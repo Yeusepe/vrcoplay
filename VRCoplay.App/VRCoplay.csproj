@@ -25,6 +25,7 @@
     <UseWinUI>true</UseWinUI>
     <EnableGeneratedDependencyPropertyAttributeEmbeddedMode>true</EnableGeneratedDependencyPropertyAttributeEmbeddedMode>
     <RestoreConfigFile>$(MSBuildThisFileDirectory)NuGet.Config</RestoreConfigFile>
+    <WarningsAsErrors>$(WarningsAsErrors);NU1603</WarningsAsErrors>
     <WinUISDKReferences>false</WinUISDKReferences>
     <EnableMsixTooling Condition="'$(Configuration)' != 'Debug'">true</EnableMsixTooling>
     <WindowsPackageType Condition="'$(Configuration)' == 'Debug'">None</WindowsPackageType>
