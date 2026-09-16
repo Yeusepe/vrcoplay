@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="vrcoplay:unity-version" content="{{UNITY_VERSION}}">
+  <meta name="description" content="Download VRCoplay for Windows and the Unity package for your VRChat avatar.">
+  <title>Download VRCoplay alpha</title>
+  <link rel="icon" href="/brand/icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@1&amp;display=swap">
+  <style>
+    :root {
+      color-scheme: light dark;
+      scrollbar-gutter: stable both-edges;
+      font: 400 100%/1.5 Satoshi, system-ui, sans-serif;
+      --background: #f3f3f3; --surface: #fff; --text: #202020; --secondary: #606060;
+      --line: #dedede; --accent: #0067a5; --button: #0067a5; --button-text: #fff;
+      --button-hover: #005b91; --button-pressed: #004d7b;
+      --quiet-button: #f5f5f5; --quiet-hover: #ececec; --quiet-pressed: #e2e2e2;
+      --motion-feedback: 120ms; --motion-change: 200ms; --motion-ease: cubic-bezier(.2, 0, 0, 1);
+      background: var(--background); color: var(--text);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --background: #191919; --surface: #242424; --text: #f5f5f5; --secondary: #bdbdbd;
+        --line: #414141; --accent: #70caff; --button: #4bc3f7; --button-text: #09212e;
+        --button-hover: #76d2fa; --button-pressed: #38afe3;
+        --quiet-button: #303030; --quiet-hover: #393939; --quiet-pressed: #444;
+      }
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { margin: 0; min-height: 100svh; display: grid; place-items: start center; padding: clamp(24px, 6vh, 64px) 20px; overflow-wrap: anywhere; }
+    main { width: min(100%, 30rem); }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: 1.75rem; line-height: 1.2; font-weight: 700; letter-spacing: -.02em; }
+    h2 { font-size: 1rem; line-height: 1.5; font-weight: 700; }
+    a { color: var(--accent); text-underline-offset: .2em; }
+    a, button, summary { -webkit-tap-highlight-color: transparent; }
+    a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+    .installer { padding: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 24px; box-shadow: 0 12px 40px #0000000a; }
+    header { text-align: center; margin-bottom: 24px; }
+    .app-icon { display: block; width: 48px; height: 48px; margin: 0 auto 16px; border-radius: 8px; box-shadow: 0 0 0 1px #00000014; }
+    .release { margin-top: 8px; color: var(--secondary); font-size: .875rem; }
+    .alpha { color: var(--accent); font-weight: 500; }
+    .avatar-slot > .download { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 24px; }
+    .download p { margin-top: 6px; color: var(--secondary); font-size: .875rem; }
+    .download .metadata { margin-top: 2px; font-size: .8125rem; }
+    strong { color: var(--text); font-weight: 600; }
+    .symbol { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .action { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 48px; padding: 12px 16px; margin-top: 16px; border: 1px solid transparent; border-radius: 12px; font: inherit; font-weight: 500; text-decoration: none; text-align: center; cursor: pointer; transition: background-color var(--motion-feedback) ease-out; }
+    .secondary { color: var(--text); background: var(--quiet-button); border-color: var(--line); }
+    .primary { color: var(--button-text); background: var(--button); }
+    @media (hover: hover) { .primary:hover { background: var(--button-hover); } .secondary:hover { background: var(--quiet-hover); } }
+    .primary:active { background: var(--button-pressed); }
+    .secondary:active { background: var(--quiet-pressed); }
+    .action:active { transition-duration: 0s; }
+    .download .next { margin-top: 10px; text-align: center; }
+    .flow { margin-top: 18px; }
+    .motion-region { display: flow-root; }
+    .motion-region.is-resizing { overflow: clip; overflow-clip-margin: 8px; }
+    .flow-title { font-size: .875rem; font-weight: 600; line-height: 1.5; }
+    .flow-title:focus { outline: none; }
+    .flow-title .count { color: var(--secondary); font-weight: 400; }
+    .quiet-action { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 44px; margin-top: 4px; padding: 10px 4px; border: 0; border-radius: 8px; background: transparent; color: var(--accent); font: inherit; font-size: .875rem; text-align: center; text-decoration: none; cursor: pointer; }
+    @media (hover: hover) { .quiet-action:hover { text-decoration: underline; text-underline-offset: .2em; } }
+    .instructions { margin: 12px 0 0; padding-left: 20px; color: var(--secondary); font-size: .875rem; }
+    .instructions li + li { margin-top: 12px; }
+    details { font-size: .875rem; }
+    summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; padding: 12px 0; cursor: pointer; list-style: none; color: var(--secondary); }
+    summary::-webkit-details-marker { display: none; }
+    summary .symbol { width: 14px; height: 14px; transition: transform var(--motion-change) var(--motion-ease); }
+    details[open] > summary .symbol { transform: rotate(90deg); }
+    @supports (interpolate-size: allow-keywords) and (transition-behavior: allow-discrete) {
+      details { interpolate-size: allow-keywords; }
+      details::details-content {
+        display: flow-root; overflow: clip; block-size: 0;
+        transition: block-size var(--motion-change) var(--motion-ease), content-visibility var(--motion-change) allow-discrete;
+      }
+      details[open]::details-content { block-size: auto; }
+    }
+    .setup { margin-top: 8px; }
+    .setup > summary { color: var(--text); }
+    .setup-body { padding: 0 0 12px; }
+    .setup ol { margin: 16px 0 0; padding-left: 20px; color: var(--secondary); }
+    .setup li + li { margin-top: 12px; }
+    .setup h3 { margin-top: 16px; font-size: .875rem; }
+    .help { margin: 8px 16px 0; }
+    .help > summary { justify-content: center; }
+    .help-body { padding: 12px 0 16px; }
+    .help-body h2 { font-size: .9375rem; }
+    .help-body section + section { margin-top: 24px; }
+    .help-body p { margin-top: 8px; color: var(--secondary); }
+    code { display: block; margin-top: 8px; font: inherit; font-size: .8125rem; overflow-wrap: anywhere; }
+    footer { display: flex; flex-wrap: wrap; gap: 0 20px; margin-top: 16px; }
+    footer a { display: inline-flex; align-items: center; min-height: 44px; }
+    .release-footer { display: block; margin: 16px 16px 0; padding-top: 20px; border-top: 1px solid var(--line); color: var(--secondary); font-size: .8125rem; text-align: center; }
+    .release-footer p + p { margin-top: 4px; }
+    .source-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 16px; margin-top: 8px; }
+    .source-links a { color: inherit; text-decoration: none; }
+    @media (hover: hover) { .source-links a:hover { color: var(--text); text-decoration: underline; } }
+    .source-checksum { font-size: inherit; }
+    .source-checksum > summary { justify-content: center; }
+    .source-checksum code { margin: 0 0 12px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); font-family: ui-monospace, Consolas, monospace; font-size: .75rem; line-height: 1.7; text-align: left; user-select: all; }
+    @media (max-width: 25rem) { body { padding: 20px 12px; } .installer { padding: 24px 20px; } }
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after, details::details-content { animation: none !important; transition: none !important; }
+    }
+    @media (forced-colors: active) { .installer, .action { border-color: ButtonText; } .app-icon { forced-color-adjust: none; } }
+  </style>
+</head>
+<body>
+  <main>
+    <article class="installer" aria-labelledby="install-title">
+      <header>
+        <svg class="app-icon" aria-hidden="true" width="187" height="187" viewBox="0 0 187 187" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_787_14621)">
+<rect width="187" height="187" rx="30" fill="#4BC3F7"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M71.7694 9.87173C31.4591 20.6728 -8.27232 37.6276 -26.8943 47.2958C-34.9309 51.4682 -40.4146 58.713 -42.0492 66.9334C-45.9734 86.6671 -46.3552 113.811 -44.8449 139.176C-43.333 164.566 -39.8545 189.3 -35.5661 204.309C-30.5784 221.766 -20.1841 233.65 -5.93625 239.992C8.00818 246.198 24.3243 246.514 40.1861 243.455C43.4114 242.832 46.2395 240.941 47.8966 238.299C51.3113 232.856 54.2291 225.453 56.6993 217.871C59.2274 210.109 61.5074 201.452 63.454 193.11C66.9011 178.329 78.3864 167.606 92.6339 164.527C98.2418 163.315 104.605 161.796 111.984 159.819C119.35 157.846 125.609 155.982 131.062 154.232C144.942 149.775 160.249 153.318 170.624 164.394C176.481 170.645 182.784 177.002 188.855 182.46C194.785 187.791 201.012 192.744 206.691 195.751C209.447 197.21 212.842 197.434 215.946 196.36C231.214 191.079 245.186 182.647 254.159 170.3C263.327 157.684 266.387 142.195 261.977 124.583C258.186 109.44 248.832 86.2809 237.446 63.5364C226.072 40.8143 212.17 17.4977 198.904 2.37014C193.379 -3.93184 185.006 -7.46393 175.959 -7.05836C154.992 -6.11883 112.081 -0.929664 71.7694 9.87173Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M68.4596 48.0169C61.1229 49.9828 56.6065 56.9187 58.3723 63.5087C60.1381 70.0985 67.5174 73.8472 74.854 71.8813L100.151 65.1031C107.488 63.1372 112.004 56.2012 110.238 49.6113C108.472 43.0213 101.093 39.2728 93.7563 41.2387L68.4596 48.0169ZM46.8676 146.609C39.5308 148.575 32.1517 144.827 30.3859 138.237L29.1595 133.659L24.0637 135.025C16.7269 136.991 9.3478 133.242 7.58202 126.652C5.81623 120.062 10.3324 113.126 17.6693 111.16L22.765 109.795L21.5383 105.217C19.7725 98.6269 24.2887 91.6911 31.6256 89.7252C38.9625 87.7593 46.3415 91.5078 48.1073 98.0978L49.334 102.676L54.431 101.31C61.7679 99.3443 69.147 103.093 70.9128 109.683C72.6785 116.273 68.1623 123.209 60.8255 125.175L55.7285 126.54L56.9549 131.117C58.7207 137.708 54.2045 144.643 46.8676 146.609ZM127.636 109.451C129.401 116.041 136.781 119.79 144.117 117.824C151.454 115.858 155.97 108.922 154.205 102.332L153.296 98.9395C151.53 92.3497 144.151 88.601 136.814 90.5669C129.477 92.5328 124.961 99.4689 126.727 106.059L127.636 109.451ZM166.083 85.6407C158.747 87.6064 151.368 83.8579 149.602 77.2678L148.693 73.8757C146.928 67.2857 151.444 60.3498 158.78 58.3842C166.117 56.4182 173.496 60.1668 175.261 66.7568L176.17 70.149C177.936 76.739 173.42 83.6747 166.083 85.6407Z" fill="black"/>
+</g>
+<defs>
+<clipPath id="clip0_787_14621">
+<rect width="187" height="187" rx="30" fill="white"/>
+</clipPath>
+</defs>
+</svg>
+        <h1 id="install-title">Get VRCoplay</h1>
+        <p class="release"><span class="alpha">Alpha</span></p>
+      </header>
+
+      <section class="download" aria-labelledby="windows-title" id="install">
+        <h2 id="windows-title">Windows app</h2>
+        <p class="metadata">Version {{VERSION}} · Windows 11, 22H2 or later · x64</p>
+        <div class="flow motion-region" id="windows-flow">
+          <div id="certificate-intro" class="flow-panel">
+            <h3 class="flow-title" tabindex="-1"><span class="count">1 of 2 · </span>Add the certificate</h3>
+            <p>The alpha uses a test certificate. Add it so Windows can verify the installer.</p>
+            <a id="download-certificate" class="action primary" href="VRCoplay.Testers.cer" download><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Zm-4 9 3 3 5-6"/></svg>Download certificate</a>
+            <p class="next">Once per PC · Administrator permission required</p>
+            <button id="certificate-already-installed" class="quiet-action" type="button" hidden>I’ve already installed this certificate</button>
+          </div>
+          <div id="certificate-install" class="flow-panel" hidden>
+            <h3 class="flow-title" tabindex="-1"><span class="count">1 of 2 · </span>Install the certificate</h3>
+            <ol class="instructions">
+              <li>Open <strong>VRCoplay.Testers.cer</strong> from your downloads. Choose <strong>Install Certificate…</strong>.</li>
+              <li>Select <strong>Local Machine → Next</strong> and allow the administrator prompt.</li>
+              <li>Select <strong>Place all certificates in the following store</strong>, then <strong>Browse… → Trusted People → OK</strong>.</li>
+              <li>Choose <strong>Next → Finish</strong>. Wait for Windows to confirm the import.</li>
+            </ol>
+            <button id="certificate-confirm-installed" class="action primary" type="button">I’ve installed the certificate<svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button>
+            <a class="quiet-action" href="VRCoplay.Testers.cer" download>Download certificate again</a>
+          </div>
+          <div id="app-download" class="flow-panel" hidden>
+            <h3 class="flow-title" tabindex="-1"><span class="count">2 of 2 · </span>Install VRCoplay</h3>
+            <div id="app-download-action"></div>
+            <p class="next">Open the downloaded file, then choose <strong>Install</strong>.</p>
+            <button id="certificate-restart" class="quiet-action" type="button">Certificate setup</button>
+          </div>
+        </div>
+        <noscript><p>Enable JavaScript to follow certificate setup and continue to the app download.</p></noscript>
+        <details id="certificate-details" class="setup">
+          <summary>Why the alpha needs a certificate<svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></summary>
+          <div class="setup-body">
+            <p>The paid signing plan covers a limited number of builds, so alpha updates use a test certificate.</p>
+            <p>Adding it to <strong>Trusted People</strong> lets Windows verify that VRCoplay signed the installer and that it hasn’t changed.</p>
+            <p>The certificate doesn’t install VRCoplay, run software, change files, or give VRCoplay access to your PC.</p>
+            <h3>When VRCoplay leaves alpha</h3>
+            <p>The public release will use a purchased code-signing certificate. You won’t need to add a certificate yourself.</p>
+            <p>Test certificate fingerprint (SHA-256):</p>
+            <code>{{FINGERPRINT}}</code>
+          </div>
+        </details>
+        <template id="app-download-template"><a id="download-app" class="action primary" href="VRCoplay.appinstaller" download><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>Download Windows app</a></template>
+      </section>
+
+      <div class="avatar-slot motion-region" id="avatar-slot">
+        <section class="download" aria-labelledby="avatar-title" id="avatar" hidden>
+          <h2 id="avatar-title">Avatar pointer</h2>
+          <p class="metadata">Version {{UNITY_VERSION}} · Unity package · {{UNITY_SIZE}}</p>
+          <p>Add this package to your avatar to use VRCoplay’s pointer in VRChat. Requires <a href="https://vrcfury.com/getting-started/">VRCFury</a>.</p>
+          <a id="download-unity" class="action secondary" href="VRCoplay.Pointer.unitypackage" download><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5v8l-9 5-9-5V8l9-5Zm0 9 9-4M12 12 3 8m9 4v9M7.5 5.5l9 5"/></svg>Download Unity package</a>
+          <details id="avatar-steps" class="setup">
+            <summary>Add to an avatar<svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></summary>
+            <div class="setup-body">
+              <ol>
+                <li>Open your avatar’s Unity project with the <strong>VRChat SDK</strong> and <strong>VRCFury</strong> installed.</li>
+                <li>Choose <strong>Assets → Import Package → Custom Package…</strong>, select <strong>VRCoplay.Pointer.unitypackage</strong>, then choose <strong>Import</strong>.</li>
+                <li>In <strong>Assets/VRCoplay/Pointer</strong>, drag <strong>VRCoplayPointer.prefab</strong> onto your avatar’s root object in the Hierarchy.</li>
+                <li><a href="https://creators.vrchat.com/avatars/creating-your-first-avatar/">Build and upload the avatar</a> with the VRChat SDK. VRCFury adds the pointer menu and controls during the build.</li>
+              </ol>
+              <p>To update an existing pointer, import the newer package into the same project and upload the avatar again. Keep one pointer prefab on the avatar.</p>
+            </div>
+          </details>
+        </section>
+      </div>
+    </article>
+
+    <details class="help">
+      <summary>Installation help<svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></summary>
+      <div class="help-body">
+        <section aria-labelledby="installer-help">
+          <h2 id="installer-help">If the installer won’t open</h2>
+          <p>If Windows doesn’t recognize the file, <a href="https://learn.microsoft.com/en-us/windows/msix/app-installer/install-update-app-installer">get App Installer from Microsoft</a>, then open <strong>VRCoplay.appinstaller</strong> again.</p>
+          <p>If the certificate isn’t trusted, return to <strong>Certificate setup</strong> and select <strong>Local Machine → Trusted People</strong>.</p>
+        </section>
+        <section aria-labelledby="after-install">
+          <h2 id="after-install">After installation</h2>
+          <p>Open VRCoplay from Start. You can skip controller setup and start sharing.</p>
+          <p>VRCoplay offers app updates when you open it. Manage them in <strong>Settings → Updates</strong>. Avatar updates need to be imported in Unity and uploaded again.</p>
+        </section>
+        <footer><a href="INSTALL.txt">Save instructions</a><a href="SHA256SUMS.txt">File checksums</a></footer>
+      </div>
+    </details>
+    <footer class="release-footer">
+      <p>© 2026 YUCP Studio · VRCoplay</p>
+      <p>GPL v3 or later · No warranty.</p>
+      <nav class="source-links" aria-label="Project source">
+        <a href="https://github.com/Yeusepe/vrcoplay">Source repository</a>
+        <a href="{{SOURCE_URI}}">Matching source &amp; licenses</a>
+      </nav>
+      <details class="source-checksum">
+        <summary>Source SHA-256<svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></summary>
+        <code>{{SOURCE_SHA256}}</code>
+      </details>
+    </footer>
+  </main>
+  <script>
+    const panels = [...document.querySelectorAll('#windows-flow > .flow-panel')];
+    const appAction = document.getElementById('app-download-action');
+    const avatarDownload = document.getElementById('avatar');
+    const motionRegions = [document.getElementById('windows-flow'), document.getElementById('avatar-slot')];
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    const motionStyle = getComputedStyle(document.documentElement);
+    const motionDuration = parseFloat(motionStyle.getPropertyValue('--motion-change'));
+    const motionEasing = motionStyle.getPropertyValue('--motion-ease').trim();
+    const stepAnimations = new Set();
+    function stopStepMotion() {
+      for (const animation of stepAnimations) animation.cancel();
+      stepAnimations.clear();
+      for (const region of motionRegions) region.classList.remove('is-resizing');
+    }
+    function animateStep(element, frames, options, onFinish = () => {}) {
+      const animation = element.animate(frames, options);
+      stepAnimations.add(animation);
+      animation.finished.then(() => {
+        stepAnimations.delete(animation);
+        onFinish();
+      }, () => {});
+    }
+    reducedMotion.addEventListener('change', () => {
+      if (reducedMotion.matches) stopStepMotion();
+    });
+    function showStep(id) {
+      const previousHeights = motionRegions.map(region => region.getBoundingClientRect().height);
+      const avatarWasHidden = avatarDownload.hidden;
+      stopStepMotion();
+      appAction.replaceChildren();
+      if (id === 'app-download') {
+        appAction.append(document.getElementById('app-download-template').content.cloneNode(true));
+      }
+      for (const panel of panels) panel.hidden = panel.id !== id;
+      avatarDownload.hidden = id !== 'app-download';
+      document.querySelector(`#${id} .flow-title`).focus();
+      if (reducedMotion.matches || typeof Element.prototype.animate !== 'function') return;
+      const timing = { duration: motionDuration, easing: motionEasing };
+      for (const [index, region] of motionRegions.entries()) {
+        const nextHeight = region.getBoundingClientRect().height;
+        if (Math.abs(previousHeights[index] - nextHeight) < 1) continue;
+        region.classList.add('is-resizing');
+        animateStep(region, [{ height: `${previousHeights[index]}px` }, { height: `${nextHeight}px` }], timing,
+          () => region.classList.remove('is-resizing'));
+      }
+      animateStep(document.getElementById(id), [{ opacity: .6 }, { opacity: 1 }], timing);
+      if (avatarWasHidden && !avatarDownload.hidden) {
+        animateStep(avatarDownload, [{ opacity: 0 }, { opacity: 1 }], timing);
+      }
+    }
+    document.getElementById('download-certificate').addEventListener('click', event => {
+      if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      showStep('certificate-install');
+    });
+    for (const id of ['certificate-already-installed', 'certificate-confirm-installed']) {
+      document.getElementById(id).addEventListener('click', () => showStep('app-download'));
+    }
+    document.getElementById('certificate-restart').addEventListener('click', () => showStep('certificate-intro'));
+    document.getElementById('certificate-already-installed').hidden = false;
+    for (const details of document.querySelectorAll('details')) {
+      const content = details.querySelector(':scope > :not(summary)');
+      const sync = () => { content.inert = !details.open; };
+      details.addEventListener('toggle', sync);
+      sync();
+    }
+    document.getElementById('download-unity')?.addEventListener('click', () => {
+      document.getElementById('avatar-steps').open = true;
+    });
+  </script>
+</body>
+</html>

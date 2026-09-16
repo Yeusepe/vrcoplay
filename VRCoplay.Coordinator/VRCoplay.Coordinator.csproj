@@ -15,4 +15,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Releases/index.template.html" LogicalName="VRCoplay.ReleasePage.html" />
+  </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 // Copyright (c) 2026 YUCP Studio. VRCoplay contributors retain their copyrights.
 // SPDX-License-Identifier: GPL-3.0-or-later
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 public interface IReleaseAccessPolicy
 {
     ValueTask<bool> CanDownloadAsync(HttpContext context);
@@ -19,6 +20,7 @@ public static partial class ReleaseEndpoints
         if (!Path.IsPathFullyQualified(configured)) throw new InvalidOperationException("RELEASE_DIRECTORY must be absolute.");
         Directory.CreateDirectory(directory);
         var store = new ReleaseStore(directory);
+        var page = new ReleasePage(store);
         foreach (var path in new[] { "/alpha", "/releases" })
         {
             var releases = app.MapGroup(path);
@@ -47,6 +49,19 @@ public static partial class ReleaseEndpoints
                     _ => null
                 };
                 if (type is null) return Results.NotFound();
+                if (name is "index.html" or "SHA256SUMS.txt")
+                {
+                    try
+                    {
+                        var content = page.Get(name);
+                        return content is null ? Results.NotFound() : Results.Bytes(content, type);
+                    }
+                    catch (Exception error) when (error is InvalidDataException or IOException or UnauthorizedAccessException)
+                    {
+                        app.Logger.LogWarning("Download page metadata is unavailable ({FailureType}).", error.GetType().Name);
+                        return Results.StatusCode(StatusCodes.Status503ServiceUnavailable);
+                    }
+                }
                 var file = store.Resolve(name);
                 if (file is null) return Results.NotFound();
                 return Results.File(file, type, fileDownloadName: name.EndsWith(".appinstaller", StringComparison.OrdinalIgnoreCase) || name == ReleaseStore.UnityPackageName ? name : null,
