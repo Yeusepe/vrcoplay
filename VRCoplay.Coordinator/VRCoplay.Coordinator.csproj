@@ -2,6 +2,7 @@
   <PropertyGroup>
     <Company>YUCP Studio</Company>
     <Product>VRCoplay</Product>
+    <RepositoryUrl>https://github.com/Yeusepe/vrcoplay</RepositoryUrl>
     <Copyright>Copyright (c) 2026 YUCP Studio and contributors.</Copyright>
     <EnableSourceLink>false</EnableSourceLink>
     <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>

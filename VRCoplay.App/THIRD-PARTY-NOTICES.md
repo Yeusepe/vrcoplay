@@ -32,7 +32,7 @@ Paths below are relative to `VRCoplay.App`.
 | Math.NET Numerics | [5.0.0](https://github.com/mathnet/mathnet-numerics/tree/v5.0.0) | MIT; `Tools/MathNet-LICENSE.txt` |
 | System.IO.Hashing | [10.0.12](https://github.com/dotnet/dotnet/tree/95017c711e6afc1085133d440e42b4bd78155701) | MIT; `Tools/DotnetHashing-LICENSE.txt` |
 | Meziantou.Framework.Win32.Jobs | [4.0.3](https://github.com/meziantou/Meziantou.Framework/tree/cb78bef9edb54229c70aaa46318a8b77bcf99af4) | MIT; `Tools/Meziantou-Jobs-LICENSE.txt` |
-| libdatachannel | [0.24.5](https://github.com/paullouisageneau/libdatachannel/tree/v0.24.5) | MPL-2.0; `ThirdParty/LibDataChannel/LICENSES.txt`, `PIN.json` |
+| libdatachannel | [0.24.5](https://github.com/paullouisageneau/libdatachannel/tree/443f6934d9007eb7076ab7825ba330f355fcbead) with `dtls-signaling.patch` | MPL-2.0; `ThirdParty/LibDataChannel/LICENSES.txt`, `PIN.json` |
 
 Vortice dependencies: `Vortice.Mathematics` 2.1.0, `SharpGen.Runtime` and `SharpGen.Runtime.COM` 2.4.2-beta.
 Their notices and source revisions are in `Tools/Vortice-LICENSE.txt`.

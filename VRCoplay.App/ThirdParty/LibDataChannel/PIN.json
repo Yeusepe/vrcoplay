@@ -2,6 +2,7 @@
   "source": "https://github.com/paullouisageneau/libdatachannel",
   "version": "0.24.5",
   "commit": "443f6934d9007eb7076ab7825ba330f355fcbead",
+  "patch": "dtls-signaling.patch",
   "generator": "21.1.8.4",
   "vcpkg": "dab721e668216d0178a54d020ac9e051b4ab9823",
   "openssl": "3.6.4",

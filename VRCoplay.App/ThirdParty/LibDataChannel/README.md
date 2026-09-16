@@ -11,7 +11,9 @@ Use `-GenerateBindings` to update `Rtc.g.cs`.
 `generate.rsp` selects the declarations from `include/rtc/rtc.h`.
 Use the generator to change these declarations.
 
-Native source: libdatachannel 0.24.5, without local changes.
+Native source: libdatachannel 0.24.5 with `dtls-signaling.patch`.
+The patch queues DTLS initialization and waits for signaling to finish before
+reading the remote fingerprint. Certificate fingerprint verification stays enabled.
 Static dependencies: libjuice, OpenSSL, usrsctp, and plog.
 OpenSSL source: https://github.com/openssl/openssl/tree/openssl-3.6.4.
 OpenSSL patch: `openssl-build-info.patch`.

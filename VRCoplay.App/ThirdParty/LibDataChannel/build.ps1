@@ -13,6 +13,7 @@ foreach ($dependency in @(@{Name='source'; Url=$pin.source; Commit=$pin.commit},
     git -C $path checkout --detach $dependency.Commit
     git -C $path submodule update --init --recursive
 }
+git -C "$BuildRoot/source" apply (Join-Path $PSScriptRoot $pin.patch)
 & "$BuildRoot/vcpkg/bootstrap-vcpkg.bat" -disableMetrics
 $triplets = Join-Path $BuildRoot 'triplets'
 [IO.Directory]::CreateDirectory($triplets) | Out-Null

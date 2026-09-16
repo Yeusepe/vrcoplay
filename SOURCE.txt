@@ -1,5 +1,7 @@
 VRCoplay source distribution
 
+Repository: https://github.com/Yeusepe/vrcoplay
+
 License: GPL-3.0-or-later.
 
 Before you distribute a binary:

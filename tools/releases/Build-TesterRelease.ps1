@@ -129,6 +129,7 @@ https://learn.microsoft.com/en-us/windows/msix/app-installer/install-update-app-
 Copyright (c) 2026 YUCP Studio and contributors.
 GPL version 3 or later. No warranty.
 Matching source: $($SourceUri.AbsoluteUri)
+Source repository: https://github.com/Yeusepe/vrcoplay
 Source ZIP SHA-256: $($SourceSha256.ToLowerInvariant())
 License texts are in the app and source archive.
 "@ | Set-Content -LiteralPath (Join-Path $output 'INSTALL.txt') -Encoding utf8
@@ -140,7 +141,8 @@ $sourceLink = [Net.WebUtility]::HtmlEncode($SourceUri.AbsoluteUri)
 <p>Windows 11 x64. Read the <a href="INSTALL.txt">installation steps</a>.</p>
 <ul><li><a href="VRCoplay.Testers.cer">Certificate</a></li>
 <li><a href="VRCoplay.appinstaller">Installer</a></li>
-<li><a href="$sourceLink">Matching source and licenses</a></li></ul>
+<li><a href="$sourceLink">Matching source and licenses</a></li>
+<li><a href="https://github.com/Yeusepe/vrcoplay">Source repository</a></li></ul>
 <p>Copyright (c) 2026 YUCP Studio and contributors. GPL v3 or later. No warranty.</p>
 <p>Source SHA-256: $($SourceSha256.ToLowerInvariant())</p></html>
 "@ | Set-Content -LiteralPath (Join-Path $output 'index.html') -Encoding utf8

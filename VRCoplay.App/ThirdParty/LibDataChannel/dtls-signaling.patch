@@ -1,0 +1,21 @@
+diff --git a/src/impl/peerconnection.cpp b/src/impl/peerconnection.cpp
+index 6bae11f..7a4ceb6 100644
+--- a/src/impl/peerconnection.cpp
++++ b/src/impl/peerconnection.cpp
+@@ -171,7 +171,7 @@ shared_ptr<IceTransport> PeerConnection::initIceTransport() {
+ 						    break;
+ 					    case IceTransport::State::Connected:
+ 						    changeIceState(IceState::Connected);
+-						    initDtlsTransport();
++						    mProcessor.enqueue(&PeerConnection::initDtlsTransport, shared_from_this());
+ 						    break;
+ 					    case IceTransport::State::Completed:
+ 						    changeIceState(IceState::Completed);
+@@ -228,6 +228,7 @@ shared_ptr<DtlsTransport> PeerConnection::initDtlsTransport() {
+ 
+ 		CertificateFingerprint::Algorithm fingerprintAlgorithm;
+ 		{
++			std::lock_guard signalingLock(signalingMutex);
+ 			std::lock_guard lock(mRemoteDescriptionMutex);
+ 			if (mRemoteDescription && mRemoteDescription->fingerprint()) {
+ 				mRemoteFingerprintAlgorithm = mRemoteDescription->fingerprint()->algorithm;
