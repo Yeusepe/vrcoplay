@@ -19,7 +19,7 @@ public sealed partial class GitHubReleaseSync : BackgroundService
     {
         repository = configuration["RELEASE_GITHUB_REPOSITORY"] ?? "";
         token = configuration["RELEASE_GITHUB_TOKEN"] ?? "";
-        baseUri = configuration["RELEASE_BASE_URI"] is { } releaseUri ? new(releaseUri) : new(VRCoplay.StreamLink.Server, "alpha/");
+        baseUri = configuration["RELEASE_BASE_URI"] is { } releaseUri ? new(releaseUri) : new(VRCoplay.StreamLink.Server, "releases/");
         var path = configuration["RELEASE_DIRECTORY"] ?? "";
         if (!RepositoryPattern().IsMatch(repository) || string.IsNullOrWhiteSpace(token) || !Path.IsPathFullyQualified(path) ||
             baseUri.Scheme != "https" || baseUri.Query.Length != 0 || baseUri.Fragment.Length != 0 || baseUri.UserInfo.Length != 0 || !baseUri.AbsolutePath.EndsWith('/'))
