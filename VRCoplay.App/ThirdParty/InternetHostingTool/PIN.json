@@ -1,0 +1,27 @@
+{
+  "project": "https://github.com/moonlight-stream/Internet-Hosting-Tool",
+  "upstream": "https://github.com/moonlight-stream/Internet-Hosting-Tool",
+  "baseCommit": "ddd86d91eb85c2f26823ec0a114bcdd429f06e21",
+  "patch": "changes.patch",
+  "patchSha256": "055b4f9a847107bac7651298e59c22a8120229a84867f40136d8290e74bfcebb",
+  "sha256": "99ae6511c6a3893258d82425cf6b139b3bd6916c152e469bb1d9b9664580150e",
+  "architecture": "Windows x64",
+  "configuration": "Release",
+  "runtime": "statically linked MSVC runtime",
+  "compiler": "MSVC 19.51.36257 / Visual Studio 18 2026",
+  "dependencies": {
+    "miniupnpc": "2cb87d04034587bdb0f51549b3936e0d9e143bcb",
+    "libnatpmp": "134fc89e2781e154e40042641f4d8bcbe42579f1"
+  },
+  "configure": "cmake -S iht-source -B iht-source/artifacts/build -A x64",
+  "build": "cmake --build iht-source/artifacts/build --config Release --target iht",
+  "artifact": "artifacts/build/Release/iht.dll",
+  "sourceSha256": {
+    "miss/miss.cpp": "aed4ab359ac73b09c00677016a3e82a6b362026cda7a9a58ae1271bedf83a559",
+    "miss/pcp.cpp": "3113bab45186646ac30241f9c036f3050e21f67e7ed6269ae1600c211c92910c",
+    "miss/tracer.cpp": "7000e700aed94d996f32bfe72e2551304cddc448777465e6667698dd34e7f231",
+    "CMakeLists.txt": "f7ff5163ae69c4d580ff99c255948edf7563184be7e0556d4ce021bcf507c3a4",
+    "miss/mapping.h": "478c1bd49fd9f7cb458d2a53ced7052edda8b1b58fbb3673e52d60725ffa9fc1"
+  },
+  "sourceHashLineEndings": "LF"
+}

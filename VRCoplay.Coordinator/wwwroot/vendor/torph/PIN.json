@@ -1,0 +1,9 @@
+{
+  "package": "torph@0.1.3",
+  "source": "https://github.com/lochie/torph",
+  "archive": "https://registry.npmjs.org/torph/-/torph-0.1.3.tgz",
+  "integrity": "sha512-DOirbURFAedEZlK6Mx9jcAc7/gbDBUZNyXQwHUmQRXyUsbB3STYwb2PjiAy9iMc1eOWoQLfhm54DuPhWBPEibg==",
+  "file": "dist/index.mjs",
+  "sha256": "051813e45c6905d1f863741f1584c5ae47c3869b685e8199d73f7433fe402915",
+  "upstreamSha256": "6a5bb136d7d3572af6dda3089f44642a5c5453a620ddd1cf5fa26f33c8517db8"
+}

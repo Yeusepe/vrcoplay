@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <GStreamerDirectory>$(MSBuildThisFileDirectory)</GStreamerDirectory>
+  </PropertyGroup>
+  <Target Name="PrepareGStreamer" BeforeTargets="AssignTargetPaths">
+    <Exec Command="&quot;$(SystemRoot)\System32\WindowsPowerShell\v1.0\powershell.exe&quot; -NoProfile -NonInteractive -ExecutionPolicy Bypass -File &quot;$(GStreamerDirectory)Prepare-Runtime.ps1&quot;" />
+    <ItemGroup>
+      <_GStreamerNative Include="$(GStreamerDirectory)runtime\**\*" />
+      <_GStreamerNotices Include="$(GStreamerDirectory)LICENSES\*;$(GStreamerDirectory)README.md;$(GStreamerDirectory)runtime.json" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="@(_GStreamerNative)" Link="GStreamer\%(_GStreamerNative.RecursiveDir)%(_GStreamerNative.Filename)%(_GStreamerNative.Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromResourceIndex="true" />
+      <Content Include="@(_GStreamerNotices)" Link="ThirdParty\GStreamer\%(_GStreamerNotices.Filename)%(_GStreamerNotices.Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromResourceIndex="true" />
+    </ItemGroup>
+  </Target>
+</Project>

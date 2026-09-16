@@ -1,0 +1,33 @@
+VRCoplay source distribution
+
+License: GPL-3.0-or-later.
+
+Before you distribute a binary:
+1. Get the editable source for that exact version.
+2. Include all required dependency source and local changes.
+3. Include build scripts, project files, interfaces, configuration, and assets.
+4. Keep all license and attribution notices.
+5. Make the complete source available from the binary download page.
+6. Keep that source available while you offer the binary under GPLv3 section 6(d).
+
+The source must include dependencies of dependencies where their licenses require them.
+DLL files, source links, and patches alone are not complete source.
+The GPL defines exceptions for System Libraries and general-purpose tools.
+A NuGet package is not automatically an exception.
+
+Exact known revisions are in THIRD-PARTY-NOTICES.md and the ThirdParty files.
+Include GStreamer, its native dependencies and bindings, Win2D, VIIPER, Internet Hosting Tool, FastOSC, libdatachannel, and their required dependencies.
+Win2D uses the public source archive and local build changes pinned in ThirdParty/Win2D.
+Development-only FFmpeg is excluded from the app and this source export.
+Do a license check for all other libraries in the distributed package.
+Get the Satoshi font as specified in BUILD.txt.
+
+The public file export excludes private tests, internal documents, optional tools, and Unity.
+It excludes credentials, environments, and build output.
+It contains required native build inputs.
+An export without matching dependency source is not a complete source release.
+
+Use a public HTTPS source URL with no authentication.
+Supply SourceUri and SourceSha256 to the package build.
+The app and download page show the source URL.
+Build and installation instructions are in BUILD.txt.

@@ -1,0 +1,13 @@
+{
+  "source": "https://github.com/paullouisageneau/libdatachannel",
+  "version": "0.24.5",
+  "commit": "443f6934d9007eb7076ab7825ba330f355fcbead",
+  "generator": "21.1.8.4",
+  "vcpkg": "dab721e668216d0178a54d020ac9e051b4ab9823",
+  "openssl": "3.6.4",
+  "opensslPatch": "openssl-build-info.patch",
+  "libjuice": "3c40a3545b6b1b62c7adee7f8f2bd58aa290afd6",
+  "usrsctp": "fec583d54493f879d2ae44a743423bf8a04371ab",
+  "plog": "94899e0b926ac1b0f4750bfbd495167b4a6ae9ef",
+  "runtime": "Windows x64; static OpenSSL, libjuice, usrsctp and MSVC runtime; no media, WebSocket, examples or tests"
+}

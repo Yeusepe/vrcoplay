@@ -1,0 +1,31 @@
+readTimeout: 10m
+writeQueueSize: 256
+authMethod: internal
+authInternalUsers:
+  - user: any
+    ips: [127.0.0.1, '::1']
+    permissions:
+      - action: publish
+      - action: read
+        path: game
+  - user: any
+    permissions:
+      - action: read
+        path: '~^share_[A-F0-9]{32}(_quest)?$'
+api: false
+metrics: false
+pprof: false
+playback: false
+rtsp: true
+rtspAddress: 0.0.0.0:8554
+rtspTransports: [tcp]
+rtmp: false
+hls: false
+webrtc: false
+srt: false
+moq: false
+paths:
+  game:
+    source: publisher
+  '~^share_[A-F0-9]{32}(_quest)?$':
+    source: publisher

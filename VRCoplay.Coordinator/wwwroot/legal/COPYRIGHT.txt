@@ -1,0 +1,19 @@
+VRCoplay
+Copyright (c) 2026 YUCP Studio, for its original contributions.
+Other contributors and upstream authors retain their copyrights.
+Modified by YUCP Studio on 2026-09-15.
+
+VRCoplay application and coordinator code: GPL-3.0-or-later.
+You can copy, modify, and redistribute this code under that license.
+Read LICENSE for the full terms.
+The software comes WITHOUT ANY WARRANTY, including MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.
+
+Proprietary branding: YUCP Studio and VRCoplay names and logos.
+YUCP Studio reserves trademark rights under GPLv3 section 7(e).
+This reservation does not restrict GPL rights or descriptive use permitted by law.
+Do not imply YUCP Studio endorsement of a modified product.
+
+Third-party code, fonts, and assets retain their licenses and attribution.
+Read the component license files and THIRD-PARTY-NOTICES.md.
+Storage in a private folder does not change upstream licenses or earlier grants.

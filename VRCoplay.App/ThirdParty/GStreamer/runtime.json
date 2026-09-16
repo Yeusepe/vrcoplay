@@ -1,0 +1,318 @@
+{
+  "version": "1.28.7",
+  "packages": [
+    {
+      "file": "gstreamer_ext_runtime-1.28.7-cp39-abi3-win_amd64.whl",
+      "url": "https://files.pythonhosted.org/packages/79/6a/2cf0a9b4c51c5d94433919af55a7112b087f826ce7b8c84e8e79143644e8/gstreamer_ext_runtime-1.28.7-cp39-abi3-win_amd64.whl",
+      "sha256": "838f7543ca718d05536cfe785d685a372b318505119f2190be59307a2a8a78f2",
+      "files": [
+        {
+          "path": "bin/msvcp140.dll",
+          "member": "gstreamer_ext_runtime-1.28.7.data/purelib/gstreamer_ext_runtime/bin/msvcp140.dll",
+          "sha256": "0f885b509a685d2bbfa652fed26b5fb31d88fbdab0a978c641d1c7b8aa460aa9"
+        },
+        {
+          "path": "bin/vcruntime140.dll",
+          "member": "gstreamer_ext_runtime-1.28.7.data/purelib/gstreamer_ext_runtime/bin/vcruntime140.dll",
+          "sha256": "d5e4d9a3e835fa679450145d6a7d94e36573a509317111904d9b3712c30d9066"
+        },
+        {
+          "path": "bin/vcruntime140_1.dll",
+          "member": "gstreamer_ext_runtime-1.28.7.data/purelib/gstreamer_ext_runtime/bin/vcruntime140_1.dll",
+          "sha256": "1f2d41c4aa5db0bc33ebf7b66d72943a817d7ce6cbe880502a9403823633093f"
+        }
+      ]
+    },
+    {
+      "file": "gstreamer_libs-1.28.7-cp39-abi3-win_amd64.whl",
+      "url": "https://files.pythonhosted.org/packages/db/10/1f71e13414c505253c86990a129c74af5adffb556a63d99483b4333bc5f7/gstreamer_libs-1.28.7-cp39-abi3-win_amd64.whl",
+      "sha256": "ea81c0f3aba25ca53053202b274c9a05e71037761def9e2dbb172982e8e961bf",
+      "files": [
+        {
+          "path": "bin/ffi-7.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/ffi-7.dll",
+          "sha256": "2a178d2df605b17bd98c2b0b0afc41b66de74b821d9abd7682bdc5abac9aedde"
+        },
+        {
+          "path": "bin/gio-2.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gio-2.0-0.dll",
+          "sha256": "7728ee11bfb6c48ec39a6ada0cf01dd6d4563d458ef34a6c4daefd90a7b71d9d"
+        },
+        {
+          "path": "bin/glib-2.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/glib-2.0-0.dll",
+          "sha256": "e1e09c06e88ac17cf328205eb6bd2f79c6e262babe93845651a7acb4ab78a231"
+        },
+        {
+          "path": "bin/gmodule-2.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gmodule-2.0-0.dll",
+          "sha256": "d787353b2eedfdfe459a0c1fcd1aba46fc7d2ba767ad1eb08405b3b19e961ff9"
+        },
+        {
+          "path": "bin/gobject-2.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gobject-2.0-0.dll",
+          "sha256": "20e9f1f6b0df1a58e7c2a7383c51a6f4b0ffb15351ee801cab09020dd4cb87ce"
+        },
+        {
+          "path": "bin/gstapp-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstapp-1.0-0.dll",
+          "sha256": "18a89a7c409284e72ae1e6ba7964d632c35915cdd131274c9df2020b98917d1e"
+        },
+        {
+          "path": "bin/gstaudio-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstaudio-1.0-0.dll",
+          "sha256": "8c726476dfc9881af47c94546aaf404719cde388ac65a32c839a0acc57e9b696"
+        },
+        {
+          "path": "bin/gstbase-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstbase-1.0-0.dll",
+          "sha256": "421d68461bbc24229bc0208f6b538532069eb11d2db9fc3abbe9a8a7aabda35f"
+        },
+        {
+          "path": "bin/gstcodecparsers-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstcodecparsers-1.0-0.dll",
+          "sha256": "ab2253f74ba50dcda5048c1742eb8aa393414cf69d4f70e47f70f191bcbc283e"
+        },
+        {
+          "path": "bin/gstcodecs-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstcodecs-1.0-0.dll",
+          "sha256": "b0821b262048fa41d160af8ef395c4f543c44407f1432af6bf4fb9da04e06057"
+        },
+        {
+          "path": "bin/gstcontroller-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstcontroller-1.0-0.dll",
+          "sha256": "f537484a8894b09d5ce47c1062bd87ac44845b2e11dd9ec533578ec5127940ee"
+        },
+        {
+          "path": "bin/gstcuda-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstcuda-1.0-0.dll",
+          "sha256": "5fd6e2697ac937f30e6b68284d7b9819240587e104164416b2e3396c950a5272"
+        },
+        {
+          "path": "bin/gstd3d11-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstd3d11-1.0-0.dll",
+          "sha256": "cc9167870006fb4feb36af4f355b32b5bf1760dd662259ad2c998906875a73a8"
+        },
+        {
+          "path": "bin/gstd3d12-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstd3d12-1.0-0.dll",
+          "sha256": "279e4dcbc78a18bb74a5c156d77ffa299fb5b32e1dd6e23b92db700cb377f1fd"
+        },
+        {
+          "path": "bin/gstd3dshader-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstd3dshader-1.0-0.dll",
+          "sha256": "b1b72653b0c18e96898e1a387ca1bd40fce60da8abbd509c40575e2d57fc41ce"
+        },
+        {
+          "path": "bin/gstdxva-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstdxva-1.0-0.dll",
+          "sha256": "f04acc343c71fa7e7e2df9e19969c9ef37436fbb4cb7c949215e061218cbb9d1"
+        },
+        {
+          "path": "bin/gstgl-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstgl-1.0-0.dll",
+          "sha256": "05d6c6164f4ec04ccd7c0c24600395eb466768622965804dd62f0c3b82b2eb56"
+        },
+        {
+          "path": "bin/gstnet-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstnet-1.0-0.dll",
+          "sha256": "05a5486e8bbcdd97f802f86a6f0aa03652b650893f84879a26d9700706d4c53b"
+        },
+        {
+          "path": "bin/gstpbutils-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstpbutils-1.0-0.dll",
+          "sha256": "b2620f25a40238ce6ae03bcdec1d282d66acd92dd04f185ace004baf871adb83"
+        },
+        {
+          "path": "bin/gstreamer-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstreamer-1.0-0.dll",
+          "sha256": "9728a996dfeb03c79b20310a43967f32c41f1c3ab8d2dd15b2a6d27ff206300d"
+        },
+        {
+          "path": "bin/gstrtp-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstrtp-1.0-0.dll",
+          "sha256": "dddd5ca931af22693cc42d01352e71d6fa5a3577111ad9950af2db2cd79a82ca"
+        },
+        {
+          "path": "bin/gstrtsp-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstrtsp-1.0-0.dll",
+          "sha256": "58b29dfed3c1e9981554117c4c854b6a18691206380f39f917a70ac9f2a08512"
+        },
+        {
+          "path": "bin/gstrtspserver-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstrtspserver-1.0-0.dll",
+          "sha256": "593da450ac16ab82f37578e1c3596dfa5d2de6f67b3f4f909503e46c235d00fc"
+        },
+        {
+          "path": "bin/gstsdp-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstsdp-1.0-0.dll",
+          "sha256": "9ff3b9b45c48d4db670603b32f39d1a8d2edcbe3a526e0a037d70a2557d70740"
+        },
+        {
+          "path": "bin/gsttag-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gsttag-1.0-0.dll",
+          "sha256": "61eb68b1a9a1e184fc6a74a1cfe853c5a038d94ec3647e93f05f411ff99bac17"
+        },
+        {
+          "path": "bin/gstvideo-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstvideo-1.0-0.dll",
+          "sha256": "96f0aa2f0a96cb570f3810dbe577f7d3b9a00b6ab316591db8b5eca0df531056"
+        },
+        {
+          "path": "bin/gstwebrtc-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstwebrtc-1.0-0.dll",
+          "sha256": "0c3970ff69c69ecc63c22527395af323932d9bb37e339d73c93328932415b332"
+        },
+        {
+          "path": "bin/gstwinrt-1.0-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/gstwinrt-1.0-0.dll",
+          "sha256": "ce856c47acc98ff37292fb96e7cbe5301f03e9d649f705c02be6fe8a5dbfc11f"
+        },
+        {
+          "path": "bin/intl-8.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/intl-8.dll",
+          "sha256": "57ebfa3ac384c2dcc3a5e3588697114414d9f9e3ebe508c641d7895189bc07e5"
+        },
+        {
+          "path": "bin/orc-0.4-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/orc-0.4-0.dll",
+          "sha256": "f2f11f289c94887d2da34118ba5ad38bc55e2fdd59c0c3a8bd7760c32a4df7dd"
+        },
+        {
+          "path": "bin/pcre2-8-0.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/pcre2-8-0.dll",
+          "sha256": "6c0903ae150f8572d9d83ddb6a38a1288cd533facc1ccc58ae1e02d457fb27cd"
+        },
+        {
+          "path": "bin/z-1.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/bin/z-1.dll",
+          "sha256": "9030f4512fc13d238190a86dfe43f5d8b87f28312d246ed2b1af0b1154fb1bb1"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstapp.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/lib/gstreamer-1.0/gstapp.dll",
+          "sha256": "eb06601a2f05c0e759bd727180de406863b32c31d48d7b15a91471e29cde8fd3"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstaudioconvert.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/lib/gstreamer-1.0/gstaudioconvert.dll",
+          "sha256": "24898567221215c7beafe99f769690d44874e77799f88fe09ee07ccaeaa93f21"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstaudiomixer.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/lib/gstreamer-1.0/gstaudiomixer.dll",
+          "sha256": "04c5ca7c71757a49fea97aca7132e3a815ed162f4a3d71cd72d38f286e6abf06"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstaudioresample.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/lib/gstreamer-1.0/gstaudioresample.dll",
+          "sha256": "8dc4b1f9e4ff1100f2e049221f2a804a5058bae6884488eea8d473beecb7ff5a"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstcoreelements.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/lib/gstreamer-1.0/gstcoreelements.dll",
+          "sha256": "86557860c861b79cb4f18fbb32de903a834fff79ba15c6532a34629e84c22908"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstvideoconvertscale.dll",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/lib/gstreamer-1.0/gstvideoconvertscale.dll",
+          "sha256": "aa317cb49585ea6d6d60cce937df095de21e7d77736d829c3bddd1afc9fe6d59"
+        },
+        {
+          "path": "libexec/gstreamer-1.0/gst-plugin-scanner.exe",
+          "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/libexec/gstreamer-1.0/gst-plugin-scanner.exe",
+          "sha256": "521870ddddd2d1e26c5eefdd2d348d651ef295b063d84dcfc56315ab98b09076"
+        }
+      ]
+    },
+    {
+      "file": "gstreamer_plugins-1.28.7-cp39-abi3-win_amd64.whl",
+      "url": "https://files.pythonhosted.org/packages/62/4d/8f60c96a1c2afeaf00b3a90b60cd2f3bec1f2fc5c381c58337068ef48f39/gstreamer_plugins-1.28.7-cp39-abi3-win_amd64.whl",
+      "sha256": "960f8cc19f4c4dfb460e782b1c8a426e95d06a300195b6f356319731a3a2b70b",
+      "files": [
+        {
+          "path": "lib/gstreamer-1.0/gstamfcodec.dll",
+          "member": "gstreamer_plugins-1.28.7.data/purelib/gstreamer_plugins/lib/gstreamer-1.0/gstamfcodec.dll",
+          "sha256": "93aab2895301e5d1e00c79810a00aceee6caa3d44b47ca7518ec9d62503c4442"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstaudioparsers.dll",
+          "member": "gstreamer_plugins-1.28.7.data/purelib/gstreamer_plugins/lib/gstreamer-1.0/gstaudioparsers.dll",
+          "sha256": "ad547062fce09fc01eacb2e36cb693730276ca51fcf72644f1e4374743882fd1"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstd3d11.dll",
+          "member": "gstreamer_plugins-1.28.7.data/purelib/gstreamer_plugins/lib/gstreamer-1.0/gstd3d11.dll",
+          "sha256": "19224b9ab7a83e2202122f489647002aecc41e3aa4cc579b8ce4fdd2c970ab37"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstmediafoundation.dll",
+          "member": "gstreamer_plugins-1.28.7.data/purelib/gstreamer_plugins/lib/gstreamer-1.0/gstmediafoundation.dll",
+          "sha256": "9d2f159bd85b342b64a5ab2a993340fb2c7a8bb13306752b31a06770d307a65b"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstnvcodec.dll",
+          "member": "gstreamer_plugins-1.28.7.data/purelib/gstreamer_plugins/lib/gstreamer-1.0/gstnvcodec.dll",
+          "sha256": "a6a418c5347de2ae59a96256f2dbfa1c556115cbe1a15a0cff99cdedf506a7b6"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstqsv.dll",
+          "member": "gstreamer_plugins-1.28.7.data/purelib/gstreamer_plugins/lib/gstreamer-1.0/gstqsv.dll",
+          "sha256": "6213e89c37dec6593e36bf63481b48d925a0443fc2ba60f7434352812b520216"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstrtp.dll",
+          "member": "gstreamer_plugins-1.28.7.data/purelib/gstreamer_plugins/lib/gstreamer-1.0/gstrtp.dll",
+          "sha256": "47e386d9a43a32b5c4224930964428a3d52bbfc658532a05d4b636f76d99023f"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstrtpmanager.dll",
+          "member": "gstreamer_plugins-1.28.7.data/purelib/gstreamer_plugins/lib/gstreamer-1.0/gstrtpmanager.dll",
+          "sha256": "e90f9a17fce85b33998c134fc4688ee993a35090935760a2144d11a0f94276ec"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstrtsp.dll",
+          "member": "gstreamer_plugins-1.28.7.data/purelib/gstreamer_plugins/lib/gstreamer-1.0/gstrtsp.dll",
+          "sha256": "03c437db1cabf6041bcb442ba232c68cac9627785d3710eb452dbc4c6558369e"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstrtspclientsink.dll",
+          "member": "gstreamer_plugins-1.28.7.data/purelib/gstreamer_plugins/lib/gstreamer-1.0/gstrtspclientsink.dll",
+          "sha256": "86a95cbb6ccb17c799d4074ec26b2f2121bd76680f9854b271963f5f41bbbfc0"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gsttcp.dll",
+          "member": "gstreamer_plugins-1.28.7.data/purelib/gstreamer_plugins/lib/gstreamer-1.0/gsttcp.dll",
+          "sha256": "3343aaaef46fd3f55914ef9385c23c1dec4a569769e75f557d0e4763dd8f8a42"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstudp.dll",
+          "member": "gstreamer_plugins-1.28.7.data/purelib/gstreamer_plugins/lib/gstreamer-1.0/gstudp.dll",
+          "sha256": "b3b693074c4124f074f03d2f11a9b66f1f0ce153d12901bfec555efdc5109148"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstvideoparsersbad.dll",
+          "member": "gstreamer_plugins-1.28.7.data/purelib/gstreamer_plugins/lib/gstreamer-1.0/gstvideoparsersbad.dll",
+          "sha256": "dbb65100e0389e449bb637fd456a360eb13a37b89e2001ed0e7868f7efc4f023"
+        }
+      ]
+    },
+    {
+      "file": "gstreamer_plugins_gpl_restricted-1.28.7-cp39-abi3-win_amd64.whl",
+      "url": "https://files.pythonhosted.org/packages/0d/87/0a83fcceaaf5d117ba99eae719aa3af20a97ac93d727a070d84e7aa44b43/gstreamer_plugins_gpl_restricted-1.28.7-cp39-abi3-win_amd64.whl",
+      "sha256": "821875d01cb54b2b720a6e8965a7b7b2e05dfacc9f708e5f66ae34fff6e16713",
+      "files": [
+        {
+          "path": "bin/x264-164.dll",
+          "member": "gstreamer_plugins_gpl_restricted-1.28.7.data/purelib/gstreamer_plugins_gpl_restricted/bin/x264-164.dll",
+          "sha256": "89fac4873ea778554579d4756d1c39c36b13b1c811932cc796aecfcac1fe7a69"
+        },
+        {
+          "path": "lib/gstreamer-1.0/gstx264.dll",
+          "member": "gstreamer_plugins_gpl_restricted-1.28.7.data/purelib/gstreamer_plugins_gpl_restricted/lib/gstreamer-1.0/gstx264.dll",
+          "sha256": "6f1e473c43b697c8c07f22c14e289cabb8b96b5a150b14b0bec2591d7b8dc4c2"
+        }
+      ]
+    }
+  ]
+}

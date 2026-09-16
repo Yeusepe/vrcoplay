@@ -1,0 +1,41 @@
+<Project>
+
+
+
+  <UsingTask TaskName="ExtractNotificationRuntimeResource" TaskFactory="RoslynCodeTaskFactory"
+             AssemblyFile="$(MSBuildToolsPath)/Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Archive ParameterType="System.String" Required="true" />
+      <Destination ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.IO.Compression" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        using (var file = File.OpenRead(Archive))
+        using (var zip = new ZipArchive(file, ZipArchiveMode.Read))
+        {
+            var entry = zip.GetEntry("Microsoft.WindowsAppRuntime.Insights.Resource.dll");
+            if (entry == null) throw new InvalidDataException("Notification runtime resource missing from " + Archive);
+            Directory.CreateDirectory(Path.GetDirectoryName(Destination));
+            using (var input = entry.Open())
+            using (var output = File.Create(Destination)) input.CopyTo(output);
+        }
+      ]]></Code>
+    </Task>
+  </UsingTask>
+  <Target Name="PrepareNotificationRuntime" BeforeTargets="AssignTargetPaths"
+          Condition="'$(WindowsAppSDKSelfContained)' == 'true'">
+    <PropertyGroup>
+      <_NotificationRuntimeResource>$(IntermediateOutputPath)NotificationRuntime/Microsoft.WindowsAppRuntime.Insights.Resource.dll</_NotificationRuntimeResource>
+    </PropertyGroup>
+    <ExtractNotificationRuntimeResource
+      Archive="$(MicrosoftWindowsAppSDKPackageDir)tools/MSIX/win10-$(PlatformTarget)/Microsoft.WindowsAppRuntime.2.msix"
+      Destination="$(_NotificationRuntimeResource)" />
+    <ItemGroup>
+      <Content Include="$(_NotificationRuntimeResource)" Link="Microsoft.WindowsAppRuntime.Insights.Resource.dll"
+               CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+      <FileWrites Include="$(_NotificationRuntimeResource)" />
+    </ItemGroup>
+  </Target>
+</Project>

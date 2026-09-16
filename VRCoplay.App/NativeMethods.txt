@@ -1,0 +1,2 @@
+CM_Get_Device_Interface_List_Size
+CM_Get_Device_Interface_List

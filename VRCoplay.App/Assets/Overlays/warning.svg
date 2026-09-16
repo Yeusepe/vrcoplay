@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="256" viewBox="0 0 1024 256">
+  <image id="gradient" href="gradient.png" x="0" y="0" width="1024" height="256" />
+  <g id="type" transform="translate(0 0)">
+    <text id="title" x="228" y="151" font-family="Satoshi" font-weight="900" font-size="44" letter-spacing="-.66" fill="#FFD166">Video may lag in this player</text>
+    <text id="detail" x="161" y="195" font-family="Satoshi" font-weight="400" font-size="26" letter-spacing="-.13" fill="#FFFFFF">Turn on low latency in the player settings, or try another world.</text>
+    <text id="compact-detail" x="32" y="230" font-family="Satoshi" font-weight="400" font-size="14" fill="#FFFFFF" opacity="0">Enable low latency in player settings</text>
+  </g>
+</svg>

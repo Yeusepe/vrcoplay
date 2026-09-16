@@ -1,0 +1,54 @@
+<!-- Copyright (c) 2026 YUCP Studio. SPDX-License-Identifier: GPL-3.0-or-later. -->
+<ContentDialog x:Class="VRCoplay.ControllerSetupDialog" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Style="{StaticResource DefaultContentDialogStyle}" DefaultButton="Primary" PrimaryButtonText="Download driver" CloseButtonText="Skip for now" PrimaryButtonClick="Primary_Click" FontFamily="{StaticResource ContentControlThemeFontFamily}" Background="{ThemeResource SolidBackgroundFillColorBaseBrush}">
+  <ContentDialog.Resources>
+    <x:Double x:Key="ContentDialogMaxWidth">440</x:Double>
+    <Thickness x:Key="ContentDialogTitleMargin">0,8,0,16</Thickness>
+    <Thickness x:Key="ContentDialogSeparatorThickness">0</Thickness>
+    <x:Double x:Key="ContentDialogButtonSpacing">0</x:Double>
+    <CornerRadius x:Key="ControlCornerRadius">12</CornerRadius>
+    <CornerRadius x:Key="OverlayCornerRadius">24</CornerRadius>
+    <StaticResource x:Key="ContentDialogTopOverlay" ResourceKey="SolidBackgroundFillColorBaseBrush" />
+  </ContentDialog.Resources>
+  <ContentDialog.CloseButtonStyle>
+    <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="Transparent" />
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}" />
+    </Style>
+  </ContentDialog.CloseButtonStyle>
+  <ContentDialog.Title>
+    <StackPanel Spacing="20">
+      <Grid Height="48">
+        <FontIcon x:Name="SetupIcon" Glyph="" FontSize="48" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" AutomationProperties.AccessibilityView="Raw" />
+        <FontIcon x:Name="WarningIcon" Glyph="" FontSize="48" Visibility="Collapsed" Foreground="{ThemeResource SystemFillColorCautionBrush}" AutomationProperties.AccessibilityView="Raw" />
+        <FontIcon x:Name="ReadyIcon" Glyph="" FontSize="48" Visibility="Collapsed" Foreground="{ThemeResource SystemFillColorSuccessBrush}" AutomationProperties.AccessibilityView="Raw" />
+      </Grid>
+      <TextBlock x:Name="SetupHeading" Text="Play with controllers" Style="{StaticResource PageTitle}" FontSize="28" TextAlignment="Center" AutomationProperties.HeadingLevel="Level1" AutomationProperties.LiveSetting="Polite" />
+    </StackPanel>
+  </ContentDialog.Title>
+  <ScrollViewer x:Name="SetupScroll" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="16">
+      <TextBlock x:Name="SetupDescription" Style="{StaticResource QuietText}" FontSize="16" TextAlignment="Center" />
+      <TextBlock x:Name="SetupNote" Style="{StaticResource QuietText}" TextAlignment="Center" />
+      <StackPanel x:Name="StatusRow" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" Visibility="Collapsed">
+        <ProgressRing x:Name="CheckingRing" Width="16" Height="16" MinWidth="16" MinHeight="16" IsActive="False" AutomationProperties.AccessibilityView="Raw" />
+        <TextBlock x:Name="SetupStatus" Style="{StaticResource QuietText}" VerticalAlignment="Center" AutomationProperties.LiveSetting="Polite" />
+      </StackPanel>
+      <TextBlock x:Name="SetupError" Visibility="Collapsed" Style="{StaticResource QuietText}" TextAlignment="Center" Foreground="{ThemeResource SystemFillColorCriticalBrush}" AutomationProperties.LiveSetting="Polite" />
+      <HyperlinkButton x:Name="SetupDetailsButton" Click="SetupDetails_Click" HorizontalAlignment="Center" MinHeight="44" Padding="8" Foreground="{ThemeResource TextFillColorSecondaryBrush}" AutomationProperties.Name="About controller setup">
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <TextBlock Text="About controller setup" />
+          <FontIcon Glyph="" FontSize="10" AutomationProperties.AccessibilityView="Raw" />
+        </StackPanel>
+        <FlyoutBase.AttachedFlyout>
+          <Flyout Placement="Top">
+            <StackPanel MaxWidth="304" Spacing="12">
+              <TextBlock x:Name="SetupDetails" TextWrapping="Wrap" />
+              <HyperlinkButton x:Name="DownloadAgainButton" Content="Open download page" Click="DownloadAgain_Click" HorizontalAlignment="Left" Padding="0,8" Visibility="Collapsed" />
+            </StackPanel>
+          </Flyout>
+        </FlyoutBase.AttachedFlyout>
+      </HyperlinkButton>
+    </StackPanel>
+  </ScrollViewer>
+</ContentDialog>

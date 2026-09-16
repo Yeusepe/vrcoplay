@@ -1,0 +1,56 @@
+<!-- Copyright (c) 2026 YUCP Studio. SPDX-License-Identifier: GPL-3.0-or-later. -->
+<UserControl x:Class="VRCoplay.CaptureSourcePicker" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="using:VRCoplay" FontFamily="{StaticResource ContentControlThemeFontFamily}">
+  <UserControl.Resources />
+  <StackPanel Spacing="8">
+    <TextBlock x:Name="PickerLabel" Text="Capture source" Style="{StaticResource FieldLabel}" />
+    <DropDownButton x:Name="PickerButton" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" MinHeight="44" Padding="12,10" CornerRadius="12" AutomationProperties.Name="Capture source" AutomationProperties.LabeledBy="{x:Bind PickerLabel}">
+      <Grid ColumnDefinitions="Auto,Auto,*">
+        <Image x:Name="SelectedImage" Width="20" Height="20" Margin="0,0,10,0" Visibility="Collapsed" AutomationProperties.AccessibilityView="Raw" />
+        <FontIcon x:Name="SelectedDisplay" Grid.Column="1" Glyph="" FontSize="18" Width="20" Margin="0,0,10,0" Visibility="Collapsed" AutomationProperties.AccessibilityView="Raw" />
+        <TextBlock x:Name="SelectedLabel" Grid.Column="2" Text="Choose a window or display" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+      </Grid>
+      <DropDownButton.Flyout>
+        <Flyout x:Name="SourceFlyout" Placement="BottomEdgeAlignedLeft">
+          <Flyout.FlyoutPresenterStyle>
+            <Style TargetType="FlyoutPresenter" BasedOn="{StaticResource DefaultFlyoutPresenterStyle}">
+              <Setter Property="Padding" Value="8" />
+              <Setter Property="CornerRadius" Value="24" />
+              <Setter Property="MaxWidth" Value="1600" />
+              <Setter Property="MaxHeight" Value="640" />
+              <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+              <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Disabled" />
+              <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+            </Style>
+          </Flyout.FlyoutPresenterStyle>
+          <Grid x:Name="FlyoutBody">
+            <TreeView x:Name="SourceTree" SelectionMode="None" CanDragItems="False" CanReorderItems="False" AllowDrop="False" ItemInvoked="SourceInvoked" AutomationProperties.Name="Capture sources by application">
+
+              <TreeView.ItemContainerTransitions>
+                <TransitionCollection>
+                  <AddDeleteThemeTransition />
+                  <RepositionThemeTransition IsStaggeringEnabled="False" />
+                </TransitionCollection>
+              </TreeView.ItemContainerTransitions>
+              <TreeView.ItemTemplate>
+                <DataTemplate x:DataType="local:CapturePickerEntry">
+                  <TreeViewItem ItemsSource="{x:Bind Children}" IsExpanded="{x:Bind IsExpanded, Mode=TwoWay}" IsEnabled="{x:Bind IsInteractive}" IsTabStop="{x:Bind IsInteractive}" MinHeight="{x:Bind RowHeight}" HorizontalContentAlignment="Stretch" Padding="0" CornerRadius="8" AutomationProperties.Name="{x:Bind AccessibleName}" AutomationProperties.ItemStatus="{x:Bind CurrentStatus, Mode=OneWay}">
+                    <Grid Margin="0,0,12,0">
+                      <TextBlock Text="{x:Bind Label}" Visibility="{x:Bind HeaderVisibility}" FontSize="12" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" />
+                      <Grid ColumnDefinitions="20,*,Auto,Auto" ColumnSpacing="12" MinHeight="40" Visibility="{x:Bind RowVisibility}" ToolTipService.ToolTip="{x:Bind Label}">
+                        <Image Width="20" Height="20" Source="{x:Bind local:WindowIconImage.For(IconWindow)}" Visibility="{x:Bind ImageVisibility}" AutomationProperties.AccessibilityView="Raw" />
+                        <FontIcon Glyph="{x:Bind Glyph}" FontSize="16" Foreground="{ThemeResource TextFillColorSecondaryBrush}" Visibility="{x:Bind GlyphVisibility}" AutomationProperties.AccessibilityView="Raw" />
+                        <TextBlock Grid.Column="1" Text="{x:Bind Label}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                        <TextBlock Grid.Column="2" Text="{x:Bind WindowCount}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" Visibility="{x:Bind CountVisibility}" AutomationProperties.AccessibilityView="Raw" />
+                        <FontIcon Grid.Column="3" Glyph="" FontSize="12" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" Visibility="{x:Bind CurrentVisibility, Mode=OneWay}" AutomationProperties.AccessibilityView="Raw" />
+                      </Grid>
+                    </Grid>
+                  </TreeViewItem>
+                </DataTemplate>
+              </TreeView.ItemTemplate>
+            </TreeView>
+          </Grid>
+        </Flyout>
+      </DropDownButton.Flyout>
+    </DropDownButton>
+  </StackPanel>
+</UserControl>

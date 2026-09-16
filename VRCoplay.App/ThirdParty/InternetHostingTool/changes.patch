@@ -1,0 +1,893 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+new file mode 100644
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,27 @@
++cmake_minimum_required(VERSION 3.28)
++project(iht LANGUAGES C CXX)
++set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
++include(FetchContent)
++set(UPNPC_BUILD_SHARED OFF CACHE BOOL "" FORCE)
++set(UPNPC_BUILD_TESTS OFF CACHE BOOL "" FORCE)
++set(UPNPC_BUILD_SAMPLE OFF CACHE BOOL "" FORCE)
++set(UPNPC_NO_INSTALL ON CACHE BOOL "" FORCE)
++FetchContent_Declare(miniupnp GIT_REPOSITORY https://github.com/miniupnp/miniupnp.git
++    GIT_TAG 2cb87d04034587bdb0f51549b3936e0d9e143bcb SOURCE_SUBDIR miniupnpc EXCLUDE_FROM_ALL)
++FetchContent_Declare(natpmp GIT_REPOSITORY https://github.com/miniupnp/libnatpmp.git
++    GIT_TAG 134fc89e2781e154e40042641f4d8bcbe42579f1 EXCLUDE_FROM_ALL)
++FetchContent_MakeAvailable(miniupnp natpmp)
++configure_file(LICENSE licenses/iht.txt COPYONLY)
++configure_file(${miniupnp_SOURCE_DIR}/LICENSE licenses/miniupnpc.txt COPYONLY)
++configure_file(${natpmp_SOURCE_DIR}/LICENSE licenses/libnatpmp.txt COPYONLY)
++target_compile_definitions(libminiupnpc-static PRIVATE MINIUPNPC_SET_SOCKET_TIMEOUT)
++file(COPY ${miniupnp_SOURCE_DIR}/miniupnpc/include/ DESTINATION ${CMAKE_BINARY_DIR}/include/miniupnpc)
++add_library(iht SHARED miss/miss.cpp miss/pcp.cpp miss/tracer.cpp)
++foreach(target iht)
++    if(TARGET ${target})
++        target_compile_features(${target} PRIVATE cxx_std_17)
++        target_compile_definitions(${target} PRIVATE IHT_LIBRARY)
++        target_include_directories(${target} PRIVATE ${CMAKE_BINARY_DIR}/include)
++        target_link_libraries(${target} PRIVATE miniupnpc::miniupnpc natpmp ws2_32 iphlpapi shlwapi advapi32)
++    endif()
++endforeach()
+diff --git a/miss/mapping.h b/miss/mapping.h
+new file mode 100644
+index 0000000..dfc2a3d
+--- /dev/null
++++ b/miss/mapping.h
+@@ -0,0 +1,18 @@
++#pragma once
++
++struct IhtPort { int protocol; int port; int internalPort = 0; };
++struct IhtRequest {
++    const IhtPort* ports;
++    int count;
++    const char* owner;
++    int lifetime;
++};
++
++// internalPort 0 uses port; upstream routers always forward port to port.
++// Blocking, serialized. Reuse owner/ports to renew; lifetime 0 removes them.
++// Returns 1 for a complete IPv4 chain, 0 or a negative UPnP error otherwise.
++// address must hold 16 bytes.
++extern "C" __declspec(dllexport) int IhtMap(const IhtRequest* request, char* address);
++
++// Blocking, serialized, read-only discovery. Creates or removes no mappings.
++extern "C" __declspec(dllexport) void IhtDiscover();
+diff --git a/miss/miss.cpp b/miss/miss.cpp
+index 85eea43..cf8cb03 100644
+--- a/miss/miss.cpp
++++ b/miss/miss.cpp
+@@ -11,26 +11,35 @@
+ #include <stdio.h>
+ #include <assert.h>
+ #include <stdlib.h>
++#include "mapping.h"
++#include <mutex>
++#include <map>
++#include <string>
++#include <future>
++#include <memory>
+ 
+ #include "relay.h"
+ #include "..\version.h"
+ 
++#ifndef IHT_LIBRARY
+ #pragma comment(lib, "miniupnpc.lib")
+ #pragma comment(lib, "libnatpmp.lib")
++#endif
+ #pragma comment(lib, "ws2_32.lib")
+ #pragma comment(lib, "iphlpapi.lib")
+ 
+-#define MINIUPNP_STATICLIB
++#define MINIUPNP_STATICLIB 1
+ #include <miniupnpc/miniupnpc.h>
+ #include <miniupnpc/upnpcommands.h>
+ #include <miniupnpc/upnperrors.h>
+ 
+-#define NATPMP_STATICLIB
++#define NATPMP_STATICLIB 1
+ #include <natpmp.h>
+ 
+ bool getHopsIP4(IN_ADDR* hopAddress, int* hopAddressCount);
++bool getRouterWanIP4(IN_ADDR nextHop, IN_ADDR* wan);
+ struct UPNPDev* getUPnPDevicesByAddress(IN_ADDR address);
+-bool PCPMapPort(PSOCKADDR_STORAGE localAddr, int localAddrLen, PSOCKADDR_STORAGE pcpAddr, int pcpAddrLen, int proto, int port, bool enable, bool indefinite);
++bool PCPMapPort(PSOCKADDR_STORAGE localAddr, int localAddrLen, PSOCKADDR_STORAGE pcpAddr, int pcpAddrLen, int proto, int port, bool enable, bool indefinite, const IhtRequest* request = nullptr, char* externalAddress = nullptr, int internalPort = 0);
+ 
+ #define SERVICE_NAME "MISS"
+ #define UPNP_SERVICE_NAME "Moonlight"
+@@ -39,10 +48,7 @@ bool PCPMapPort(PSOCKADDR_STORAGE localAddr, int localAddrLen, PSOCKADDR_STORAGE
+ #define UPNP_DISCOVERY_DELAY_MS 5000
+ #define GAA_INITIAL_SIZE 8192
+ 
+-static struct port_entry {
+-    int proto;
+-    int port;
+-} k_Ports[] = {
++static const IhtPort k_Ports[] = {
+     {IPPROTO_TCP, 47984},
+     {IPPROTO_TCP, 47989},
+     {IPPROTO_TCP, 48010},
+@@ -54,11 +60,51 @@ static struct port_entry {
+ };
+ 
+ static const int k_WolPorts[] = { 9, 47009 };
++static const IhtRequest* s_Request;
++static int s_MappingError;
++static const IhtPort* s_Ports = k_Ports;
++static int s_PortCount = ARRAYSIZE(k_Ports);
+ 
+ static HANDLE s_StopEvent;
+ static CRITICAL_SECTION s_PortMappingUpdateLock;
+ 
+-bool UPnPMapPort(struct UPNPUrls* urls, struct IGDdatas* data, int proto, const char* myAddr, int port, bool enable, bool indefinite, bool validationPass)
++// Discovery hints only: every operation still reads the WAN address and verifies
++// the exact owned mapping. Never cache port ownership or mapping readiness.
++static std::map<std::string, std::string> s_Descriptions;
++static IN_ADDR s_Hops[4];
++static int s_HopCount = -1;
++static std::mutex s_LibraryMutex;
++
++bool NATPMPMapPort(natpmp_t* natpmp, int proto, int port, bool enable, bool indefinite, int internalPort = 0);
++
++static void CheckDiscoveryNetwork()
++{
++    static DWORD gateway, interfaceIndex, local;
++    static ULONGLONG expires;
++    MIB_IPFORWARDROW route = {};
++    SOCKADDR_IN endpoint = {};
++    endpoint.sin_family = AF_INET;
++    endpoint.sin_addr.s_addr = inet_addr("1.1.1.1");
++    endpoint.sin_port = htons(53);
++    SOCKET socketHandle = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
++    int size = sizeof(endpoint);
++    bool valid = GetBestRoute(endpoint.sin_addr.s_addr, 0, &route) == NO_ERROR
++        && socketHandle != INVALID_SOCKET
++        && connect(socketHandle, (SOCKADDR*)&endpoint, size) == 0
++        && getsockname(socketHandle, (SOCKADDR*)&endpoint, &size) == 0;
++    if (socketHandle != INVALID_SOCKET) closesocket(socketHandle);
++    if (!valid || gateway != route.dwForwardNextHop || interfaceIndex != route.dwForwardIfIndex
++        || local != endpoint.sin_addr.s_addr || GetTickCount64() >= expires) {
++        s_Descriptions.clear();
++        s_HopCount = -1;
++        gateway = route.dwForwardNextHop;
++        interfaceIndex = route.dwForwardIfIndex;
++        local = endpoint.sin_addr.s_addr;
++        expires = GetTickCount64() + 300000;
++    }
++}
++
++bool UPnPMapPort(struct UPNPUrls* urls, struct IGDdatas* data, int proto, const char* myAddr, int port, bool enable, bool indefinite, bool validationPass, int internalPort = 0, const char* gateway = nullptr)
+ {
+     char intClient[16];
+     char intPort[6];
+@@ -76,6 +122,7 @@ bool UPnPMapPort(struct UPNPUrls* urls, struct IGDdatas* data, int proto, const
+         snprintf(computerName, sizeof(computerName), "UNKNOWN");
+     }
+     snprintf(myDesc, sizeof(myDesc), "%s - %s", UPNP_SERVICE_NAME, computerName);
++    if (s_Request) snprintf(myDesc, sizeof(myDesc), "IHT-%s", s_Request->owner);
+ 
+     snprintf(portStr, sizeof(portStr), "%d", port);
+     switch (proto)
+@@ -95,6 +142,58 @@ bool UPnPMapPort(struct UPNPUrls* urls, struct IGDdatas* data, int proto, const
+     int err = UPNP_GetSpecificPortMappingEntry(
+         urls->controlURL, data->first.servicetype, portStr, protoStr, nullptr,
+         intClient, intPort, desc, enabled, leaseDuration);
++    if (s_Request) {
++        if (!internalPort) internalPort = port;
++        char privatePort[6];
++        snprintf(privatePort, sizeof(privatePort), "%d", internalPort);
++        auto read = [&] { return UPNP_GetSpecificPortMappingEntry(urls->controlURL,
++            data->first.servicetype, portStr, protoStr, nullptr, intClient, intPort, desc, enabled, leaseDuration); };
++        auto owned = [&] { return !strcmp(intClient, myAddr) && atoi(intPort) == internalPort && !strcmp(desc, myDesc); };
++        if (err != 714 && (err != 0 || !owned())) {
++            if (enable && !s_MappingError) s_MappingError = err > 0 ? err : 718;
++            return false;
++        }
++        if (!enable) return err == 714 || (UPNP_DeletePortMapping(urls->controlURL, data->first.servicetype, portStr, protoStr, nullptr) == 0 && read() == 714);
++        char duration[16];
++        snprintf(duration, sizeof(duration), "%d", s_Request->lifetime);
++        auto add = [&] {
++            int result = UPNP_AddPortMapping(urls->controlURL, data->first.servicetype,
++                portStr, privatePort, myAddr, myDesc, protoStr, nullptr, duration);
++            if (result > 0 && !s_MappingError) s_MappingError = result;
++            return result;
++        };
++        int previousError = s_MappingError;
++        int added = add();
++        // Some IGDs reject a new UPnP entry at capacity but can allocate it via
++        // NAT-PMP. Their public-address request can fail independently of MAP.
++        // Bootstrap only an absent port, then claim it with our normal UPnP
++        // owner and remove the temporary NAT-PMP lease. Readback below must
++        // still prove that the owned UPnP mapping survived that removal.
++        IN_ADDR gatewayAddress;
++        if (err == 714 && (added == 501 || added == 728) && gateway
++            && InetPtonA(AF_INET, gateway, &gatewayAddress) == 1) {
++            natpmp_t seed = {};
++            if (initnatpmp(&seed, 1, gatewayAddress.s_addr) == 0) {
++                if (NATPMPMapPort(&seed, proto, port, true, false, internalPort)
++                    && read() == 0 && !strcmp(intClient, myAddr) && atoi(intPort) == internalPort
++                    && !strcmp(enabled, "1") && atoi(leaseDuration) >= s_Request->lifetime * 0.8) {
++                    added = add();
++                    // We just allocated this exact tuple after observing it
++                    // absent. Never delete a router-assigned alternative.
++                    if (!NATPMPMapPort(&seed, proto, port, false, false, internalPort)) added = -1;
++                }
++                closenatpmp(&seed);
++            }
++        }
++        if (added != 0 || read() != 0 || !owned()) return false;
++        s_MappingError = previousError;
++        // Some routers acknowledge renewal without extending expiry.
++        if (atoi(leaseDuration) > 0 && atoi(leaseDuration) < s_Request->lifetime * 0.8) {
++            if (UPNP_DeletePortMapping(urls->controlURL, data->first.servicetype, portStr, protoStr, nullptr) != 0
++                || read() != 714 || add() != 0 || read() != 0 || !owned()) return false;
++        }
++        return !strcmp(enabled, "1") && atoi(leaseDuration) >= s_Request->lifetime * 0.8;
++    }
+     if (err == 714) {
+         // NoSuchEntryInArray
+         printf("NOT FOUND\n");
+@@ -297,18 +396,38 @@ bool GetIP4OnLinkPrefixLength(char* lanAddressString, int* prefixLength)
+     return false;
+ }
+ 
+-bool UPnPHandleDeviceList(struct UPNPDev* list, bool enable, char* lanAddrOverride, char* wanAddr)
++bool UPnPHandleDeviceList(struct UPNPDev* list, bool enable, char* lanAddrOverride, char* wanAddr,
++    const char* target = nullptr, const char* descriptionHint = nullptr, bool* available = nullptr)
+ {
+-    struct UPNPUrls urls;
+-    struct IGDdatas data;
++    struct UPNPUrls urls = {};
++    struct IGDdatas data = {};
+     char localAddress[128];
+     char* portMappingInternalAddress;
+     int pinholeAllowed = false;
+     bool success = true;
+ 
+-    int ret = UPNP_GetValidIGD(list, &urls, &data, localAddress, sizeof(localAddress));
++    if (available) *available = false;
++    int ret = descriptionHint
++        ? UPNP_GetIGDFromUrl(descriptionHint, &urls, &data, localAddress, sizeof(localAddress))
++        : UPNP_GetValidIGD(list, &urls, &data, localAddress, sizeof(localAddress)
++#if MINIUPNPC_API_VERSION >= 18
++        , wanAddr, 128
++#endif
++    );
++#if MINIUPNPC_API_VERSION >= 18
++    if (!descriptionHint && ret >= 3) --ret;
++#endif
++    if (!descriptionHint && (ret == 0 || ret == 3) && target) {
++        FreeUPNPUrls(&urls);
++        char description[128];
++        snprintf(description, sizeof(description), "http://%s:52869/gatedesc.xml", target);
++        ret = UPNP_GetIGDFromUrl(description, &urls, &data, localAddress, sizeof(localAddress));
++    }
++    if (ret && (!urls.controlURL || (!strstr(data.first.servicetype, ":WANIPConnection:")
++        && !strstr(data.first.servicetype, ":WANPPPConnection:")))) ret = 3;
+     if (ret == 0) {
+         printf("No UPnP device found!\n");
++        FreeUPNPUrls(&urls);
+         return false;
+     }
+     else if (ret == 3) {
+@@ -323,13 +442,17 @@ bool UPnPHandleDeviceList(struct UPNPDev* list, bool enable, char* lanAddrOverri
+         printf("Found a disconnected (!) UPnP IGD (%s)\n", urls.rootdescURL);
+ 
+         // Even if we are able to add forwarding entries, go ahead and try NAT-PMP
+-        success = false;
++        if (!s_Request) success = false;
+     }
+     else {
+         printf("UPNP_GetValidIGD() failed: %d\n", ret);
++        FreeUPNPUrls(&urls);
+         return false;
+     }
+ 
++    if (available) *available = true;
++    if (target && urls.rootdescURL) s_Descriptions[target] = urls.rootdescURL;
++
+     ret = UPNP_GetExternalIPAddress(urls.controlURL, data.first.servicetype, wanAddr);
+     if (ret == UPNPCOMMAND_SUCCESS) {
+         printf("UPnP IGD WAN address is: %s\n", wanAddr);
+@@ -348,14 +471,15 @@ bool UPnPHandleDeviceList(struct UPNPDev* list, bool enable, char* lanAddrOverri
+     }
+ 
+     // Create the port mappings
+-    for (int i = 0; i < ARRAYSIZE(k_Ports); i++) {
+-        if (!UPnPMapPort(&urls, &data, k_Ports[i].proto, portMappingInternalAddress, k_Ports[i].port, enable, false, false)) {
++    for (int i = 0; i < s_PortCount; i++) {
++        if (!UPnPMapPort(&urls, &data, s_Ports[i].protocol, portMappingInternalAddress, s_Ports[i].port, enable, false, false,
++            lanAddrOverride ? 0 : s_Ports[i].internalPort, target)) {
+             success = false;
+         }
+     }
+ 
+     // Do a best-effort for IPv4 Wake-on-LAN broadcast mappings
+-    for (int i = 0; i < ARRAYSIZE(k_WolPorts); i++) {
++    for (int i = 0; !s_Request && i < ARRAYSIZE(k_WolPorts); i++) {
+         if (lanAddrOverride == nullptr) {
+             // Map the port to the broadcast address (may not work on all routers). This
+             // ensures delivery even after the ARP entry for this PC times out on the router.
+@@ -384,15 +508,15 @@ bool UPnPHandleDeviceList(struct UPNPDev* list, bool enable, char* lanAddrOverri
+     }
+ 
+     // Validate the rules are present and correct if they claimed to be added successfully
+-    if (success && enable) {
++    if (success && enable && !s_Request) {
+         // Wait 10 seconds for the router state to quiesce or the stop event to be set
+         printf("Waiting before UPnP port validation...");
+         if (WaitForSingleObject(s_StopEvent, 10000) == WAIT_TIMEOUT) {
+             printf("done\n");
+ 
+             // Perform the validation pass (converting any now missing entries to permanent ones)
+-            for (int i = 0; i < ARRAYSIZE(k_Ports); i++) {
+-                if (!UPnPMapPort(&urls, &data, k_Ports[i].proto, portMappingInternalAddress, k_Ports[i].port, enable, false, true)) {
++            for (int i = 0; i < s_PortCount; i++) {
++                if (!UPnPMapPort(&urls, &data, s_Ports[i].protocol, portMappingInternalAddress, s_Ports[i].port, enable, false, true)) {
+                     success = false;
+                 }
+             }
+@@ -406,7 +530,7 @@ bool UPnPHandleDeviceList(struct UPNPDev* list, bool enable, char* lanAddrOverri
+     return success;
+ }
+ 
+-bool NATPMPMapPort(natpmp_t* natpmp, int proto, int port, bool enable, bool indefinite)
++bool NATPMPMapPort(natpmp_t* natpmp, int proto, int port, bool enable, bool indefinite, int internalPort)
+ {
+     int natPmpProto;
+ 
+@@ -432,17 +556,18 @@ bool NATPMPMapPort(natpmp_t* natpmp, int proto, int port, bool enable, bool inde
+         lifetime = 604800; // 1 week
+     }
+     else {
+-        lifetime = PORT_MAPPING_DURATION_SEC;
++        lifetime = s_Request ? s_Request->lifetime : PORT_MAPPING_DURATION_SEC;
+     }
+ 
+     printf("Updating NAT-PMP port mapping for %s %d...", proto == IPPROTO_TCP ? "TCP" : "UDP", port);
+-    int err = sendnewportmappingrequest(natpmp, natPmpProto, port, enable ? port : 0, lifetime);
++    int err = sendnewportmappingrequest(natpmp, natPmpProto, internalPort ? internalPort : port, enable ? port : 0, lifetime);
+     if (err < 0) {
+         printf("ERROR %d\n", err);
+         return false;
+     }
+ 
+-    natpmpresp_t response;
++    natpmpresp_t response = {};
++    ULONGLONG deadline = GetTickCount64() + 6000;
+     do
+     {
+         fd_set fds;
+@@ -458,6 +583,15 @@ bool NATPMPMapPort(natpmp_t* natpmp, int proto, int port, bool enable, bool inde
+             return false;
+         }
+ 
++        if (s_Request) {
++            auto now = GetTickCount64();
++            if (now >= deadline) return false;
++            auto remaining = deadline - now;
++            if ((ULONGLONG)timeout.tv_sec * 1000 + timeout.tv_usec / 1000 > remaining) {
++                timeout.tv_sec = (long)(remaining / 1000);
++                timeout.tv_usec = (long)(remaining % 1000) * 1000;
++            }
++        }
+         select(0, &fds, nullptr, nullptr, &timeout);
+ 
+         err = readnatpmpresponseorretry(natpmp, &response);
+@@ -467,6 +601,10 @@ bool NATPMPMapPort(natpmp_t* natpmp, int proto, int port, bool enable, bool inde
+         printf("FAILED %d\n", err);
+         return false;
+     }
++    else if (response.type != natPmpProto || response.pnu.newportmapping.privateport != (internalPort ? internalPort : port)) {
++        printf("MISMATCHED RESPONSE\n");
++        return false;
++    }
+     else if (response.pnu.newportmapping.lifetime == 0 && !enable) {
+         printf("DELETED\n");
+         return true;
+@@ -474,6 +612,10 @@ bool NATPMPMapPort(natpmp_t* natpmp, int proto, int port, bool enable, bool inde
+     else if (response.pnu.newportmapping.mappedpublicport != port) {
+         printf("CONFLICT\n");
+ 
++        // NAT-PMP has no owner token. A returned alternative may be an
++        // existing mapping for this private port; let its finite lease expire.
++        if (s_Request) return false;
++
+         // It couldn't assign us the external port we requested and gave us an alternate external port.
+         // We can't use this alternate mapping, so immediately release it.
+         printf("Deleting unwanted NAT-PMP mapping for %s %d...", proto == IPPROTO_TCP ? "TCP" : "UDP", response.pnu.newportmapping.mappedpublicport);
+@@ -514,7 +656,7 @@ bool NATPMPMapPort(natpmp_t* natpmp, int proto, int port, bool enable, bool inde
+     }
+     else {
+         printf("OK (%d seconds remaining)\n", response.pnu.newportmapping.lifetime);
+-        return true;
++        return !s_Request || response.pnu.newportmapping.lifetime >= (unsigned)lifetime;
+     }
+ }
+ 
+@@ -578,11 +720,13 @@ bool IsAlternateHostSoftwareRunning()
+     return result;
+ }
+ 
+-void UpdatePortMappingsForTarget(bool enable, char* targetAddressIP4, char* internalAddressIP4, char* upstreamAddressIP4)
++bool UpdatePortMappingsForTarget(bool enable, char* targetAddressIP4, char* internalAddressIP4, char* upstreamAddressIP4,
++    struct UPNPDev* discovered = nullptr, bool discoveryComplete = false)
+ {
+-    natpmp_t natpmp;
++    natpmp_t natpmp = {};
+     bool tryNatPmp = true;
+     bool tryPcp = true;
++    bool mapped = false;
+     char upstreamAddrNatPmp[128] = {};
+     char upstreamAddrUPnP[128] = {};
+ 
+@@ -606,14 +750,25 @@ void UpdatePortMappingsForTarget(bool enable, char* targetAddressIP4, char* inte
+ 
+     {
+         int upnpErr;
+-        struct UPNPDev* ipv4Devs;
++        struct UPNPDev* ipv4Devs = discovered;
++        char gateway[16] = {};
++        if (natpmp.gateway) inet_ntop(AF_INET, &natpmp.gateway, gateway, sizeof(gateway));
++        const char* target = targetAddressIP4 ? targetAddressIP4 : (*gateway ? gateway : nullptr);
++        bool available = false;
++        auto hint = s_Descriptions.find(target ? target : "");
++        if (hint != s_Descriptions.end()) {
++            std::string description = hint->second;
++            mapped = UPnPHandleDeviceList(nullptr, enable, internalAddressIP4, upstreamAddrUPnP,
++                target, description.c_str(), &available);
++            if (!available) s_Descriptions.erase(target);
++        }
+         
+-        if (targetAddressIP4 == nullptr) {
++        if (!available && !discoveryComplete && targetAddressIP4 == nullptr) {
+             // If we have no target, use discovery to find the first hop
+             ipv4Devs = upnpDiscoverAll(UPNP_DISCOVERY_DELAY_MS, nullptr, nullptr, UPNP_LOCAL_PORT_ANY, 0, 2, &upnpErr);
+             printf("UPnP IPv4 IGD discovery completed with error code: %d\n", upnpErr);
+         }
+-        else {
++        else if (!available && !discoveryComplete) {
+             // We have a specified target, so do discovery against that directly (may be outside our subnet in case of double-NAT)
+             struct in_addr addr;
+             addr.S_un.S_addr = inet_addr(targetAddressIP4);
+@@ -621,7 +776,7 @@ void UpdatePortMappingsForTarget(bool enable, char* targetAddressIP4, char* inte
+         }
+ 
+         // Abort if this is an add/update request and we're stopping
+-        if (enable && WaitForSingleObject(s_StopEvent, 0) == WAIT_OBJECT_0) {
++        if (enable && s_StopEvent && WaitForSingleObject(s_StopEvent, 0) == WAIT_OBJECT_0) {
+             printf("Aborting port mapping update due to stop request\n");
+             goto Exit;
+         }
+@@ -641,7 +796,10 @@ void UpdatePortMappingsForTarget(bool enable, char* targetAddressIP4, char* inte
+         }
+ 
+         // Don't try NAT-PMP if UPnP succeeds
+-        if (UPnPHandleDeviceList(ipv4Devs, enable, internalAddressIP4, upstreamAddrUPnP)) {
++        if (!available)
++            mapped = UPnPHandleDeviceList(ipv4Devs, enable, internalAddressIP4, upstreamAddrUPnP, target);
++        if (mapped) {
++            mapped = true;
+             printf("UPnP IPv4 port mapping successful\n");
+             if (enable) {
+                 // We still want to try NAT-PMP if we're removing
+@@ -660,7 +818,7 @@ void UpdatePortMappingsForTarget(bool enable, char* targetAddressIP4, char* inte
+         // NAT-PMP has no description field or other token that we can use to determine
+         // if we created the rules we'd be deleting. Since we don't have that, we can't
+         // safely remove mappings that could be shared by another machine behind a double NAT.
+-        if (!enable && targetAddressIP4 != nullptr) {
++        if (!enable && (targetAddressIP4 != nullptr || s_Request)) {
+             printf("Not removing upstream NAT-PMP mappings on non-default gateway device\n");
+             tryNatPmp = false;
+         }
+@@ -679,8 +837,8 @@ void UpdatePortMappingsForTarget(bool enable, char* targetAddressIP4, char* inte
+ 
+         if (tryNatPmp) {
+             bool success = true;
+-            for (int i = 0; i < ARRAYSIZE(k_Ports); i++) {
+-                if (!NATPMPMapPort(&natpmp, k_Ports[i].proto, k_Ports[i].port, enable, false)) {
++            for (int i = 0; i < s_PortCount; i++) {
++                if (!NATPMPMapPort(&natpmp, s_Ports[i].protocol, s_Ports[i].port, enable, false, targetAddressIP4 ? 0 : s_Ports[i].internalPort)) {
+                     success = false;
+                 }
+             }
+@@ -690,13 +848,14 @@ void UpdatePortMappingsForTarget(bool enable, char* targetAddressIP4, char* inte
+             // doesn't work (needs to be broadcast) for the last hop.
+             if (targetAddressIP4 != nullptr) {
+                 // Best effort, don't care if we fail for WOL
+-                for (int i = 0; i < ARRAYSIZE(k_WolPorts); i++) {
++                for (int i = 0; !s_Request && i < ARRAYSIZE(k_WolPorts); i++) {
+                     // Indefinite mapping since we may not be awake to refresh it
+                     NATPMPMapPort(&natpmp, IPPROTO_UDP, k_WolPorts[i], enable, true);
+                 }
+             }
+ 
+             if (success) {
++                mapped = true;
+                 printf("NAT-PMP IPv4 port mapping successful\n");
+ 
+                 // Always try all possibilities when disabling to ensure
+@@ -735,10 +894,10 @@ void UpdatePortMappingsForTarget(bool enable, char* targetAddressIP4, char* inte
+         }
+ 
+         bool success = true;
+-        for (int i = 0; i < ARRAYSIZE(k_Ports); i++) {
++        for (int i = 0; i < s_PortCount; i++) {
+             if (!PCPMapPort((PSOCKADDR_STORAGE)&internalAddr, sizeof(internalAddr),
+                 (PSOCKADDR_STORAGE)&targetAddr, sizeof(targetAddr),
+-                k_Ports[i].proto, k_Ports[i].port, enable, false)) {
++                s_Ports[i].protocol, s_Ports[i].port, enable, false, s_Request, upstreamAddrNatPmp, targetAddressIP4 ? 0 : s_Ports[i].internalPort)) {
+                 success = false;
+             }
+         }
+@@ -748,7 +907,7 @@ void UpdatePortMappingsForTarget(bool enable, char* targetAddressIP4, char* inte
+         // doesn't work (needs to be broadcast) for the last hop.
+         if (internalAddressIP4 != nullptr) {
+             // Best effort, don't care if we fail for WOL
+-            for (int i = 0; i < ARRAYSIZE(k_WolPorts); i++) {
++            for (int i = 0; !s_Request && i < ARRAYSIZE(k_WolPorts); i++) {
+                 // Indefinite mapping since we may not be awake to refresh it
+                 PCPMapPort((PSOCKADDR_STORAGE)&internalAddr, sizeof(internalAddr),
+                     (PSOCKADDR_STORAGE)&targetAddr, sizeof(targetAddr),
+@@ -757,6 +916,7 @@ void UpdatePortMappingsForTarget(bool enable, char* targetAddressIP4, char* inte
+         }
+ 
+         if (success) {
++            mapped = true;
+             printf("PCP IPv4 port mapping successful\n");
+         }
+     }
+@@ -775,6 +935,7 @@ Exit:
+         printf("No valid upstream IPv4 address found!\n");
+         upstreamAddressIP4[0] = 0;
+     }
++    return mapped;
+ }
+ 
+ bool IsLikelyNAT(unsigned long netByteOrderAddr)
+@@ -801,28 +962,54 @@ bool IsLikelyNAT(unsigned long netByteOrderAddr)
+     return false;
+ }
+ 
+-void UpdatePortMappings(bool enable)
++bool UpdatePortMappings(bool enable, char* publicAddress = nullptr)
+ {
+     IN_ADDR hops[4];
+     int hopCount = ARRAYSIZE(hops);
+     char upstreamAddrStr[128];
+     unsigned long upstreamAddr;
+-
+-    printf("Finding upstream IPv4 hops via traceroute...\n");
+-    if (!getHopsIP4(hops, &hopCount)) {
+-        hopCount = 0;
+-    }
+-    else {
+-        printf("Found %d hops\n", hopCount);
+-    }
++    std::unique_ptr<UPNPDev, decltype(&freeUPNPDevlist)> firstHopDevices(nullptr, freeUPNPDevlist);
++    bool firstHopDiscovered = false;
++
++    // Trace while discovering the local gateway, then reuse the route for other
++    // port groups and renewals on this network.
++    auto trace = std::async(std::launch::async, [&] {
++        if (s_HopCount >= 0) {
++            hopCount = s_HopCount;
++            memcpy(hops, s_Hops, sizeof(hops));
++        }
++        else {
++            printf("Finding upstream IPv4 hops via traceroute...\n");
++            if (!getHopsIP4(hops, &hopCount)) hopCount = 0;
++            // Retry unsuccessful discovery next time rather than caching it.
++            if (hopCount > 0) {
++                s_HopCount = hopCount;
++                memcpy(s_Hops, hops, sizeof(hops));
++                // The first upstream gateway can discover its IGD while the
++                // default gateway is doing SSDP. This is read-only discovery.
++                if (IsLikelyNAT(hops[0].s_addr)) {
++                    firstHopDevices.reset(getUPnPDevicesByAddress(hops[0]));
++                    firstHopDiscovered = true;
++                }
++            }
++        }
++    });
+ 
+     // getHopsIP4() already skips the default gateway, so 0
+     // is actually the first hop after the default gateway
+     int nextHopIndex = 0;
+ 
+     // Start by probing for the default gateway
+-    UpdatePortMappingsForTarget(enable, nullptr, nullptr, upstreamAddrStr);
+-    while (upstreamAddrStr[0] != 0 && (upstreamAddr = inet_addr(upstreamAddrStr)) != 0) {
++    bool success = UpdatePortMappingsForTarget(enable, nullptr, nullptr, upstreamAddrStr);
++    trace.get();
++    for (;;) {
++        if ((!upstreamAddrStr[0] || inet_addr(upstreamAddrStr) == 0) && nextHopIndex < hopCount) {
++            IN_ADDR wan;
++            if (IsLikelyNAT(hops[nextHopIndex].s_addr) && getRouterWanIP4(hops[nextHopIndex], &wan) && IsLikelyNAT(wan.s_addr))
++                inet_ntop(AF_INET, &wan, upstreamAddrStr, sizeof(upstreamAddrStr));
++        }
++        upstreamAddr = inet_addr(upstreamAddrStr);
++        if (!upstreamAddrStr[0] || upstreamAddr == 0 || upstreamAddr == INADDR_NONE) break;
+         // We got an upstream address. Let's check if this is a NAT
+         if (IsLikelyNAT(upstreamAddr)) {
+             printf("Upstream address %s is likely a NAT\n", upstreamAddrStr);
+@@ -838,12 +1025,18 @@ void UpdatePortMappings(bool enable)
+             // It's a NAT, so let's direct our UPnP/NAT-PMP messages to it.
+             // The internal IP address for the new mapping will be the upstream address of the last one.
+             // The target IP address to which to send the UPnP/NAT-PMP is the next hop of the traceroute.
+-            UpdatePortMappingsForTarget(enable, targetAddress, upstreamAddrStr, upstreamAddrStr);
++            success = UpdatePortMappingsForTarget(enable, targetAddress, upstreamAddrStr, upstreamAddrStr,
++                nextHopIndex == 0 ? firstHopDevices.release() : nullptr,
++                nextHopIndex == 0 && firstHopDiscovered) && success;
+         }
+         else {
++            DWORD hostAddr = ntohl(upstreamAddr);
++            if ((hostAddr >> 24) == 0 || (hostAddr >> 24) == 127 || hostAddr >= 0xE0000000
++                || (hostAddr & 0xFFFF0000) == 0xA9FE0000) break;
+             // If we reach a proper public IP address, we're done
+             printf("Reached the Internet at hop %d\n", nextHopIndex);
+-            break;
++            if (publicAddress) strcpy_s(publicAddress, 16, upstreamAddrStr);
++            return success;
+         }
+ 
+         // Next hop
+@@ -851,8 +1044,59 @@ void UpdatePortMappings(bool enable)
+     }
+ 
+     fflush(stdout);
++    return false;
+ }
+ 
++#ifdef IHT_LIBRARY
++extern "C" __declspec(dllexport) void IhtDiscover()
++{
++    std::lock_guard<std::mutex> lock(s_LibraryMutex);
++    WSADATA wsa;
++    if (WSAStartup(MAKEWORD(2, 2), &wsa)) return;
++    CheckDiscoveryNetwork();
++    // No requested ports: discovery and WAN reads only, including upstream IGDs.
++    IhtRequest discovery = { nullptr, 0, "discovery", 120 };
++    s_Request = &discovery;
++    s_PortCount = 0;
++    UpdatePortMappings(true);
++    s_Request = nullptr;
++    s_PortCount = ARRAYSIZE(k_Ports);
++    WSACleanup();
++}
++
++extern "C" __declspec(dllexport) int IhtMap(const IhtRequest* request, char* address)
++{
++    if (address) *address = 0;
++    if (!request || !address || !request->ports || request->count < 1 || request->count > 16
++        || !request->owner || !*request->owner || strnlen_s(request->owner, 65) > 64
++        || request->lifetime < 0 || request->lifetime > 86400) return 0;
++    for (int i = 0; i < request->count; ++i)
++        if ((request->ports[i].protocol != IPPROTO_TCP && request->ports[i].protocol != IPPROTO_UDP)
++            || request->ports[i].port < 1 || request->ports[i].port > 65535
++            || request->ports[i].internalPort < 0 || request->ports[i].internalPort > 65535) return 0;
++    std::lock_guard<std::mutex> lock(s_LibraryMutex);
++    WSADATA wsa;
++    if (WSAStartup(MAKEWORD(2, 2), &wsa)) return 0;
++    CheckDiscoveryNetwork();
++    s_Request = request;
++    s_MappingError = 0;
++    s_Ports = request->ports;
++    s_PortCount = request->count;
++    bool result = UpdatePortMappings(request->lifetime != 0, address);
++    int error = s_MappingError;
++    if (!result && request->lifetime) {
++        UpdatePortMappings(false);
++        // A changed or failed upstream path must be discovered again on retry.
++        s_HopCount = -1;
++    }
++    s_Request = nullptr;
++    s_Ports = k_Ports;
++    s_PortCount = ARRAYSIZE(k_Ports);
++    WSACleanup();
++    if (!result) *address = 0;
++    return result ? 1 : -error;
++}
++#else
+ void NETIOAPI_API_ IpInterfaceChangeNotificationCallback(PVOID context, PMIB_IPINTERFACE_ROW, MIB_NOTIFICATION_TYPE)
+ {
+     SetEvent((HANDLE)context);
+@@ -952,9 +1196,9 @@ int Run(bool standaloneExe)
+     SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
+ 
+     // Create the UDP alternate port relays
+-    for (int i = 0; i < ARRAYSIZE(k_Ports); i++) {
+-        if (k_Ports[i].proto == IPPROTO_UDP) {
+-            StartUdpRelay(k_Ports[i].port);
++    for (int i = 0; i < s_PortCount; i++) {
++        if (s_Ports[i].protocol == IPPROTO_UDP) {
++            StartUdpRelay(s_Ports[i].port);
+         }
+     }
+ 
+@@ -1129,4 +1373,5 @@ int main(int argc, char* argv[])
+     }
+ 
+     return StartServiceCtrlDispatcher(ServiceTable);
+-}
+\ No newline at end of file
++}
++#endif
+diff --git a/miss/pcp.cpp b/miss/pcp.cpp
+index 79a4cea..24a2482 100644
+--- a/miss/pcp.cpp
++++ b/miss/pcp.cpp
+@@ -13,6 +13,7 @@
+ 
+ #include <assert.h>
+ #include <stdio.h>
++#include "mapping.h"
+ 
+ #define RECV_TIMEOUT_SEC 3
+ 
+@@ -75,13 +76,14 @@ typedef struct _PCP_MAP_RESPONSE {
+ 
+ #pragma pack(pop)
+ 
+-static void populateMappingNonce(PPCP_MAP_REQUEST request, PSOCKADDR_STORAGE pcpAddr, int pcpAddrLen)
++static void populateMappingNonce(PPCP_MAP_REQUEST request, PSOCKADDR_STORAGE pcpAddr, int pcpAddrLen, const char* owner)
+ {
+     struct {
+         unsigned short port;
+         unsigned char localAddress[16];
+         SOCKADDR_STORAGE targetAddress;
+-    } dataToHash;
++        char owner[65];
++    } dataToHash = {};
+ 
+     assert(request->internalPort != 0);
+ 
+@@ -89,7 +91,8 @@ static void populateMappingNonce(PPCP_MAP_REQUEST request, PSOCKADDR_STORAGE pcp
+     memcpy(dataToHash.localAddress, request->hdr.localAddress, sizeof(dataToHash.localAddress));
+     memcpy(&dataToHash.targetAddress, pcpAddr, pcpAddrLen);
+ 
+-    HashData((BYTE*)&dataToHash, 18 + pcpAddrLen, request->mappingNonce, sizeof(request->mappingNonce));
++    if (owner) strcpy_s(dataToHash.owner, owner);
++    HashData((BYTE*)&dataToHash, owner ? sizeof(dataToHash) : 18 + pcpAddrLen, request->mappingNonce, sizeof(request->mappingNonce));
+ }
+ 
+ static void populateAddressFromSockAddr(PSOCKADDR_STORAGE sockAddr, unsigned char* address)
+@@ -109,7 +112,7 @@ static void populateAddressFromSockAddr(PSOCKADDR_STORAGE sockAddr, unsigned cha
+     }
+ }
+ 
+-bool PCPMapPort(PSOCKADDR_STORAGE localAddr, int localAddrLen, PSOCKADDR_STORAGE pcpAddr, int pcpAddrLen, int proto, int port, bool enable, bool indefinite)
++bool PCPMapPort(PSOCKADDR_STORAGE localAddr, int localAddrLen, PSOCKADDR_STORAGE pcpAddr, int pcpAddrLen, int proto, int port, bool enable, bool indefinite, const IhtRequest* request, char* externalAddress, int internalPort)
+ {
+     SOCKET sock;
+     PCP_MAP_REQUEST reqMsg;
+@@ -129,7 +132,7 @@ bool PCPMapPort(PSOCKADDR_STORAGE localAddr, int localAddrLen, PSOCKADDR_STORAGE
+         lifetime = 604800; // 1 week
+     }
+     else {
+-        lifetime = 3600;
++        lifetime = request ? request->lifetime : 3600;
+     }
+ 
+     assert(localAddr->ss_family == pcpAddr->ss_family);
+@@ -178,7 +181,7 @@ bool PCPMapPort(PSOCKADDR_STORAGE localAddr, int localAddrLen, PSOCKADDR_STORAGE
+     populateAddressFromSockAddr(localAddr, reqMsg.hdr.localAddress);
+ 
+     reqMsg.protocol = proto;
+-    reqMsg.internalPort = htons(port);
++    reqMsg.internalPort = htons(internalPort ? internalPort : port);
+     reqMsg.externalPort = htons(port);
+ 
+     SOCKADDR_STORAGE noneAddr = {};
+@@ -197,7 +200,7 @@ bool PCPMapPort(PSOCKADDR_STORAGE localAddr, int localAddrLen, PSOCKADDR_STORAGE
+     }
+ 
+     // This must be done after the rest of the message is populated
+-    populateMappingNonce(&reqMsg, pcpAddr, pcpAddrLen);
++    populateMappingNonce(&reqMsg, pcpAddr, pcpAddrLen, request ? request->owner : nullptr);
+ 
+     bytesRead = 0;
+     for (i = 0; i < RECV_TIMEOUT_SEC; i++) {
+@@ -295,6 +298,7 @@ bool PCPMapPort(PSOCKADDR_STORAGE localAddr, int localAddrLen, PSOCKADDR_STORAGE
+         goto fail;
+     }
+ 
++    if (request && pcpAddr->ss_family == AF_INET && memcmp(resp.hdr.externalAddress, reqMsg.hdr.localAddress, 12)) goto fail;
+     if (enable) {
+         printf("OK (%d seconds remaining)\n", ntohl(resp.hdr.hdr.lifetime));
+     }
+@@ -302,10 +306,12 @@ bool PCPMapPort(PSOCKADDR_STORAGE localAddr, int localAddrLen, PSOCKADDR_STORAGE
+         printf("DELETED\n");
+     }
+ 
++    if (externalAddress && pcpAddr->ss_family == AF_INET)
++        inet_ntop(AF_INET, &resp.hdr.externalAddress[12], externalAddress, 128);
+     closesocket(sock);
+-    return true;
++    return !enable || ntohl(resp.hdr.hdr.lifetime) >= (unsigned)lifetime;
+ 
+ fail:
+     closesocket(sock);
+     return false;
+-}
+\ No newline at end of file
++}
+diff --git a/miss/tracer.cpp b/miss/tracer.cpp
+index 12f3a92..f7e4ace 100644
+--- a/miss/tracer.cpp
++++ b/miss/tracer.cpp
+@@ -11,7 +11,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ 
+-#define MINIUPNP_STATICLIB
++#define MINIUPNP_STATICLIB 1
+ #include <miniupnpc/miniupnpc.h>
+ 
+ static const char* k_SsdpSearchFormatString =
+@@ -147,9 +147,10 @@ struct UPNPDev* getUPnPDevicesByAddress(IN_ADDR address)
+ 
+         // Parse the first status line:
+         // HTTP/1.1 200 OK
+-        char* protocol = strtok(responseBuffer, " ");
+-        char* statusCodeStr = strtok(nullptr, " ");
+-        char* statusMessage = strtok(nullptr, "\r");
++        char* context = nullptr;
++        char* protocol = strtok_s(responseBuffer, " ", &context);
++        char* statusCodeStr = strtok_s(nullptr, " ", &context);
++        char* statusMessage = strtok_s(nullptr, "\r", &context);
+ 
+         // Check for a valid response header
+         if (protocol == nullptr) {
+@@ -171,7 +172,8 @@ struct UPNPDev* getUPnPDevicesByAddress(IN_ADDR address)
+         }
+ 
+         // Parse the header options
+-        char* remainder = strtok(nullptr, "");
++        char* remainder = strtok_s(nullptr, "", &context);
++        if (!remainder) continue;
+         const char* loc = nullptr;
+         const char* st = nullptr;
+         const char* usn = ""; // Initialize to empty since it's optional
+@@ -215,6 +217,39 @@ struct UPNPDev* getUPnPDevicesByAddress(IN_ADDR address)
+ // Start at TTL 2 to skip contacting our default gateway
+ #define TTL_START 2
+ 
++bool getRouterWanIP4(IN_ADDR nextHop, IN_ADDR* wan)
++{
++    HANDLE icmp = IcmpCreateFile();
++    if (icmp == INVALID_HANDLE_VALUE) return false;
++    unsigned char route[40] = { 7, 39, 4 };
++    IP_OPTION_INFORMATION options = { 64, 0, 0, sizeof(route), route };
++    unsigned char buffer[512] = {};
++    DWORD count = IcmpSendEcho(icmp, nextHop.s_addr, nullptr, 0, &options, buffer, sizeof(buffer), 2000);
++    IcmpCloseHandle(icmp);
++    auto reply = (ICMP_ECHO_REPLY*)buffer;
++    if (!count || reply->Status != IP_SUCCESS) return false;
++    auto data = reply->Options.OptionsData;
++    int size = reply->Options.OptionsSize;
++    for (int offset = 0; data && offset < size && data[offset];) {
++        if (data[offset] == 1) { ++offset; continue; }
++        if (offset + 2 > size || data[offset + 1] < 2 || offset + data[offset + 1] > size) break;
++        if (data[offset] == 7 && data[offset + 1] >= 11) {
++            int end = min(data[offset + 1], data[offset + 2] - 1);
++            for (int i = 7; i + 4 <= end; i += 4) {
++                IN_ADDR current, previous;
++                memcpy(&current, data + offset + i, 4);
++                memcpy(&previous, data + offset + i - 4, 4);
++                if (current.s_addr == nextHop.s_addr && previous.s_addr && previous.s_addr != nextHop.s_addr) {
++                    *wan = previous;
++                    return true;
++                }
++            }
++        }
++        offset += data[offset + 1];
++    }
++    return false;
++}
++
+ bool getHopsIP4(IN_ADDR* hopAddress, int* hopAddressCount)
+ {
+     HANDLE icmpFile;

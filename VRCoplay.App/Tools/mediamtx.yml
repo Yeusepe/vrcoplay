@@ -1,0 +1,13 @@
+readTimeout: 10m
+writeQueueSize: 256
+api: false
+rtsp: true
+rtspAddress: 127.0.0.1:8554
+rtspTransports: [tcp]
+rtmp: false
+hls: false
+webrtc: false
+srt: false
+moq: false
+paths:
+  game:

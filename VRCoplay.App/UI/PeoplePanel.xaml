@@ -1,0 +1,64 @@
+<!-- Copyright (c) 2026 YUCP Studio. SPDX-License-Identifier: GPL-3.0-or-later. -->
+<UserControl x:Class="VRCoplay.PeoplePanel" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="using:VRCoplay" FontFamily="{StaticResource ContentControlThemeFontFamily}">
+  <StackPanel Spacing="20">
+    <StackPanel Spacing="4">
+      <TextBlock Text="Players in your game" Style="{StaticResource SectionTitle}" AutomationProperties.HeadingLevel="Level2" />
+      <TextBlock x:Name="RoomSummary" Style="{StaticResource QuietText}" AutomationProperties.LiveSetting="Polite" />
+    </StackPanel>
+    <StackPanel Spacing="8">
+      <TextBox x:Name="PlayerNameBox" Header="Your name" PlaceholderText="Choose a name" MaxLength="32" IsSpellCheckEnabled="False" IsTextPredictionEnabled="False" TextChanged="PlayerName_Changed" KeyDown="PlayerName_KeyDown" AutomationProperties.HelpText="Up to 32 characters. Leave blank to use a default name." />
+      <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+        <TextBlock Text="Shown to everyone in the room." Style="{StaticResource QuietText}" VerticalAlignment="Center" />
+        <Button x:Name="SaveNameButton" Grid.Column="1" Content="Save" Click="SaveName_Click" IsEnabled="False" AutomationProperties.Name="Save your name" />
+      </Grid>
+      <TextBlock x:Name="NameFeedback" Style="{StaticResource QuietText}" Visibility="Collapsed" AutomationProperties.LiveSetting="Polite" />
+    </StackPanel>
+    <Border Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+    <StackPanel Spacing="8">
+      <TextBlock x:Name="ControllerHint" Style="{StaticResource QuietText}" Visibility="Collapsed" />
+      <ListView x:Name="PlayersList" SelectionMode="None" MaxHeight="360" AutomationProperties.Name="Players" ScrollViewer.VerticalScrollBarVisibility="Auto">
+        <ListView.ItemContainerStyle>
+          <Style TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0" />
+          </Style>
+        </ListView.ItemContainerStyle>
+        <ListView.ItemTemplate>
+          <DataTemplate x:DataType="local:PlayerRow">
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" RowSpacing="12" Padding="0,12">
+              <PersonPicture DisplayName="{x:Bind Name, Mode=OneWay}" Width="36" Height="36" VerticalAlignment="Top" IsTextScaleFactorEnabled="False" AutomationProperties.AccessibilityView="Raw" />
+              <StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Center">
+                <TextBlock Text="{x:Bind Name, Mode=OneWay}" FontWeight="SemiBold" TextWrapping="Wrap" />
+                <TextBlock Text="{x:Bind Status, Mode=OneWay}" Style="{StaticResource QuietText}" />
+              </StackPanel>
+              <Button Grid.Column="2" VerticalAlignment="Top" Visibility="{x:Bind ActionsVisibility, Mode=OneWay}" AutomationProperties.Name="{x:Bind ActionsLabel, Mode=OneWay}" ToolTipService.ToolTip="Player options">
+                <SymbolIcon Symbol="More" />
+                <Button.Flyout>
+                  <MenuFlyout>
+                    <MenuFlyoutItem Text="Revoke control" Tag="{x:Bind Id}" Visibility="{x:Bind RevokeVisibility, Mode=OneWay}" Click="Revoke_Click" />
+                    <MenuFlyoutSeparator Visibility="{x:Bind RevokeVisibility, Mode=OneWay}" />
+                    <MenuFlyoutItem Text="Remove from game" Tag="{x:Bind Id}" Click="Remove_Click" />
+                  </MenuFlyout>
+                </Button.Flyout>
+              </Button>
+              <Grid Grid.Row="1" Grid.ColumnSpan="3" ColumnDefinitions="*,*" ColumnSpacing="8" Visibility="{x:Bind RequestVisibility, Mode=OneWay}">
+                <Button Tag="{x:Bind Id}" Click="Approve_Click" HorizontalAlignment="Stretch" MinHeight="44" IsEnabled="{x:Bind CanApprove, Mode=OneWay}" Style="{StaticResource AccentButtonStyle}" AutomationProperties.Name="{x:Bind ApproveLabel, Mode=OneWay}">
+                  <TextBlock Text="Approve" TextWrapping="Wrap" />
+                </Button>
+                <Button Grid.Column="1" Tag="{x:Bind Id}" Click="Decline_Click" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Bind DeclineLabel, Mode=OneWay}">
+                  <TextBlock Text="Decline" TextWrapping="Wrap" />
+                </Button>
+              </Grid>
+            </Grid>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+      <StackPanel x:Name="EmptyRoom" Spacing="4" Padding="0,4,0,8" Visibility="Collapsed">
+        <TextBlock Text="Waiting for players" FontWeight="SemiBold" TextWrapping="Wrap" />
+        <TextBlock Text="Use Invite players to bring friends into your game." Style="{StaticResource QuietText}" />
+      </StackPanel>
+      <TextBlock x:Name="ActionFeedback" Style="{StaticResource QuietText}" Visibility="Collapsed" AutomationProperties.LiveSetting="Polite" />
+    </StackPanel>
+  </StackPanel>
+</UserControl>

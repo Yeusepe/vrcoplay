@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>VRCoplay.Win2D</id>
+    <version>1.4.0-public.25680382.3</version>
+    <authors>Microsoft; YUCP Studio (local build)</authors>
+    <description>Windows x64 build of public Win2D source, with its public telemetry stub. Not an official Microsoft package.</description>
+    <license type="file">LICENSE.txt</license>
+    <repository type="git" url="https://github.com/microsoft/Win2D" commit="25680382dd2136779e10ea6084f0c5ba437ae288" />
+    <dependencies>
+      <group targetFramework="net8.0-windows10.0.22621.0">
+        <dependency id="Microsoft.WindowsAppSDK.WinUI" version="1.8.260204000" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="LICENSE.txt" target="LICENSE.txt" />
+    <file src="obj/Win2D.githash.txt" target="Win2D.githash.txt" />
+    <file src="build/nuget/Microsoft.Graphics.Win2D-WinUI3.props" target="buildTransitive/net8.0-windows10.0.22621.0/VRCoplay.Win2D.props" />
+    <file src="build/nuget/Microsoft.Graphics.Win2D-WinUI3.targets" target="buildTransitive/net8.0-windows10.0.22621.0/VRCoplay.Win2D.targets" />
+    <file src="bin/uapx64/release/winrt.dll.uap/Microsoft.Graphics.Canvas.winmd" target="lib/uap10.0/Microsoft.Graphics.Canvas.winmd" />
+    <file src="bin/anycpu/release/winrt.projection/Microsoft.Graphics.Canvas.Interop.dll" target="lib/net8.0-windows10.0.22621.0/Microsoft.Graphics.Canvas.Interop.dll" />
+    <file src="bin/uapx64/release/winrt.dll.uap/Microsoft.Graphics.Canvas.dll" target="runtimes/win-x64/native/Microsoft.Graphics.Canvas.dll" />
+  </files>
+</package>

@@ -1,0 +1,58 @@
+VRCoplay build
+
+Requirements
+- Windows 11 x64.
+- .NET SDK 10 and Windows SDK 10.0.22621.0 or later.
+- PowerShell 7 for native restore/build and release packaging.
+
+Font
+1. Get Satoshi from https://www.fontshare.com/fonts/satoshi.
+2. Read VRCoplay.App/Assets/Fonts/LICENSE.txt.
+3. Copy Fonts/TTF/Satoshi-Variable.ttf to VRCoplay.App/Assets/Fonts/.
+4. Compare its SHA-256 with this value:
+   02ad131926aa46d282b6af73ad2bcaecb0ec6ef3b830a2f08dcabef44f1140ff
+
+Build
+For a source export without native binaries, first restore/build them:
+  pwsh -File tools/Restore-Native.ps1
+This needs Git, CMake 3.28+, and the Visual Studio C++ tools in addition to the requirements above.
+Win2D is built locally from pinned public source. Its recipe requires Visual
+Studio 2022 C++ x64 tools (v143) and Windows SDK 10.0.26100.0.
+See VRCoplay.App/ThirdParty/Win2D/README.md. The local package must exist before
+desktop restore; VRCoplay.App/NuGet.Config restricts it to the local feed.
+Run these commands from the repository root:
+  dotnet build VRCoplay.App/VRCoplay.csproj -c Debug -p:Platform=x64
+  dotnet build VRCoplay.Coordinator/VRCoplay.Coordinator.csproj -c Release
+
+Keep .editorconfig with the source. It sets compiler diagnostics for OpenVR.
+Keep the output files with the executable.
+The build restores the pinned GStreamer runtime from official PyPI wheel archives.
+GStreamer restore does not require Python or a global GStreamer installation. See VRCoplay.App/ThirdParty/GStreamer/README.md.
+
+Package
+  pwsh -File tools/releases/Build-TesterRelease.ps1 -Version <version> -BaseUri <download-directory-url> -SourceUri <source-zip-url> -SourceSha256 <sha256> -OutputDirectory <output-directory>
+
+Use a four-part version number.
+Use HTTPS URLs. End BaseUri with a slash.
+Use -NotesPath for a release note file.
+Use -CertificateThumbprint for an existing certificate.
+Without that option, the script creates or reuses a local test certificate.
+Use your own certificate for modified copies.
+Use -WorkDirectory to select a build directory. The default is a new temporary directory.
+Read SOURCE.txt before distribution.
+
+Server
+Set VRCOPLAY_SERVER to the server origin on the app and coordinator.
+The default origin is https://vrco.pl/.
+Use HTTP or HTTPS. Do not include credentials, a path prefix, a query, or a fragment.
+Set VRCOPLAY_RTSP_PORT to the external resolver port. The default is 32270.
+For custom HTTPS activation, change the Host value in Package.appxmanifest.
+VRCOPLAY_STUN_SERVER selects the peer connection STUN service (default:
+stun:stun.l.google.com:19302). An empty value disables STUN; this can prevent
+connections across NAT. The invite webpage uses installed/system fonts and
+does not request fonts from an external service.
+
+Assets and native libraries
+Runtime RGBA artwork is included and copied by the project. No artwork generators or Python are needed to build this export.
+Read the build instructions in VRCoplay.App/ThirdParty.
+Native versions and SHA-256 values are in the component PIN.json files.

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="256" viewBox="0 0 1024 256">
+  <image id="gradient" href="gradient.png" x="0" y="0" width="1024" height="256" />
+  <g id="type" transform="translate(0 0)">
+    <text id="title" x="180.40" y="126" font-family="Satoshi" font-weight="900" font-size="44" letter-spacing="-.66" fill="#60A5FA">Some players haven’t calibrated</text>
+    <text id="detail" x="180.90" y="171" font-family="Satoshi" font-weight="400" font-size="26" letter-spacing="-.13" fill="#FFFFFF">Ask players using VR controllers to calibrate their pointers.</text>
+    <text id="detail-second" x="259.00" y="207" font-family="Satoshi" font-weight="400" font-size="26" fill="#FFFFFF">Select each blue point with the trigger.</text>
+    <text id="compact-detail" x="32" y="230" font-family="Satoshi" font-weight="400" font-size="14" fill="#FFFFFF" opacity="0">Ask players using VR controllers to calibrate their pointers.</text>
+  </g>
+</svg>
