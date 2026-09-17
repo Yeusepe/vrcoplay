@@ -10,7 +10,8 @@ param(
     [Parameter(Mandatory)][ValidatePattern('^[a-fA-F0-9]{64}$')][string] $SourceSha256,
     [Parameter(Mandatory)][string] $OutputDirectory,
     [string] $WorkDirectory,
-    [switch] $ReuseRepositoryBuild
+    [switch] $ReuseRepositoryBuild,
+    [string] $RepositoryBuildReceipt
 )
 $ErrorActionPreference = 'Stop'
 if ($env:CI -eq 'true' -and !$CertificateThumbprint) {
@@ -28,6 +29,36 @@ if (!$TimestampUri.IsAbsoluteUri -or $TimestampUri.Scheme -notin @('http','https
 }
 $repo = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
 $project = Join-Path $repo 'VRCoplay.App/VRCoplay.csproj'
+if ($ReuseRepositoryBuild) {
+    if (!$RepositoryBuildReceipt) { throw 'Packaging without compilation requires this run''s repository build receipt.' }
+    $receipt = Get-Content -LiteralPath $RepositoryBuildReceipt -Raw | ConvertFrom-Json -AsHashtable
+    if ($receipt.status -ne 'passed' -or $receipt.build_input -ne 'repository-checkout' -or
+        $receipt.release_version -cne $Version -or $receipt.source_commit -cne (& git -C $repo rev-parse HEAD) -or
+        !$receipt.build_outputs -or $receipt.build_outputs.Count -eq 0) {
+        throw 'The repository build receipt does not match this release.'
+    }
+    if ($env:GITHUB_ACTIONS -eq 'true' -and (!$env:GITHUB_RUN_ID -or !$env:GITHUB_RUN_ATTEMPT -or
+        $receipt.workflow_run_id -cne $env:GITHUB_RUN_ID -or $receipt.workflow_run_attempt -cne $env:GITHUB_RUN_ATTEMPT -or
+        $receipt.source_dirty -ne $false -or (& git -C $repo status --porcelain))) {
+        throw 'CI packaging must use a clean repository build from this workflow attempt.'
+    }
+    foreach ($relative in $receipt.build_outputs.Keys) {
+        if ($relative -notmatch '^VRCoplay\.App/(bin|obj)/' -or $relative.Split('/') -contains '..') {
+            throw 'Unexpected repository build output path.'
+        }
+        $path = Join-Path $repo $relative
+        if (!(Test-Path -LiteralPath $path -PathType Leaf) -or
+            (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash -ine $receipt.build_outputs[$relative]) {
+            throw "Repository build output changed after validation: $relative"
+        }
+    }
+    $files = @(Get-ChildItem -LiteralPath (Join-Path $repo 'VRCoplay.App') -Directory |
+        Where-Object Name -In @('bin', 'obj') | Get-ChildItem -Recurse -File |
+        ForEach-Object { [IO.Path]::GetRelativePath($repo, $_.FullName).Replace('\', '/') })
+    if (Compare-Object @($receipt.build_outputs.Keys) $files) {
+        throw 'Repository build output inventory changed after validation.'
+    }
+}
 if ($SourceUri.Scheme -ne 'https' -or $SourceUri.UserInfo -or $SourceUri.Query -or $SourceUri.Fragment) {
     throw 'SourceUri must be a stable HTTPS URL without credentials, query, or fragment.'
 }
@@ -88,6 +119,10 @@ $buildArgs = @('build', $project, '-c', 'Release', '--nologo', '-v:minimal', '-c
     "-p:AppxPackageDir=$packageFolder/", "-p:TesterManifest=$manifestPath", "-p:TesterReleaseNotes=$notesFile", "-p:TesterUpdateSource=$sourceFile", "-p:CorrespondingSourceInfo=$sourceInfo")
 if (!$ReuseRepositoryBuild) {
     $buildArgs += @("-p:BaseIntermediateOutputPath=$work/obj/", "-p:MSBuildProjectExtensionsPath=$work/obj/", "-p:OutputPath=$work/bin/")
+}
+else {
+    $buildArgs[0] = 'publish'
+    $buildArgs += @('--no-build', '-p:PublishAppxPackage=true')
 }
 & dotnet @buildArgs
 if ($LASTEXITCODE -ne 0) { throw "MSIX build failed. Build files: $work" }
