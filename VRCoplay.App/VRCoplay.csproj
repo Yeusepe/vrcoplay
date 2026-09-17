@@ -15,7 +15,7 @@
     <TargetFramework>net10.0-windows10.0.22621.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.22621.0</TargetPlatformMinVersion>
     <RootNamespace>VRCoplay</RootNamespace>
-    <Version>1.0.8.0</Version>
+    <Version>1.0.0.0</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\VRCoplay.ico</ApplicationIcon>
     <Platforms>x64</Platforms>
@@ -53,6 +53,29 @@
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 
+
+  <PropertyGroup Condition="'$(StorePackage)' == 'true'">
+    <SelfContained>true</SelfContained>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <WindowsPackageType>MSIX</WindowsPackageType>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
+    <UapAppxPackageBuildMode>StoreUpload</UapAppxPackageBuildMode>
+    <AppxBundle>Never</AppxBundle>
+    <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
+    <AppxSymbolPackageEnabled>false</AppxSymbolPackageEnabled>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(StorePackage)' == 'true'">
+    <AppxManifest Include="Package.Store.appxmanifest" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(StoreReleaseNotes)' != ''">
+    <Content Include="$(StoreReleaseNotes)" Link="release-notes.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+  <Target Name="ValidateStorePackageInputs" BeforeTargets="PrepareForBuild" Condition="'$(StorePackage)' == 'true'">
+    <Error Condition="'$(Configuration)' != 'Release' or '$(Platform)' != 'x64'" Text="Build the Microsoft Store package as Release x64." />
+    <Error Condition="'$(TesterManifest)' != '' or '$(TesterUpdateSource)' != ''" Text="Store packages cannot include tester packaging or update-feed inputs." />
+    <Error Condition="'$(CorrespondingSourceInfo)' == '' or !Exists('$(CorrespondingSourceInfo)')" Text="Supply verified matching source metadata before preparing a Store upload." />
+  </Target>
 
   <ItemGroup Condition="'$(TesterManifest)' != ''">
     <AppxManifest Include="$(TesterManifest)" />

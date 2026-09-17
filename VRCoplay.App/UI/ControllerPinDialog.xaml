@@ -1,0 +1,29 @@
+<!-- Copyright (c) 2026 YUCP Studio. SPDX-License-Identifier: GPL-3.0-or-later. -->
+<ContentDialog x:Class="VRCoplay.ControllerPinDialog" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="Play on the host's PC" PrimaryButtonText="Continue" CloseButtonText="Cancel" DefaultButton="Primary" IsPrimaryButtonEnabled="False" Style="{StaticResource DefaultContentDialogStyle}" FontFamily="{StaticResource ContentControlThemeFontFamily}">
+  <ContentDialog.Resources>
+    <x:Double x:Key="ContentDialogMaxWidth">440</x:Double>
+  </ContentDialog.Resources>
+  <StackPanel Spacing="16">
+    <TextBlock Text="Enter the 6-digit PIN shown by the host." Style="{StaticResource QuietText}" />
+    <StackPanel Spacing="4">
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBlock Text="Controller PIN" Style="{StaticResource FieldLabel}" VerticalAlignment="Center" />
+        <Button x:Name="PastePinButton" Grid.Column="1" Click="PastePin_Click" Background="Transparent" BorderThickness="0" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" AutomationProperties.Name="Paste controller PIN" ToolTipService.ToolTip="Paste controller PIN">
+          <SymbolIcon Symbol="Paste" />
+        </Button>
+      </Grid>
+      <Grid Height="52">
+        <Grid ColumnDefinitions="*,*,*,*,*,*" ColumnSpacing="8" AutomationProperties.AccessibilityView="Raw">
+          <Border Grid.Column="0" Style="{StaticResource CodeCell}"><Grid><Border x:Name="PinFocus0" Style="{StaticResource CodeFocus}" /><TextBlock x:Name="PinCharacter0" Style="{StaticResource CodeCharacter}" /></Grid></Border>
+          <Border Grid.Column="1" Style="{StaticResource CodeCell}"><Grid><Border x:Name="PinFocus1" Style="{StaticResource CodeFocus}" /><TextBlock x:Name="PinCharacter1" Style="{StaticResource CodeCharacter}" /></Grid></Border>
+          <Border Grid.Column="2" Style="{StaticResource CodeCell}"><Grid><Border x:Name="PinFocus2" Style="{StaticResource CodeFocus}" /><TextBlock x:Name="PinCharacter2" Style="{StaticResource CodeCharacter}" /></Grid></Border>
+          <Border Grid.Column="3" Style="{StaticResource CodeCell}"><Grid><Border x:Name="PinFocus3" Style="{StaticResource CodeFocus}" /><TextBlock x:Name="PinCharacter3" Style="{StaticResource CodeCharacter}" /></Grid></Border>
+          <Border Grid.Column="4" Style="{StaticResource CodeCell}"><Grid><Border x:Name="PinFocus4" Style="{StaticResource CodeFocus}" /><TextBlock x:Name="PinCharacter4" Style="{StaticResource CodeCharacter}" /></Grid></Border>
+          <Border Grid.Column="5" Style="{StaticResource CodeCell}"><Grid><Border x:Name="PinFocus5" Style="{StaticResource CodeFocus}" /><TextBlock x:Name="PinCharacter5" Style="{StaticResource CodeCharacter}" /></Grid></Border>
+        </Grid>
+        <TextBox x:Name="PinBox" MaxLength="6" InputScope="Number" Opacity="0.001" Background="Transparent" BorderThickness="0" UseSystemFocusVisuals="False" IsSpellCheckEnabled="False" IsTextPredictionEnabled="False" TextChanged="Pin_Changed" SelectionChanged="Pin_SelectionChanged" GotFocus="Pin_FocusChanged" LostFocus="Pin_FocusChanged" AutomationProperties.Name="Controller PIN" AutomationProperties.HelpText="Enter the six-digit controller PIN." />
+      </Grid>
+    </StackPanel>
+    <TextBlock x:Name="PinFeedback" Text="The clipboard doesn't contain a 6-digit PIN." Style="{StaticResource QuietText}" Foreground="{ThemeResource SystemFillColorCriticalBrush}" Visibility="Collapsed" AutomationProperties.LiveSetting="Polite" />
+  </StackPanel>
+</ContentDialog>

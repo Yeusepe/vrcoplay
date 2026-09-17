@@ -116,7 +116,9 @@ internal sealed class StreamPublisher : IDisposable
                 if (message.Type == MessageType.Latency) { _pipeline.RecalculateLatency(); continue; }
                 if (message.Type == MessageType.Eos) throw new InvalidOperationException("The media pipeline ended unexpectedly.");
                 message.ParseError(out var error, out var detail);
-                var failure = new InvalidOperationException($"{message.Src.Name}: {error.Message} ({detail})");
+                var failure = new StreamPipelineException((message.Src as Element)?.Factory?.Name,
+                    GStreamerRuntime.ErrorDomain(error.Domain), error.Code,
+                    $"{message.Src.Name}: {error.Message} ({detail})");
                 Log?.Invoke(failure.Message);
                 lock (_gate)
                 {

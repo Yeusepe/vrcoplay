@@ -67,7 +67,7 @@ public sealed partial class MainWindow
     private Task<bool> RequestControlAsync() =>
         (_session.ActivePlayLocation == PlayLocation.HostPc && _session.GameSession?.AutomaticRemotePlay == true)
             || CanCaptureControllers
-            ? _session.RequestControlAsync(() => AskAsync("Play on the host's PC", "Controller PIN"))
+            ? _session.RequestControlAsync(AskControllerPinAsync)
             : Task.FromResult(false);
     private string? ActOnPlayer(string id, PlayerAction action)
     {
@@ -161,23 +161,10 @@ public sealed partial class MainWindow
         catch (Exception error) { Show(error.GetBaseException().Message, InfoBarSeverity.Error); }
         finally { _remoteApprovalOpen = false; }
     }
-    private async Task<string?> AskAsync(string title, string header)
+    private async Task<string?> AskControllerPinAsync()
     {
-        var input = new PasswordBox
-        {
-            Header = header,
-            MaxLength = 32,
-            PasswordRevealMode = _settings.StreamerMode ? PasswordRevealMode.Hidden : PasswordRevealMode.Visible,
-        };
-        var dialog = new ContentDialog
-        {
-            Title = title,
-            Content = input,
-            PrimaryButtonText = "Continue",
-            CloseButtonText = "Cancel",
-            DefaultButton = ContentDialogButton.Primary,
-        };
-        return await ShowDialogAsync(dialog) == ContentDialogResult.Primary ? input.Password.Trim() : null;
+        var dialog = new ControllerPinDialog(_settings.StreamerMode);
+        return await ShowDialogAsync(dialog) == ContentDialogResult.Primary ? dialog.Pin : null;
     }
     private async Task<ContentDialogResult> ShowDialogAsync(ContentDialog dialog)
     {

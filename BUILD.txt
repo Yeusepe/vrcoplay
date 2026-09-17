@@ -43,6 +43,17 @@ Use your own certificate for modified copies.
 Use -WorkDirectory to select a build directory. The default is a new temporary directory.
 Read SOURCE.txt before distribution.
 
+Microsoft Store
+The Store identity is in VRCoplay.App/Package.Store.appxmanifest. Keep its version
+and the project version aligned; Store package versions must end in .0.
+Prepare matching source first and supply a JSON file with version, public HTTPS
+uri and sha256 fields describing that exact corresponding-source ZIP.
+  dotnet build VRCoplay.App/VRCoplay.csproj -c Release -p:Platform=x64 -p:StorePackage=true -p:CorrespondingSourceInfo=<source-info-json>
+The .msixupload under AppPackages is the submission file. Microsoft signs Store
+packages. Validate the package with the Windows App Certification Kit and publish
+the matching source before distributing the app. Store installs receive updates
+through Microsoft Store. The tester manifest and download feed are independent.
+
 Server
 Set VRCOPLAY_SERVER to the server origin on the app and coordinator.
 The default origin is https://vrco.pl/.

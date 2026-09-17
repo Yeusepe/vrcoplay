@@ -81,6 +81,8 @@ internal sealed class SharingDiagnosticLog(string directory, int maxFileBytes = 
                 type = current.GetType().FullName,
                 hresult = $"0x{current.HResult:X8}",
                 summary = Summarize(current.Message),
+                pipeline = current is StreamPipelineException media
+                    ? new { element = media.Element, domain = media.Domain, code = media.Code } : null,
             });
         return result.ToArray();
     }
@@ -95,6 +97,24 @@ internal sealed class SharingDiagnosticLog(string directory, int maxFileBytes = 
     }
     private static readonly string[] DiagnosticPhrases =
     [
+        "Internal data stream error",
+        "not-negotiated",
+        "not-linked",
+        "Could not connect to server",
+        "Could not receive message",
+        "Could not send message",
+        "Could not open resource",
+        "Could not write to resource",
+        "Could not read from resource",
+        "Failed to initialize encoder",
+        "Failed to create encoder",
+        "Failed to allocate",
+        "GStreamer could not start the stream",
+        "GStreamer could not connect the capture source",
+        "GStreamer audio input stopped",
+        "The media pipeline ended unexpectedly",
+        "The media pipeline stopped",
+        "Audio capture stopped",
         "Unable to load DLL",
         "gstreamer-1.0-0.dll",
         "glib-2.0-0.dll",
