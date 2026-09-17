@@ -11,6 +11,7 @@ builder.Logging.SetMinimumLevel(LogLevel.Warning);
 builder.Services.AddSignalR(o => o.MaximumReceiveMessageSize = 32768);
 builder.Services.AddSingleton<RoomDirectory>();
 builder.Services.AddSingleton<IReleaseAccessPolicy, PublicReleaseAccess>();
+builder.Services.AddSingleton<ReleaseSyncTrigger>();
 if (!string.IsNullOrWhiteSpace(builder.Configuration["RELEASE_GITHUB_REPOSITORY"]))
     builder.Services.AddHostedService<GitHubReleaseSync>();
 var streamRouting = builder.Configuration.GetValue<bool>("STREAM_ROUTING");

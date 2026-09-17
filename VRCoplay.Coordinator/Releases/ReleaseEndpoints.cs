@@ -1,5 +1,7 @@
 // Copyright (c) 2026 YUCP Studio. VRCoplay contributors retain their copyrights.
 // SPDX-License-Identifier: GPL-3.0-or-later
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 public interface IReleaseAccessPolicy
@@ -60,8 +62,21 @@ public static partial class ReleaseEndpoints
                     {
                         app.Logger.LogWarning("Download page metadata is unavailable ({FailureType}).", error.GetType().Name);
                         return Results.StatusCode(StatusCodes.Status503ServiceUnavailable);
-                    }
-                }
+        }
+        var refreshToken = app.Configuration["RELEASE_REFRESH_TOKEN"];
+        if (!string.IsNullOrWhiteSpace(refreshToken))
+        {
+            app.MapPost("/releases/refresh", (HttpContext context) =>
+            {
+                var provided = context.Request.Headers.Authorization.ToString();
+                var expected = "Bearer " + refreshToken;
+                if (!CryptographicOperations.FixedTimeEquals(Encoding.UTF8.GetBytes(provided), Encoding.UTF8.GetBytes(expected)))
+                    return Results.NotFound();
+                context.RequestServices.GetRequiredService<ReleaseSyncTrigger>().Trigger();
+                return Results.Accepted();
+            });
+        }
+    }
                 var file = store.Resolve(name);
                 if (file is null) return Results.NotFound();
                 return Results.File(file, type, fileDownloadName: name.EndsWith(".appinstaller", StringComparison.OrdinalIgnoreCase) || name == ReleaseStore.UnityPackageName ? name : null,

@@ -15,7 +15,8 @@ public sealed partial class GitHubReleaseSync : BackgroundService
     private readonly Uri baseUri;
     private readonly ReleaseStore store;
     private readonly ILogger<GitHubReleaseSync> logger;
-    public GitHubReleaseSync(IConfiguration configuration, ILogger<GitHubReleaseSync> logger)
+    private readonly ReleaseSyncTrigger trigger;
+    public GitHubReleaseSync(IConfiguration configuration, ILogger<GitHubReleaseSync> logger, ReleaseSyncTrigger trigger)
     {
         repository = configuration["RELEASE_GITHUB_REPOSITORY"] ?? "";
         token = configuration["RELEASE_GITHUB_TOKEN"] ?? "";
@@ -27,6 +28,7 @@ public sealed partial class GitHubReleaseSync : BackgroundService
         store = new(path);
         Directory.CreateDirectory(store.DirectoryPath);
         this.logger = logger;
+        this.trigger = trigger;
     }
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -34,7 +36,7 @@ public sealed partial class GitHubReleaseSync : BackgroundService
         EntityTagHeaderValue? entityTag = null;
         while (!stoppingToken.IsCancellationRequested)
         {
-            var delay = TimeSpan.FromSeconds(30);
+            var delay = TimeSpan.FromSeconds(5);
             try { entityTag = await SynchronizeAsync(http, repository, token, baseUri, store, stoppingToken, entityTag); }
             catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested) { break; }
             catch (Exception error)
@@ -42,7 +44,7 @@ public sealed partial class GitHubReleaseSync : BackgroundService
                 delay = TimeSpan.FromMinutes(5);
                 logger.LogWarning("Release sync failed ({FailureType}); keeping the current release and retrying in five minutes.", error.GetType().Name);
             }
-            try { await Task.Delay(delay, stoppingToken); }
+            try { await trigger.WaitAsync(delay, stoppingToken); }
             catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested) { break; }
         }
     }

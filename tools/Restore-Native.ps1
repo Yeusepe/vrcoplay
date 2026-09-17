@@ -54,4 +54,8 @@ if (!(Test-Path -LiteralPath (Join-Path $native 'LibDataChannel/datachannel.dll'
     & (Join-Path $native 'LibDataChannel/build.ps1') -BuildRoot (Join-Path $CacheDirectory ('datachannel-' + [guid]::NewGuid().ToString('N')))
 }
 & (Join-Path $native 'Win2D/build.ps1') -CacheDirectory $CacheDirectory
+if ($env:NUGET_PACKAGES) {
+    $cached = Join-Path $env:NUGET_PACKAGES 'VRCoplay.Win2D'
+    if (Test-Path -LiteralPath $cached) { Remove-Item -LiteralPath $cached -Recurse -Force }
+}
 Write-Output 'Native build inputs are ready. Obtain the Satoshi font as described in BUILD.txt, then build the projects.'
