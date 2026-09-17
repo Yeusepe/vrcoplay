@@ -9,6 +9,7 @@ internal sealed class AppUpdates : IDisposable
     private readonly HttpClient _http = new(new HttpClientHandler { AllowAutoRedirect = false }) { Timeout = TimeSpan.FromSeconds(25) };
     internal UpdateIdentity? Identity { get; }
     internal Uri? Source { get; }
+    internal bool IsStoreManaged { get; }
     internal string CurrentVersion => Identity?.Version.ToString() ?? "Development build";
     internal AppUpdates()
     {
@@ -17,6 +18,9 @@ internal sealed class AppUpdates : IDisposable
         var id = package.Id;
         Identity = new(id.Name, id.Publisher, id.Architecture.ToString().ToLowerInvariant(),
             new(id.Version.Major, id.Version.Minor, id.Version.Build, id.Version.Revision));
+        IsStoreManaged = package.SignatureKind == PackageSignatureKind.Store ||
+            id.FamilyName == "YUCPStudio.VRCoplay_w1zj3ynvdat22";
+        if (IsStoreManaged) return;
         try { Source = package.GetAppInstallerInfo()?.Uri; }
         catch (Exception error) { System.Diagnostics.Debug.WriteLine(error); }
         if (Source is not null) return;

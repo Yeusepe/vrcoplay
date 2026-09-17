@@ -53,6 +53,12 @@ public sealed partial class MainWindow
         try
         {
             using var updates = new AppUpdates();
+            if (updates.IsStoreManaged)
+            {
+                if (!await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-windows-store://pdp/?ProductId=9NTMPDPF4KVT")))
+                    Show("Open Microsoft Store to check for VRCoplay updates.", InfoBarSeverity.Informational);
+                return;
+            }
             _updateDialog = CreateUpdateDialog(updates);
             _updateDialog.SetSessionActive(UpdateSessionActive);
             DismissSharingTip();

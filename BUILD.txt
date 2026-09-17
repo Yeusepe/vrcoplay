@@ -58,3 +58,17 @@ Assets and native libraries
 Runtime RGBA artwork is included and copied by the project. No artwork generators or Python are needed to build this export.
 Read the build instructions in VRCoplay.App/ThirdParty.
 Native versions and SHA-256 values are in the component PIN.json files.
+MICROSOFT STORE PACKAGING
+
+Store identity is recorded in VRCoplay.App/StoreIdentity.json. The Store packaging
+script derives a separate manifest from Package.appxmanifest, preserving its
+resources, capabilities and extensions without changing the tester identity.
+From a repository checkout with verified matching corresponding-source metadata:
+
+pwsh tools/releases/Build-StoreRelease.ps1 -Version A.B.C.0 -SourceUri <matching-public-source-URL> -SourceSha256 <verified-SHA256> -NotesPath <release-notes.txt> -OutputDirectory <new-output-directory>
+
+The script produces an unsigned x64 .msixupload for Microsoft to sign after Store
+certification, not a sideloadable tester installer. All package, assembly and file
+versions use A.B.C.0. The Store app uses Microsoft Store updates, not the tester feed.
+Production release automation and validation tools are private and are not part of
+the source export. Packaging alone does not prove release/certification readiness.
