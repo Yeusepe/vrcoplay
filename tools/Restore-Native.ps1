@@ -55,7 +55,16 @@ if (!(Test-Path -LiteralPath (Join-Path $native 'LibDataChannel/datachannel.dll'
 }
 & (Join-Path $native 'Win2D/build.ps1') -CacheDirectory $CacheDirectory
 if ($env:NUGET_PACKAGES) {
-    $cached = Join-Path $env:NUGET_PACKAGES 'VRCoplay.Win2D'
-    if (Test-Path -LiteralPath $cached) { Remove-Item -LiteralPath $cached -Recurse -Force }
+    $packagesRoot = [IO.Path]::GetFullPath($env:NUGET_PACKAGES)
+    $cached = [IO.Path]::GetFullPath((Join-Path $packagesRoot 'vrcoplay.win2d'))
+    $pin = Get-Content -LiteralPath (Join-Path $native 'Win2D/PIN.json') -Raw | ConvertFrom-Json
+    $packageName = "$($pin.packageId).$($pin.packageVersion).nupkg"
+    $restored = Join-Path $cached "$($pin.packageVersion)/$($packageName.ToLowerInvariant())"
+    $built = Join-Path $native "Win2D/artifacts/$packageName"
+    $matches = (Test-Path -LiteralPath $restored) -and ((Get-FileHash -LiteralPath $restored).Hash -eq (Get-FileHash -LiteralPath $built).Hash)
+    if (!$matches -and (Test-Path -LiteralPath $cached)) {
+        if ([IO.Path]::GetDirectoryName($cached) -ne $packagesRoot.TrimEnd([IO.Path]::DirectorySeparatorChar)) { throw 'Invalid package cache directory.' }
+        Remove-Item -LiteralPath $cached -Recurse -Force
+    }
 }
 Write-Output 'Native build inputs are ready. Obtain the Satoshi font as described in BUILD.txt, then build the projects.'

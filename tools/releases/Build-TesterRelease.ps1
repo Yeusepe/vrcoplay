@@ -9,7 +9,8 @@ param(
     [Parameter(Mandatory)][uri] $SourceUri,
     [Parameter(Mandatory)][ValidatePattern('^[a-fA-F0-9]{64}$')][string] $SourceSha256,
     [Parameter(Mandatory)][string] $OutputDirectory,
-    [string] $WorkDirectory
+    [string] $WorkDirectory,
+    [switch] $ReuseRepositoryBuild
 )
 $ErrorActionPreference = 'Stop'
 if ($env:CI -eq 'true' -and !$CertificateThumbprint) {
@@ -83,8 +84,11 @@ $buildArgs = @('build', $project, '-c', 'Release', '--nologo', '-v:minimal', '-c
     '-p:Platform=x64', '-p:RuntimeIdentifier=win-x64', '-p:SelfContained=true', '-p:WindowsAppSDKSelfContained=true',
     '-p:WindowsPackageType=MSIX', '-p:EnableMsixTooling=true', '-p:GenerateAppxPackageOnBuild=true',
     '-p:AppxBundle=Never', '-p:UapAppxPackageBuildMode=SideloadOnly', '-p:AppxPackageSigningEnabled=false', '-p:AppxSymbolPackageEnabled=false',
-    "-p:AppxPackageDir=$packageFolder/", "-p:BaseIntermediateOutputPath=$work/obj/", "-p:MSBuildProjectExtensionsPath=$work/obj/",
-    "-p:OutputPath=$work/bin/", "-p:TesterManifest=$manifestPath", "-p:TesterReleaseNotes=$notesFile", "-p:TesterUpdateSource=$sourceFile", "-p:CorrespondingSourceInfo=$sourceInfo")
+    '-p:PythonExe=NO_ARTWORK_GENERATORS',
+    "-p:AppxPackageDir=$packageFolder/", "-p:TesterManifest=$manifestPath", "-p:TesterReleaseNotes=$notesFile", "-p:TesterUpdateSource=$sourceFile", "-p:CorrespondingSourceInfo=$sourceInfo")
+if (!$ReuseRepositoryBuild) {
+    $buildArgs += @("-p:BaseIntermediateOutputPath=$work/obj/", "-p:MSBuildProjectExtensionsPath=$work/obj/", "-p:OutputPath=$work/bin/")
+}
 & dotnet @buildArgs
 if ($LASTEXITCODE -ne 0) { throw "MSIX build failed. Build files: $work" }
 $packages = @(Get-ChildItem -LiteralPath $packageFolder -Recurse -Filter '*.msix' | Where-Object { $_.FullName -notmatch '[\\/]Dependencies[\\/]' })
