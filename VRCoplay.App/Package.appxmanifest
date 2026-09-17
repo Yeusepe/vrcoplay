@@ -19,7 +19,7 @@
   <mp:PhoneIdentity PhoneProductId="9A28BE70-8187-4B43-9829-CA935ADB1B00" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>VRCoplay</DisplayName>
+    <DisplayName>ms-resource:AppDisplayName</DisplayName>
     <PublisherDisplayName>VRCoplay</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
     <uap10:PackageIntegrity>
@@ -40,8 +40,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="VRCoplay"
-        Description="VRCoplay"
+        DisplayName="ms-resource:AppDisplayName"
+        Description="ms-resource:AppDescription"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png">
@@ -60,7 +60,7 @@
           </com:ComServer>
         </com:Extension>
         <uap:Extension Category="windows.protocol">
-          <uap:Protocol Name="vrcoplay"><uap:DisplayName>VRCoplay</uap:DisplayName></uap:Protocol>
+          <uap:Protocol Name="vrcoplay"><uap:DisplayName>ms-resource:AppDisplayName</uap:DisplayName></uap:Protocol>
         </uap:Extension>
         <uap3:Extension Category="windows.appUriHandler">
           <uap3:AppUriHandler><uap3:Host Name="vrco.pl" /></uap3:AppUriHandler>

@@ -65,29 +65,38 @@ public sealed partial class UpdateDialog : ContentDialog
         try
         {
             if (await _install(_release!)) Hide();
-            else ShowError("Couldn’t open Windows App Installer. Make sure App Installer is installed, then try again.");
+            else ShowError(AppStrings.Get("Update.OpenInstallerFailed", "Couldn’t open Windows App Installer. Make sure App Installer is installed, then try again."));
         }
-        catch { ShowError("Couldn’t open the update. Check your connection, then try again."); }
+        catch { ShowError(AppStrings.Get("Update.OpenFailed", "Couldn’t open the update. Check your connection, then try again.")); }
         finally { _opening = false; if (!_closed) Render(); }
     }
     private void Render()
     {
-        UpdateHeading.Text = _checking ? "Checking for updates" : _opening ? "Opening the update"
-            : _failed ? "Couldn’t check for updates" : !_connected ? "VRCoplay updates"
-            : Available ? "Update available" : "You’re up to date";
+        UpdateHeading.Text = _checking ? AppStrings.Get("Update.Checking", "Checking for updates")
+            : _opening ? AppStrings.Get("Update.Opening", "Opening the update")
+            : _failed ? AppStrings.Get("Update.CheckFailed", "Couldn’t check for updates")
+            : !_connected ? AppStrings.Get("Update.Title", "VRCoplay updates")
+            : Available ? AppStrings.Get("Update.Available", "Update available")
+            : AppStrings.Get("Update.UpToDate", "You’re up to date");
         UpdateIcon.Glyph = Available ? "\uE896" : _failed || !_connected || _checking ? "\uE895" : "\uE930";
-        VersionText.Text = Available ? $"Version {_release!.Version} · Installed {_current}" : _current is null ? "Development build" : $"Version {_current}";
-        UpdateDescription.Text = _checking ? "Looking for the latest version of VRCoplay."
-            : _opening ? "Continue in Windows App Installer."
-            : _failed ? "Check your connection, then try again. You can keep using VRCoplay."
-            : !_connected ? _current is null ? "Install a tester release to receive updates from Windows."
-                : "Install using VRCoplay.appinstaller to connect this copy to updates."
-            : Available ? _sessionActive ? "Stop sharing and leave your game room before updating."
-                : "Windows will install the update. If asked, close VRCoplay to continue."
-            : "You have the latest version of VRCoplay.";
-        PrimaryButtonText = !_connected ? "" : _checking ? "Checking…" : _opening ? "Opening…" : Available ? "Update" : _failed ? "Check again" : "";
+        VersionText.Text = Available
+            ? AppStrings.Format("Update.VersionInstalled", "Version {0} · Installed {1}", _release!.Version, _current)
+            : _current is null ? AppStrings.Get("Update.DevelopmentBuild", "Development build")
+            : AppStrings.Format("Update.Version", "Version {0}", _current);
+        UpdateDescription.Text = _checking ? AppStrings.Get("Update.Looking", "Looking for the latest version of VRCoplay.")
+            : _opening ? AppStrings.Get("Update.ContinueInstaller", "Continue in Windows App Installer.")
+            : _failed ? AppStrings.Get("Update.ConnectionRetry", "Check your connection, then try again. You can keep using VRCoplay.")
+            : !_connected ? _current is null ? AppStrings.Get("Update.InstallTester", "Install a tester release to receive updates from Windows.")
+                : AppStrings.Get("Update.ConnectInstaller", "Install using VRCoplay.appinstaller to connect this copy to updates.")
+            : Available ? _sessionActive ? AppStrings.Get("Update.StopSession", "Stop sharing and leave your game room before updating.")
+                : AppStrings.Get("Update.WindowsInstalls", "Windows will install the update. If asked, close VRCoplay to continue.")
+            : AppStrings.Get("Update.Latest", "You have the latest version of VRCoplay.");
+        PrimaryButtonText = !_connected ? "" : _checking ? AppStrings.Get("Update.CheckingAction", "Checking…")
+            : _opening ? AppStrings.Get("Update.OpeningAction", "Opening…")
+            : Available ? AppStrings.Get("Update.Action", "Update")
+            : _failed ? AppStrings.Get("Update.CheckAgain", "Check again") : "";
         IsPrimaryButtonEnabled = !_checking && !_opening && !(Available && _sessionActive);
-        CloseButtonText = Available || _checking ? "Not now" : "Done";
+        CloseButtonText = Available || _checking ? AppStrings.Get("Update.NotNow", "Not now") : AppStrings.Get("Update.Done", "Done");
         DefaultButton = PrimaryButtonText.Length > 0 && IsPrimaryButtonEnabled ? ContentDialogButton.Primary : ContentDialogButton.Close;
         UpdateProgress.Visibility = _checking || _opening ? Visibility.Visible : Visibility.Collapsed;
         NotesText.Text = Available ? _release!.Notes : _installedNotes;
@@ -112,7 +121,7 @@ public sealed partial class UpdateDialog : ContentDialog
             _skipVersion(_release!.Version);
             Hide();
         }
-        catch { ShowError("Couldn’t save that preference. Try again in a moment."); }
+        catch { ShowError(AppStrings.Get("Update.SavePreferenceFailed", "Couldn’t save that preference. Try again in a moment.")); }
     }
     private void AutomaticPrompts_Click(object sender, RoutedEventArgs e)
     {
@@ -127,7 +136,7 @@ public sealed partial class UpdateDialog : ContentDialog
         catch
         {
             AutomaticPromptsItem.IsChecked = _automaticPromptsEnabled;
-            ShowError("Couldn’t save that preference. Try again in a moment.");
+            ShowError(AppStrings.Get("Update.SavePreferenceFailed", "Couldn’t save that preference. Try again in a moment."));
         }
     }
     private void ShowError(string text)

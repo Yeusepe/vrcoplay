@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AppDisplayName" xml:space="preserve"><value>VRCoplay</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>Lire et partager des vidéos de bureau dans VRChat</value></data>
+  <data name="Settings_Language.Header" xml:space="preserve"><value>Langue d’affichage</value></data>
+  <data name="Settings_Language.Description" xml:space="preserve"><value>Choisissez la langue utilisée par VRCoplay. L’application redémarre après ce changement.</value></data>
+  <data name="Settings_Language.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Langue d’affichage</value></data>
+  <data name="Settings_LanguageSystem.Content" xml:space="preserve"><value>Utiliser la langue de Windows</value></data>
+  <data name="Settings_LanguageEnglish.Content" xml:space="preserve"><value>English</value></data>
+  <data name="Settings_LanguageSpanish.Content" xml:space="preserve"><value>Español</value></data>
+  <data name="Settings_LanguageFrench.Content" xml:space="preserve"><value>Français</value></data>
+  <data name="Language.RestartFailed" xml:space="preserve"><value>La langue d’affichage sera appliquée à la prochaine ouverture de VRCoplay.</value></data>
+  <data name="Main_SharingTip.Title" xml:space="preserve"><value>Regardez dans votre lecteur vidéo VRChat®</value></data>
+  <data name="Main_SharingTip.Subtitle" xml:space="preserve"><value>Copiez le lien du lecteur vidéo, puis collez-le dans un lecteur vidéo VRChat®. Gardez VRCoplay et la fenêtre partagée ouverts.</value></data>
+  <data name="Main_SettingsButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Paramètres</value></data>
+  <data name="Main_SettingsButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Paramètres</value></data>
+  <data name="Main_PreviewPlaceholder.Text" xml:space="preserve"><value>Choisissez une fenêtre ou un écran à afficher ici</value></data>
+  <data name="Main_RoomHeading.Text" xml:space="preserve"><value>Code de salon</value></data>
+  <data name="Main_RoomOptions.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Options du salon</value></data>
+  <data name="Main_RoomOptions.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Options du salon</value></data>
+  <data name="Main_LeaveGameRoom.Text" xml:space="preserve"><value>Quitter le salon de jeu</value></data>
+  <data name="Main_RoomCode.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Code de salon</value></data>
+  <data name="Main_CopyRoomCode.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Copier le code du salon</value></data>
+  <data name="Main_CopyRoomCode.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Copier le code du salon</value></data>
+  <data name="Main_RoomDiscovery.Text" xml:space="preserve"><value>La découverte du salon se reconnecte. Votre session de jeu continue.</value></data>
+  <data name="Main_InvitePlayers.Content" xml:space="preserve"><value>Inviter des joueurs</value></data>
+  <data name="Main_InviteFlyoutTitle.Text" xml:space="preserve"><value>Inviter des joueurs</value></data>
+  <data name="Main_ShareHint.Text" xml:space="preserve"><value>Partagez le lien ou scannez le code pour rejoindre.</value></data>
+  <data name="Main_ShareQr.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Scannez pour rejoindre le salon de jeu</value></data>
+  <data name="Main_InviteLink.Text" xml:space="preserve"><value>Lien d’invitation</value></data>
+  <data name="Main_ShareUrl.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>URL d’invitation du salon</value></data>
+  <data name="Main_CopyInvite.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Copier le lien d’invitation</value></data>
+  <data name="Main_CopyInvite.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Copier le lien d’invitation</value></data>
+  <data name="Main_ControllerPinLabel.Text" xml:space="preserve"><value>PIN du contrôleur</value></data>
+  <data name="Main_ControllerPin.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>PIN du contrôleur</value></data>
+  <data name="Main_CopyControllerPin.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Copier le PIN du contrôleur</value></data>
+  <data name="Main_CopyControllerPin.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Copier le PIN du contrôleur</value></data>
+  <data name="Main_ControllerPinHint.Text" xml:space="preserve"><value>Partagez ce PIN avec les joueurs ayant besoin d’un contrôleur. Vous approuvez chaque demande.</value></data>
+  <data name="Main_PeopleButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Personnes</value></data>
+  <data name="Main_PeopleLabel.Text" xml:space="preserve"><value>Personnes</value></data>
+  <data name="Main_JoinLauncher.Content" xml:space="preserve"><value>Rejoindre un salon</value></data>
+  <data name="Main_JoinFlyoutTitle.Text" xml:space="preserve"><value>Rejoindre un salon</value></data>
+  <data name="Main_JoinFlyoutHint.Text" xml:space="preserve"><value>Saisissez le code à 6 caractères affiché par l’hôte.</value></data>
+  <data name="Main_RoomCodeLabel.Text" xml:space="preserve"><value>Code de salon</value></data>
+  <data name="Main_PasteInvite.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Coller l’invitation</value></data>
+  <data name="Main_PasteInvite.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Coller l’invitation</value></data>
+  <data name="Main_RoomCodeEntry.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Code de salon</value></data>
+  <data name="Main_RoomCodeEntry.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.HelpText" xml:space="preserve"><value>Saisissez six lettres et chiffres, ou collez un lien d’invitation VRCoplay.</value></data>
+  <data name="Main_JoinRoom.Content" xml:space="preserve"><value>Rejoindre un salon</value></data>
+  <data name="Main_Cancel.Content" xml:space="preserve"><value>Annuler</value></data>
+  <data name="Main_ActivityPicker.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Activité à partager</value></data>
+  <data name="Main_GameModePicker.Header" xml:space="preserve"><value>Le jeu s’exécute sur</value></data>
+  <data name="Main_PlayLocationPicker.Header" xml:space="preserve"><value>Jouer sur</value></data>
+  <data name="Main_MoonlightHelp.Content" xml:space="preserve"><value>Aide d’appairage Moonlight</value></data>
+  <data name="Main_StreamLinkLabel.Text" xml:space="preserve"><value>Lien du lecteur vidéo</value></data>
+  <data name="Main_StreamUrl.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Lien du lecteur vidéo</value></data>
+  <data name="Main_CopyStreamLink.Content" xml:space="preserve"><value>Copier le lien</value></data>
+  <data name="Main_CopyStreamLink.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Copier le lien du lecteur vidéo</value></data>
+  <data name="Main_StreamLinkOptions.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Options du lien du lecteur vidéo</value></data>
+  <data name="Main_StreamLinkOptions.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Options du lien du lecteur vidéo</value></data>
+  <data name="Main_RotateStreamLink.Text" xml:space="preserve"><value>Créer un nouveau lien de lecteur vidéo</value></data>
+  <data name="Main_RotateStreamLink.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Redémarre la vidéo partagée et invalide l’ancien lien. Les spectateurs auront besoin du nouveau lien.</value></data>
+  <data name="Main_SharingHelp.Text" xml:space="preserve"><value>Comment fonctionne le partage</value></data>
+  <data name="Main_QuestLinkLabel.Text" xml:space="preserve"><value>Lien du lecteur vidéo Quest</value></data>
+  <data name="Main_QuestUrl.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Lien du lecteur vidéo Quest</value></data>
+  <data name="Main_CopyQuestLink.Content" xml:space="preserve"><value>Copier le lien Quest</value></data>
+  <data name="Main_CopyQuestLink.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Copier le lien du lecteur vidéo Quest</value></data>
+  <data name="Main_Play.Content" xml:space="preserve"><value>Jouer</value></data>
+  <data name="Main_Watch.Content" xml:space="preserve"><value>Continuer à regarder</value></data>
+  <data name="Main_RequestController.Content" xml:space="preserve"><value>Demander le contrôle</value></data>
+  <data name="Main_UseWindow.Content" xml:space="preserve"><value>Utiliser une fenêtre ici</value></data>
+  <data name="Main_UseWindow.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Exécutez votre propre copie du jeu et gardez votre contrôleur sur ce PC.</value></data>
+  <data name="Main_ControllerSetupNotice.Title" xml:space="preserve"><value>Les contrôleurs sont facultatifs</value></data>
+  <data name="Main_SetupControllers.Content" xml:space="preserve"><value>Configurer les contrôleurs</value></data>
+  <data name="Main_Start.Content" xml:space="preserve"><value>Démarrer le partage</value></data>
+  <data name="Main_CreateGameRoom.Content" xml:space="preserve"><value>Créer un salon de jeu</value></data>
+  <data name="Settings_Title.Text" xml:space="preserve"><value>Paramètres</value></data>
+  <data name="Settings_Actions.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Actions des paramètres</value></data>
+  <data name="Settings_Actions.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Actions des paramètres</value></data>
+  <data name="Settings_BackToStream.Text" xml:space="preserve"><value>Retour au flux</value></data>
+  <data name="Settings_SharingPrivacy.Text" xml:space="preserve"><value>Partage et confidentialité</value></data>
+  <data name="Settings_Updates.Text" xml:space="preserve"><value>Mises à jour</value></data>
+  <data name="Settings_ControllerSetupItem.Text" xml:space="preserve"><value>Configuration des contrôleurs</value></data>
+  <data name="Settings_Reset.Text" xml:space="preserve"><value>Réinitialiser en automatique</value></data>
+  <data name="Dialog_ControllerPin.Title" xml:space="preserve"><value>Jouer sur le PC de l’hôte</value></data>
+  <data name="Dialog_ControllerPin.PrimaryButtonText" xml:space="preserve"><value>Continuer</value></data>
+  <data name="Dialog_ControllerPin.CloseButtonText" xml:space="preserve"><value>Annuler</value></data>
+  <data name="Dialog_ControllerPinIntro.Text" xml:space="preserve"><value>Saisissez le PIN à 6 chiffres affiché par l’hôte.</value></data>
+  <data name="Dialog_ControllerPinLabel.Text" xml:space="preserve"><value>PIN du contrôleur</value></data>
+  <data name="Dialog_PastePin.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Coller le PIN du contrôleur</value></data>
+  <data name="Dialog_PastePin.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Coller le PIN du contrôleur</value></data>
+  <data name="Dialog_ControllerPinEntry.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>PIN du contrôleur</value></data>
+  <data name="Dialog_ControllerPinEntry.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.HelpText" xml:space="preserve"><value>Saisissez le PIN de contrôleur à six chiffres.</value></data>
+  <data name="Dialog_ControllerPinClipboard.Text" xml:space="preserve"><value>Le Presse-papiers ne contient pas de PIN à 6 chiffres.</value></data>
+  <data name="Dialog_SharingWelcome.PrimaryButtonText" xml:space="preserve"><value>Continuer</value></data>
+  <data name="Dialog_SharingWelcome.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Partage et confidentialité</value></data>
+  <data name="Dialog_SharingWelcomeTitle.Text" xml:space="preserve"><value>Partage et confidentialité</value></data>
+  <data name="Dialog_SharingWelcomeIntro.Text" xml:space="preserve"><value>La vidéo va directement aux spectateurs, jamais via les serveurs de VRCoplay. Ils peuvent voir votre adresse IP. Partagez dans des lieux de confiance ou utilisez un VPN.</value></data>
+  <data name="Dialog_SharingDetails.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Comment fonctionne le partage</value></data>
+  <data name="Dialog_SharingDetailsLabel.Text" xml:space="preserve"><value>Comment fonctionne le partage</value></data>
+  <data name="Dialog_SharingDetailsText.Text" xml:space="preserve"><value>Votre lien de flux dirige les spectateurs vers votre ordinateur. La vidéo leur parvient directement. Les serveurs de VRCoplay ne la voient ni ne la stockent jamais.&#xA;&#xA;Votre adresse IP est l’adresse Internet de votre ordinateur. Un VPN peut la masquer lorsque votre flux utilise la connexion VPN.</value></data>
+  <data name="Dialog_Update.CloseButtonText" xml:space="preserve"><value>Terminé</value></data>
+  <data name="Dialog_UpdateOptions.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Options de mise à jour</value></data>
+  <data name="Dialog_UpdateOptions.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Options de mise à jour</value></data>
+  <data name="Dialog_CheckUpdates.Text" xml:space="preserve"><value>Rechercher des mises à jour</value></data>
+  <data name="Dialog_SkipVersion.Text" xml:space="preserve"><value>Ignorer cette version</value></data>
+  <data name="Dialog_AutomaticUpdates.Text" xml:space="preserve"><value>M’avertir des mises à jour</value></data>
+  <data name="Dialog_UpdateHeading.Text" xml:space="preserve"><value>Recherche de mises à jour</value></data>
+  <data name="Dialog_UpdateProgress.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Recherche de mises à jour</value></data>
+  <data name="Dialog_Notes.Header" xml:space="preserve"><value>Nouveautés</value></data>
+  <data name="Dialog_ControllerSetup.PrimaryButtonText" xml:space="preserve"><value>Télécharger le pilote</value></data>
+  <data name="Dialog_ControllerSetup.CloseButtonText" xml:space="preserve"><value>Ignorer pour le moment</value></data>
+  <data name="Dialog_ControllerSetupHeading.Text" xml:space="preserve"><value>Jouer avec des contrôleurs</value></data>
+  <data name="Dialog_ControllerSetupDetails.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>À propos de la configuration des contrôleurs</value></data>
+  <data name="Dialog_ControllerSetupDetailsLabel.Text" xml:space="preserve"><value>À propos de la configuration des contrôleurs</value></data>
+  <data name="Dialog_DownloadAgain.Content" xml:space="preserve"><value>Ouvrir la page de téléchargement</value></data>
+  <data name="Update.OpenInstallerFailed" xml:space="preserve"><value>Impossible d’ouvrir le programme d’installation d’applications Windows. Vérifiez qu’il est installé, puis réessayez.</value></data>
+  <data name="Update.OpenFailed" xml:space="preserve"><value>Impossible d’ouvrir la mise à jour. Vérifiez votre connexion, puis réessayez.</value></data>
+  <data name="Update.Checking" xml:space="preserve"><value>Recherche de mises à jour</value></data>
+  <data name="Update.Opening" xml:space="preserve"><value>Ouverture de la mise à jour</value></data>
+  <data name="Update.CheckFailed" xml:space="preserve"><value>Impossible de rechercher les mises à jour</value></data>
+  <data name="Update.Title" xml:space="preserve"><value>Mises à jour de VRCoplay</value></data>
+  <data name="Update.Available" xml:space="preserve"><value>Mise à jour disponible</value></data>
+  <data name="Update.UpToDate" xml:space="preserve"><value>Vous êtes à jour</value></data>
+  <data name="Update.VersionInstalled" xml:space="preserve"><value>Version {0} · Installée {1}</value></data>
+  <data name="Update.DevelopmentBuild" xml:space="preserve"><value>Version de développement</value></data>
+  <data name="Update.Version" xml:space="preserve"><value>Version {0}</value></data>
+  <data name="Update.Looking" xml:space="preserve"><value>Recherche de la dernière version de VRCoplay.</value></data>
+  <data name="Update.ContinueInstaller" xml:space="preserve"><value>Continuez dans le programme d’installation d’applications Windows.</value></data>
+  <data name="Update.ConnectionRetry" xml:space="preserve"><value>Vérifiez votre connexion, puis réessayez. Vous pouvez continuer à utiliser VRCoplay.</value></data>
+  <data name="Update.InstallTester" xml:space="preserve"><value>Installez une version de test pour recevoir les mises à jour Windows.</value></data>
+  <data name="Update.ConnectInstaller" xml:space="preserve"><value>Installez avec VRCoplay.appinstaller pour connecter cette copie aux mises à jour.</value></data>
+  <data name="Update.StopSession" xml:space="preserve"><value>Arrêtez le partage et quittez le salon de jeu avant la mise à jour.</value></data>
+  <data name="Update.WindowsInstalls" xml:space="preserve"><value>Windows installera la mise à jour. Si demandé, fermez VRCoplay pour continuer.</value></data>
+  <data name="Update.Latest" xml:space="preserve"><value>Vous disposez de la dernière version de VRCoplay.</value></data>
+  <data name="Update.CheckingAction" xml:space="preserve"><value>Recherche…</value></data>
+  <data name="Update.OpeningAction" xml:space="preserve"><value>Ouverture…</value></data>
+  <data name="Update.Action" xml:space="preserve"><value>Mettre à jour</value></data>
+  <data name="Update.CheckAgain" xml:space="preserve"><value>Réessayer</value></data>
+  <data name="Update.NotNow" xml:space="preserve"><value>Pas maintenant</value></data>
+  <data name="Update.Done" xml:space="preserve"><value>Terminé</value></data>
+  <data name="Update.SavePreferenceFailed" xml:space="preserve"><value>Impossible d’enregistrer cette préférence. Réessayez dans un instant.</value></data>
+  <data name="Settings_ControllerSetupCard.Header" xml:space="preserve"><value>Configuration des contrôleurs</value></data>
+  <data name="Settings_ControllerSetupCard.Description" xml:space="preserve"><value>Vérification de ce PC…</value></data>
+  <data name="Settings_SetupControllers.Content" xml:space="preserve"><value>Configurer les contrôleurs</value></data>
+  <data name="Settings_StreamExpander.Description" xml:space="preserve"><value>Audio, lecture et liens</value></data>
+  <data name="Settings_StreamTitle.Text" xml:space="preserve"><value>Flux</value></data>
+  <data name="Settings_ShareAudio.Header" xml:space="preserve"><value>Partager l’audio</value></data>
+  <data name="Settings_ShareAudio.Description" xml:space="preserve"><value>La capture de fenêtre partage l’audio de l’application sélectionnée. La capture plein écran partage l’audio de ce PC.</value></data>
+  <data name="Settings_ShareAudioToggle.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Partager l’audio</value></data>
+  <data name="Settings_QuietAudio.Header" xml:space="preserve"><value>Réduire l’audio local</value></data>
+  <data name="Settings_QuietAudio.Description" xml:space="preserve"><value>Pour la capture de fenêtre, rendez l’application sélectionnée presque silencieuse sur ce PC tout en conservant son volume de flux. Le volume d’origine revient à l’arrêt.</value></data>
+  <data name="Settings_QuietAudioToggle.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Réduire l’audio local</value></data>
+  <data name="Settings_WorldPlayback.Header" xml:space="preserve"><value>Lecture dans le monde</value></data>
+  <data name="Settings_WorldPlayback.Description" xml:space="preserve"><value>Automatique vérifie la faible latence dans VRChat®. Démarrez le partage, puis rechargez le lecteur vidéo pour détecter son mode.</value></data>
+  <data name="Settings_QuestStreaming.Header" xml:space="preserve"><value>Diffuser aussi vers Quest</value></data>
+  <data name="Settings_QuestStreaming.Description" xml:space="preserve"><value>Ajoute un lien de visionnage pour Quest autonome lors du partage avec des amis. Utilise la connexion directe existante pour la vidéo et l’audio, sans commandes ni relais.</value></data>
+  <data name="Settings_DirectIp.Header" xml:space="preserve"><value>Utiliser un lien IP direct</value></data>
+  <data name="Settings_DirectIp.Description" xml:space="preserve"><value>Connecte les spectateurs directement à votre PC sans contacter le serveur pour la diffusion. Les salons de jeu se connectent séparément. L’activer déconnecte les liens existants.</value></data>
+  <data name="Settings_StreamerMode.Header" xml:space="preserve"><value>Mode streamer</value></data>
+  <data name="Settings_StreamerMode.Description" xml:space="preserve"><value>Masque les codes de salon, liens, codes QR et PIN de contrôleurs dans l’application. Les boutons Copier fonctionnent toujours.</value></data>
+  <data name="Settings_ControlsExpander.Description" xml:space="preserve"><value>Sorties de contrôleur, mouvement et profils</value></data>
+  <data name="Settings_ControlsTitle.Text" xml:space="preserve"><value>Contrôles</value></data>
+  <data name="Settings_AutoControllers.Header" xml:space="preserve"><value>Connecter automatiquement les contrôleurs VR</value></data>
+  <data name="Settings_AutoControllers.Description" xml:space="preserve"><value>Utilisez vos contrôleurs SteamVR lorsque vous jouez.</value></data>
+  <data name="Settings_SteamVrControllers.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Contrôleurs SteamVR</value></data>
+  <data name="Settings_PreferredHand.Header" xml:space="preserve"><value>Main préférée</value></data>
+  <data name="Settings_PreferredHand.Description" xml:space="preserve"><value>Utilisez cette main pour pointer et comme source Cemuhook principale.</value></data>
+  <data name="Settings_CemuhookMotion.Header" xml:space="preserve"><value>Mouvement Cemuhook</value></data>
+  <data name="Settings_CemuhookMotion.Description" xml:space="preserve"><value>Deux sources de contrôleur complètes, avec un mouvement indépendant pour chaque main. Connectez-les avec les paramètres DSU d’une application compatible.</value></data>
+  <data name="Settings_CemuhookPort.Header" xml:space="preserve"><value>Port Cemuhook</value></data>
+  <data name="Settings_CemuhookPort.Description" xml:space="preserve"><value>Adresse : 127.0.0.1. Ce port porte la main préférée ; le suivant porte l’autre main. Chacun a les joueurs 1 à 4.</value></data>
+  <data name="Settings_DualShockController.Header" xml:space="preserve"><value>Contrôleur DualShock</value></data>
+  <data name="Settings_DualShockController.Description" xml:space="preserve"><value>Une manette virtuelle par joueur, avec boutons, deux sticks, gâchettes et pointage. Nécessite le pilote de contrôleur.</value></data>
+  <data name="Settings_DualShockMotion.Header" xml:space="preserve"><value>Mouvement DualShock</value></data>
+  <data name="Settings_DualShockMotion.Description" xml:space="preserve"><value>Choisissez la main physique fournissant gyroscope et accéléromètre à cette manette. Cemuhook transporte toujours les deux mains séparément.</value></data>
+  <data name="Settings_ControllerProfiles.Header" xml:space="preserve"><value>Profils de contrôleur</value></data>
+  <data name="Settings_ControllerProfiles.Description" xml:space="preserve"><value>Parcourez les configurations de contrôleur pour les émulateurs et autres logiciels.</value></data>
+  <data name="Settings_BrowseProfiles.Content" xml:space="preserve"><value>Parcourir les profils</value></data>
+</root>

@@ -41,6 +41,9 @@ internal static class GStreamerRuntime
     private static extern bool SetDefaultDllDirectories(uint flags);
     [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
     private static extern nint AddDllDirectory(string path);
+    internal static string? ErrorDomain(int domain) => Marshal.PtrToStringUTF8(g_quark_to_string(domain));
+    [DllImport("glib-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+    private static extern nint g_quark_to_string(int quark);
     internal static Gst.Pipeline CreatePipeline(string graph)
     {
         Initialize();

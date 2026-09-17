@@ -27,9 +27,9 @@
       </VisualStateManager.VisualStateGroups>
       <TitleBar x:Name="AppTitleBar" Title="VRCoplay"><TitleBar.IconSource><ImageIconSource ImageSource="ms-appx:///Assets/StoreLogo.png" /></TitleBar.IconSource></TitleBar>
 
-      <TeachingTip x:Name="SharingTip" Target="{x:Bind CopyStreamLinkButton}" PreferredPlacement="BottomLeft" IsLightDismissEnabled="False" Title="Watch on your VRChat® Video Player" Subtitle="Copy the Video Player link, then paste it into a VRChat® Video Player. Keep VRCoplay and the shared window open." />
+      <TeachingTip x:Uid="Main_SharingTip" x:Name="SharingTip" Target="{x:Bind CopyStreamLinkButton}" PreferredPlacement="BottomLeft" IsLightDismissEnabled="False" Title="Watch on your VRChat® Video Player" Subtitle="Copy the Video Player link, then paste it into a VRChat® Video Player. Keep VRCoplay and the shared window open." />
       <Grid Grid.Row="1" MaxWidth="1600" Padding="24,8,24,16">
-        <Button x:Name="SettingsNavigationButton" HorizontalAlignment="Right" VerticalAlignment="Center" Click="Settings_Click" AutomationProperties.Name="Settings" ToolTipService.ToolTip="Settings"><SymbolIcon Symbol="Setting" /></Button>
+        <Button x:Uid="Main_SettingsButton" x:Name="SettingsNavigationButton" HorizontalAlignment="Right" VerticalAlignment="Center" Click="Settings_Click" AutomationProperties.Name="Settings" ToolTipService.ToolTip="Settings"><SymbolIcon Symbol="Setting" /></Button>
       </Grid>
       <ScrollView x:Name="Scroller" Grid.Row="2" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Hidden">
         <StackPanel x:Name="PageSections" MaxWidth="1600" Padding="24,0,24,24" Spacing="24">
@@ -41,7 +41,7 @@
                     <Border x:Name="PreviewHost" Height="320" Background="{ThemeResource LayerOnMicaBaseAltFillColorDefaultBrush}" CornerRadius="12">
                       <StackPanel x:Name="PreviewEmpty" Spacing="16" VerticalAlignment="Center" Margin="24">
                         <SymbolIcon Symbol="BrowsePhotos" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
-                        <TextBlock x:Name="PreviewPlaceholder" Text="Choose a window or display to see it here" Style="{StaticResource QuietText}" TextAlignment="Center" />
+                        <TextBlock x:Uid="Main_PreviewPlaceholder" x:Name="PreviewPlaceholder" Text="Choose a window or display to see it here" Style="{StaticResource QuietText}" TextAlignment="Center" />
                       </StackPanel>
                     </Border>
                 </Border>
@@ -49,21 +49,21 @@
                   <StackPanel x:Name="StreamControls" Spacing="24">
                     <StackPanel x:Name="RoomHeader" Spacing="12" Margin="0,0,0,8" Visibility="Collapsed">
                       <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
-                        <TextBlock x:Name="RoomHeading" Text="Room code" FontSize="18" FontWeight="Normal" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" />
-                        <Button x:Name="RoomOptionsButton" Grid.Column="1" AutomationProperties.Name="Room options" ToolTipService.ToolTip="Room options">
+                        <TextBlock x:Uid="Main_RoomHeading" x:Name="RoomHeading" Text="Room code" FontSize="18" FontWeight="Normal" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" />
+                        <Button x:Uid="Main_RoomOptions" x:Name="RoomOptionsButton" Grid.Column="1" AutomationProperties.Name="Room options" ToolTipService.ToolTip="Room options">
                           <SymbolIcon Symbol="More" />
                           <Button.Flyout><MenuFlyout>
-                            <MenuFlyoutItem x:Name="LeaveGameRoomItem" Text="Leave game room" Icon="LeaveChat" Click="LeaveGameRoom_Click" />
+                            <MenuFlyoutItem x:Uid="Main_LeaveGameRoom" x:Name="LeaveGameRoomItem" Text="Leave game room" Icon="LeaveChat" Click="LeaveGameRoom_Click" />
                           </MenuFlyout></Button.Flyout>
                         </Button>
                       </Grid>
                       <Grid x:Name="RoomCodeRow" ColumnDefinitions="*,Auto" ColumnSpacing="12">
-                        <TextBlock x:Name="RoomCodeText" FontSize="48" FontWeight="Black" CharacterSpacing="80" TextWrapping="Wrap" IsTextSelectionEnabled="True" AutomationProperties.Name="Room code" AutomationProperties.LiveSetting="Polite" />
-                        <Button x:Name="CopyRoomCodeButton" Grid.Column="1" VerticalAlignment="Center" Click="CopyRoomCode_Click" AutomationProperties.Name="Copy room code" ToolTipService.ToolTip="Copy room code"><SymbolIcon Symbol="Copy" /></Button>
+                        <TextBlock x:Uid="Main_RoomCode" x:Name="RoomCodeText" FontSize="48" FontWeight="Black" CharacterSpacing="80" TextWrapping="Wrap" IsTextSelectionEnabled="True" AutomationProperties.Name="Room code" AutomationProperties.LiveSetting="Polite" />
+                        <Button x:Uid="Main_CopyRoomCode" x:Name="CopyRoomCodeButton" Grid.Column="1" VerticalAlignment="Center" Click="CopyRoomCode_Click" AutomationProperties.Name="Copy room code" ToolTipService.ToolTip="Copy room code"><SymbolIcon Symbol="Copy" /></Button>
                       </Grid>
-                      <TextBlock x:Name="RoomDiscoveryStatus" Text="Room discovery is reconnecting. Your game session continues." Style="{StaticResource QuietText}" Visibility="Collapsed" />
+                      <TextBlock x:Uid="Main_RoomDiscovery" x:Name="RoomDiscoveryStatus" Text="Room discovery is reconnecting. Your game session continues." Style="{StaticResource QuietText}" Visibility="Collapsed" />
                       <Grid x:Name="SessionBar" Visibility="Collapsed" ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                        <Button x:Name="ShareButton" Content="Invite players" HorizontalAlignment="Stretch">
+                        <Button x:Uid="Main_InvitePlayers" x:Name="ShareButton" Content="Invite players" HorizontalAlignment="Stretch">
                           <Button.Flyout>
                             <Flyout Placement="BottomEdgeAlignedLeft">
                               <Flyout.FlyoutPresenterStyle>
@@ -75,40 +75,40 @@
                               </Flyout.FlyoutPresenterStyle>
                               <StackPanel Width="288" Spacing="20">
                                 <StackPanel Spacing="4">
-                                  <TextBlock Text="Invite players" Style="{StaticResource SectionTitle}" />
-                                  <TextBlock x:Name="ShareHint" Text="Share the link or scan the code to join." Style="{StaticResource QuietText}" />
+                                  <TextBlock x:Uid="Main_InviteFlyoutTitle" Text="Invite players" Style="{StaticResource SectionTitle}" />
+                                  <TextBlock x:Uid="Main_ShareHint" x:Name="ShareHint" Text="Share the link or scan the code to join." Style="{StaticResource QuietText}" />
                                 </StackPanel>
                                 <Border x:Name="ShareQrPanel" Background="White" Padding="8" CornerRadius="8" HorizontalAlignment="Center">
-                                  <Image x:Name="ShareQrImage" Width="160" Height="160" AutomationProperties.Name="Scan to join the game room" />
+                                  <Image x:Uid="Main_ShareQr" x:Name="ShareQrImage" Width="160" Height="160" AutomationProperties.Name="Scan to join the game room" />
                                 </Border>
                                 <StackPanel Spacing="8">
-                                  <TextBlock Text="Invite link" Style="{StaticResource FieldLabel}" />
+                                  <TextBlock x:Uid="Main_InviteLink" Text="Invite link" Style="{StaticResource FieldLabel}" />
                                   <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
                                     <Border MinHeight="44" Padding="12,0" CornerRadius="8" Background="{ThemeResource ControlFillColorSecondaryBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1">
-                                      <TextBlock x:Name="ShareUrlText" VerticalAlignment="Center" IsTextSelectionEnabled="True" TextTrimming="CharacterEllipsis" AutomationProperties.Name="Room invite URL" ToolTipService.ToolTip="{Binding Text, ElementName=ShareUrlText}" />
+                                      <TextBlock x:Uid="Main_ShareUrl" x:Name="ShareUrlText" VerticalAlignment="Center" IsTextSelectionEnabled="True" TextTrimming="CharacterEllipsis" AutomationProperties.Name="Room invite URL" ToolTipService.ToolTip="{Binding Text, ElementName=ShareUrlText}" />
                                     </Border>
-                                    <Button x:Name="CopyShareButton" Grid.Column="1" Click="CopyShare_Click" AutomationProperties.Name="Copy invite link" ToolTipService.ToolTip="Copy invite link"><SymbolIcon Symbol="Copy" /></Button>
+                                    <Button x:Uid="Main_CopyInvite" x:Name="CopyShareButton" Grid.Column="1" Click="CopyShare_Click" AutomationProperties.Name="Copy invite link" ToolTipService.ToolTip="Copy invite link"><SymbolIcon Symbol="Copy" /></Button>
                                   </Grid>
                                 </StackPanel>
                                 <StackPanel x:Name="ControllerPinSection" Spacing="12">
                                   <Border Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
                                   <StackPanel Spacing="8">
-                                    <TextBlock Text="Controller PIN" Style="{StaticResource FieldLabel}" />
+                                    <TextBlock x:Uid="Main_ControllerPinLabel" Text="Controller PIN" Style="{StaticResource FieldLabel}" />
                                     <Grid x:Name="ControllerPinRow" ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                                      <TextBlock x:Name="ControlPinText" FontSize="24" FontWeight="SemiBold" CharacterSpacing="120" VerticalAlignment="Center" IsTextSelectionEnabled="True" AutomationProperties.Name="Controller PIN" />
-                                      <Button x:Name="CopyPinButton" Grid.Column="1" Click="CopyPin_Click" AutomationProperties.Name="Copy controller PIN" ToolTipService.ToolTip="Copy controller PIN"><SymbolIcon Symbol="Copy" /></Button>
+                                      <TextBlock x:Uid="Main_ControllerPin" x:Name="ControlPinText" FontSize="24" FontWeight="SemiBold" CharacterSpacing="120" VerticalAlignment="Center" IsTextSelectionEnabled="True" AutomationProperties.Name="Controller PIN" />
+                                      <Button x:Uid="Main_CopyControllerPin" x:Name="CopyPinButton" Grid.Column="1" Click="CopyPin_Click" AutomationProperties.Name="Copy controller PIN" ToolTipService.ToolTip="Copy controller PIN"><SymbolIcon Symbol="Copy" /></Button>
                                     </Grid>
-                                    <TextBlock x:Name="ControllerPinHint" Text="Share this PIN with players who need a controller. You approve each request." Style="{StaticResource QuietText}" />
+                                    <TextBlock x:Uid="Main_ControllerPinHint" x:Name="ControllerPinHint" Text="Share this PIN with players who need a controller. You approve each request." Style="{StaticResource QuietText}" />
                                   </StackPanel>
                                 </StackPanel>
                               </StackPanel>
                             </Flyout>
                           </Button.Flyout>
                         </Button>
-                        <Button x:Name="ParticipantsButton" Grid.Column="1" AutomationProperties.Name="People">
+                        <Button x:Uid="Main_PeopleButton" x:Name="ParticipantsButton" Grid.Column="1" AutomationProperties.Name="People">
                           <Button.Content>
                             <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                              <TextBlock Text="People" VerticalAlignment="Center" />
+                              <TextBlock x:Uid="Main_PeopleLabel" Text="People" VerticalAlignment="Center" />
                               <Border x:Name="ParticipantCountBadge" MinWidth="24" MinHeight="24" Padding="6,3" CornerRadius="12" VerticalAlignment="Center" Background="{ThemeResource ControlFillColorSecondaryBrush}">
 
                                 <TextBlock x:Name="ParticipantCountText" Text="1" FontSize="12" FontWeight="SemiBold" TextLineBounds="Tight" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.AccessibilityView="Raw" />
@@ -132,7 +132,7 @@
                       </Grid>
                     </StackPanel>
                     <StackPanel x:Name="SessionChoices" Spacing="8">
-                      <Button x:Name="JoinLauncher" Content="Join room" MinWidth="96" HorizontalAlignment="Stretch">
+                      <Button x:Uid="Main_JoinLauncher" x:Name="JoinLauncher" Content="Join room" MinWidth="96" HorizontalAlignment="Stretch">
                         <Button.Flyout>
                           <Flyout x:Name="JoinFlyout" Placement="BottomEdgeAlignedLeft">
                             <Flyout.FlyoutPresenterStyle>
@@ -144,62 +144,57 @@
                             </Flyout.FlyoutPresenterStyle>
                             <StackPanel Spacing="16">
                               <StackPanel Spacing="4">
-                                <TextBlock Text="Join room" Style="{StaticResource SectionTitle}" />
-                                <TextBlock Text="Enter the 6-character code shown by the host." Style="{StaticResource QuietText}" />
+                                <TextBlock x:Uid="Main_JoinFlyoutTitle" Text="Join room" Style="{StaticResource SectionTitle}" />
+                                <TextBlock x:Uid="Main_JoinFlyoutHint" Text="Enter the 6-character code shown by the host." Style="{StaticResource QuietText}" />
                               </StackPanel>
                               <StackPanel Spacing="4">
                                 <Grid ColumnDefinitions="*,Auto">
-                                  <TextBlock Text="Room code" Style="{StaticResource FieldLabel}" VerticalAlignment="Center" />
-                                  <Button x:Name="PasteInviteButton" Grid.Column="1" Click="PasteInvite_Click" Background="Transparent" BorderThickness="0" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" AutomationProperties.Name="Paste invite" ToolTipService.ToolTip="Paste invite"><SymbolIcon Symbol="Paste" /></Button>
+                                  <TextBlock x:Uid="Main_RoomCodeLabel" Text="Room code" Style="{StaticResource FieldLabel}" VerticalAlignment="Center" />
+                                  <Button x:Uid="Main_PasteInvite" x:Name="PasteInviteButton" Grid.Column="1" Click="PasteInvite_Click" Background="Transparent" BorderThickness="0" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" AutomationProperties.Name="Paste invite" ToolTipService.ToolTip="Paste invite"><SymbolIcon Symbol="Paste" /></Button>
                                 </Grid>
                                 <Grid Height="52">
                                   <Grid x:Name="RoomCodeCells" ColumnDefinitions="*,*,*,*,*,*" ColumnSpacing="8" AutomationProperties.AccessibilityView="Raw">
-                                    <Grid.Resources>
-                                      <Style x:Key="RoomCodeCell" TargetType="Border"><Setter Property="Background" Value="{ThemeResource ControlFillColorSecondaryBrush}" /><Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}" /><Setter Property="BorderThickness" Value="1" /><Setter Property="CornerRadius" Value="12" /></Style>
-                                      <Style x:Key="RoomCodeFocus" TargetType="Border"><Setter Property="BorderBrush" Value="{ThemeResource AccentFillColorDefaultBrush}" /><Setter Property="BorderThickness" Value="2" /><Setter Property="CornerRadius" Value="12" /><Setter Property="Visibility" Value="Collapsed" /></Style>
-                                      <Style x:Key="RoomCodeCharacter" TargetType="TextBlock"><Setter Property="FontSize" Value="24" /><Setter Property="FontWeight" Value="SemiBold" /><Setter Property="HorizontalAlignment" Value="Center" /><Setter Property="VerticalAlignment" Value="Center" /></Style>
-                                    </Grid.Resources>
-                                    <Border Grid.Column="0" Style="{StaticResource RoomCodeCell}"><Grid><Border x:Name="RoomCodeFocus0" Style="{StaticResource RoomCodeFocus}" /><TextBlock x:Name="RoomCodeCharacter0" Style="{StaticResource RoomCodeCharacter}" /></Grid></Border>
-                                    <Border Grid.Column="1" Style="{StaticResource RoomCodeCell}"><Grid><Border x:Name="RoomCodeFocus1" Style="{StaticResource RoomCodeFocus}" /><TextBlock x:Name="RoomCodeCharacter1" Style="{StaticResource RoomCodeCharacter}" /></Grid></Border>
-                                    <Border Grid.Column="2" Style="{StaticResource RoomCodeCell}"><Grid><Border x:Name="RoomCodeFocus2" Style="{StaticResource RoomCodeFocus}" /><TextBlock x:Name="RoomCodeCharacter2" Style="{StaticResource RoomCodeCharacter}" /></Grid></Border>
-                                    <Border Grid.Column="3" Style="{StaticResource RoomCodeCell}"><Grid><Border x:Name="RoomCodeFocus3" Style="{StaticResource RoomCodeFocus}" /><TextBlock x:Name="RoomCodeCharacter3" Style="{StaticResource RoomCodeCharacter}" /></Grid></Border>
-                                    <Border Grid.Column="4" Style="{StaticResource RoomCodeCell}"><Grid><Border x:Name="RoomCodeFocus4" Style="{StaticResource RoomCodeFocus}" /><TextBlock x:Name="RoomCodeCharacter4" Style="{StaticResource RoomCodeCharacter}" /></Grid></Border>
-                                    <Border Grid.Column="5" Style="{StaticResource RoomCodeCell}"><Grid><Border x:Name="RoomCodeFocus5" Style="{StaticResource RoomCodeFocus}" /><TextBlock x:Name="RoomCodeCharacter5" Style="{StaticResource RoomCodeCharacter}" /></Grid></Border>
+                                    <Border Grid.Column="0" Style="{StaticResource CodeCell}"><Grid><Border x:Name="RoomCodeFocus0" Style="{StaticResource CodeFocus}" /><TextBlock x:Name="RoomCodeCharacter0" Style="{StaticResource CodeCharacter}" /></Grid></Border>
+                                    <Border Grid.Column="1" Style="{StaticResource CodeCell}"><Grid><Border x:Name="RoomCodeFocus1" Style="{StaticResource CodeFocus}" /><TextBlock x:Name="RoomCodeCharacter1" Style="{StaticResource CodeCharacter}" /></Grid></Border>
+                                    <Border Grid.Column="2" Style="{StaticResource CodeCell}"><Grid><Border x:Name="RoomCodeFocus2" Style="{StaticResource CodeFocus}" /><TextBlock x:Name="RoomCodeCharacter2" Style="{StaticResource CodeCharacter}" /></Grid></Border>
+                                    <Border Grid.Column="3" Style="{StaticResource CodeCell}"><Grid><Border x:Name="RoomCodeFocus3" Style="{StaticResource CodeFocus}" /><TextBlock x:Name="RoomCodeCharacter3" Style="{StaticResource CodeCharacter}" /></Grid></Border>
+                                    <Border Grid.Column="4" Style="{StaticResource CodeCell}"><Grid><Border x:Name="RoomCodeFocus4" Style="{StaticResource CodeFocus}" /><TextBlock x:Name="RoomCodeCharacter4" Style="{StaticResource CodeCharacter}" /></Grid></Border>
+                                    <Border Grid.Column="5" Style="{StaticResource CodeCell}"><Grid><Border x:Name="RoomCodeFocus5" Style="{StaticResource CodeFocus}" /><TextBlock x:Name="RoomCodeCharacter5" Style="{StaticResource CodeCharacter}" /></Grid></Border>
                                   </Grid>
-                                  <TextBox x:Name="RoomCodeBox" MaxLength="2048" Opacity="0.001" Background="Transparent" BorderThickness="0" UseSystemFocusVisuals="False" IsSpellCheckEnabled="False" IsTextPredictionEnabled="False" KeyDown="RoomCode_KeyDown" AutomationProperties.Name="Room code" AutomationProperties.HelpText="Type six letters and numbers, or paste a VRCoplay invite link." />
+                                  <TextBox x:Uid="Main_RoomCodeEntry" x:Name="RoomCodeBox" MaxLength="2048" Opacity="0.001" Background="Transparent" BorderThickness="0" UseSystemFocusVisuals="False" IsSpellCheckEnabled="False" IsTextPredictionEnabled="False" KeyDown="RoomCode_KeyDown" AutomationProperties.Name="Room code" AutomationProperties.HelpText="Type six letters and numbers, or paste a VRCoplay invite link." />
                                 </Grid>
                               </StackPanel>
                               <TextBlock x:Name="JoinFeedback" Style="{StaticResource QuietText}" Foreground="{ThemeResource SystemFillColorCriticalBrush}" Visibility="Collapsed" AutomationProperties.LiveSetting="Polite" />
                               <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                                <Button x:Name="JoinRoomButton" Content="Join room" HorizontalAlignment="Stretch" MinHeight="44" FontWeight="SemiBold" CornerRadius="12" IsEnabled="False" Style="{StaticResource AccentButtonStyle}" Click="Join_Click" />
-                                <Button x:Name="CancelJoinButton" Grid.Column="1" Content="Cancel" Visibility="Collapsed" Click="CancelJoin_Click" />
+                                <Button x:Uid="Main_JoinRoom" x:Name="JoinRoomButton" Content="Join room" HorizontalAlignment="Stretch" MinHeight="44" FontWeight="SemiBold" CornerRadius="12" IsEnabled="False" Style="{StaticResource AccentButtonStyle}" Click="Join_Click" />
+                                <Button x:Uid="Main_Cancel" x:Name="CancelJoinButton" Grid.Column="1" Content="Cancel" Visibility="Collapsed" Click="CancelJoin_Click" />
                               </Grid>
                             </StackPanel>
                           </Flyout>
                         </Button.Flyout>
                       </Button>
-                      <RadioButtons x:Name="ActivityPicker" SelectedIndex="{x:Bind _settings.Activity, Mode=TwoWay}" MaxColumns="2" SelectionChanged="Flow_Changed" AutomationProperties.Name="Share activity"><x:String>Screen sharing</x:String><x:String>Games</x:String></RadioButtons>
+                      <RadioButtons x:Uid="Main_ActivityPicker" x:Name="ActivityPicker" SelectedIndex="{x:Bind _settings.Activity, Mode=TwoWay}" MaxColumns="2" SelectionChanged="Flow_Changed" AutomationProperties.Name="Share activity"><x:String>Screen sharing</x:String><x:String>Games</x:String></RadioButtons>
                     </StackPanel>
-                    <ComboBox x:Name="GameModePicker" IsEnabled="{x:Bind ActivityPicker.IsEnabled, Mode=OneWay}" SelectedIndex="{x:Bind _settings.GameMode, Mode=TwoWay}" Header="Game runs on" Visibility="Collapsed"><x:String>This PC</x:String><x:String>Each player's PC</x:String></ComboBox>
+                    <ComboBox x:Uid="Main_GameModePicker" x:Name="GameModePicker" IsEnabled="{x:Bind ActivityPicker.IsEnabled, Mode=OneWay}" SelectedIndex="{x:Bind _settings.GameMode, Mode=TwoWay}" Header="Game runs on" Visibility="Collapsed"><x:String>This PC</x:String><x:String>Each player's PC</x:String></ComboBox>
                     <StackPanel x:Name="PlaySetup" Spacing="12" Visibility="Collapsed">
-                      <RadioButtons x:Name="PlayLocationPicker" Header="Play on" SelectedIndex="0" MaxColumns="3" SelectionChanged="Flow_Changed"><x:String>Host's PC</x:String><x:String>My PC</x:String><x:String>Video Player</x:String></RadioButtons>
+                      <RadioButtons x:Uid="Main_PlayLocationPicker" x:Name="PlayLocationPicker" Header="Play on" SelectedIndex="0" MaxColumns="3" SelectionChanged="Flow_Changed"><x:String>Host's PC</x:String><x:String>My PC</x:String><x:String>Video Player</x:String></RadioButtons>
                       <TextBlock x:Name="PlayHint" Style="{StaticResource QuietText}" />
-                      <HyperlinkButton x:Name="MoonlightHelp" Content="Moonlight pairing help" NavigateUri="https://github.com/moonlight-stream/moonlight-docs/wiki/Setup-Guide" HorizontalAlignment="Left" Padding="0,8" />
+                      <HyperlinkButton x:Uid="Main_MoonlightHelp" x:Name="MoonlightHelp" Content="Moonlight pairing help" NavigateUri="https://github.com/moonlight-stream/moonlight-docs/wiki/Setup-Guide" HorizontalAlignment="Left" Padding="0,8" />
                     </StackPanel>
                     <local:CaptureSourcePicker x:Name="WindowPicker" Visibility="{x:Bind PreviewPanel.Visibility, Mode=OneWay}" HorizontalAlignment="Stretch" DropDownOpened="WindowPicker_DropDownOpened" SelectionChanged="WindowPicker_SelectionChanged" />
                     <StackPanel x:Name="StreamUrlRow" Spacing="8" Visibility="Collapsed">
-                      <TextBlock Text="Video Player link" Style="{StaticResource FieldLabel}" />
+                      <TextBlock x:Uid="Main_StreamLinkLabel" Text="Video Player link" Style="{StaticResource FieldLabel}" />
                       <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
                         <Border MinHeight="44" Padding="12,0" CornerRadius="8" Background="{ThemeResource ControlFillColorSecondaryBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1">
-                          <TextBlock x:Name="StreamUrlBox" VerticalAlignment="Center" IsTextSelectionEnabled="True" TextTrimming="CharacterEllipsis" AutomationProperties.Name="Video Player link" ToolTipService.ToolTip="{Binding Text, ElementName=StreamUrlBox}" />
+                          <TextBlock x:Uid="Main_StreamUrl" x:Name="StreamUrlBox" VerticalAlignment="Center" IsTextSelectionEnabled="True" TextTrimming="CharacterEllipsis" AutomationProperties.Name="Video Player link" ToolTipService.ToolTip="{Binding Text, ElementName=StreamUrlBox}" />
                         </Border>
-                        <Button x:Name="CopyStreamLinkButton" Grid.Column="1" Content="Copy link" Click="CopyUrl_Click" AutomationProperties.Name="Copy Video Player link" />
-                        <Button Grid.Column="2" AutomationProperties.Name="Video Player link options" ToolTipService.ToolTip="Video Player link options">
+                        <Button x:Uid="Main_CopyStreamLink" x:Name="CopyStreamLinkButton" Grid.Column="1" Content="Copy link" Click="CopyUrl_Click" AutomationProperties.Name="Copy Video Player link" />
+                        <Button x:Uid="Main_StreamLinkOptions" Grid.Column="2" AutomationProperties.Name="Video Player link options" ToolTipService.ToolTip="Video Player link options">
                           <SymbolIcon Symbol="More" />
                           <Button.Flyout><MenuFlyout>
-                            <MenuFlyoutItem x:Name="RotateStreamLinkButton" Text="Create new Video Player link" Icon="Refresh" Click="RotateStreamLink_Click" Visibility="Collapsed" ToolTipService.ToolTip="Restarts the shared video and invalidates the old link. Viewers will need the new link." />
+                            <MenuFlyoutItem x:Uid="Main_RotateStreamLink" x:Name="RotateStreamLinkButton" Text="Create new Video Player link" Icon="Refresh" Click="RotateStreamLink_Click" Visibility="Collapsed" ToolTipService.ToolTip="Restarts the shared video and invalidates the old link. Viewers will need the new link." />
                             <MenuFlyoutSeparator Visibility="{x:Bind RotateStreamLinkButton.Visibility, Mode=OneWay}" />
-                            <MenuFlyoutItem Text="How sharing works" Icon="Help" Click="SharingHelp_Click" />
+                            <MenuFlyoutItem x:Uid="Main_SharingHelp" Text="How sharing works" Icon="Help" Click="SharingHelp_Click" />
                           </MenuFlyout></Button.Flyout>
                         </Button>
                       </Grid>
@@ -212,26 +207,26 @@
                       </Grid>
                     </StackPanel>
                     <StackPanel x:Name="QuestStreamUrlRow" Spacing="8" Visibility="Collapsed">
-                      <TextBlock Text="Quest Video Player link" Style="{StaticResource FieldLabel}" />
+                      <TextBlock x:Uid="Main_QuestLinkLabel" Text="Quest Video Player link" Style="{StaticResource FieldLabel}" />
                       <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
                         <Border MinHeight="44" Padding="12,0" CornerRadius="8" Background="{ThemeResource ControlFillColorSecondaryBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1">
-                          <TextBlock x:Name="QuestStreamUrlBox" VerticalAlignment="Center" IsTextSelectionEnabled="True" TextTrimming="CharacterEllipsis" AutomationProperties.Name="Quest Video Player link" ToolTipService.ToolTip="{Binding Text, ElementName=QuestStreamUrlBox}" />
+                          <TextBlock x:Uid="Main_QuestUrl" x:Name="QuestStreamUrlBox" VerticalAlignment="Center" IsTextSelectionEnabled="True" TextTrimming="CharacterEllipsis" AutomationProperties.Name="Quest Video Player link" ToolTipService.ToolTip="{Binding Text, ElementName=QuestStreamUrlBox}" />
                         </Border>
-                        <Button x:Name="CopyQuestStreamLinkButton" Grid.Column="1" Content="Copy Quest link" Click="CopyQuestUrl_Click" IsEnabled="False" AutomationProperties.Name="Copy Quest Video Player link" />
+                        <Button x:Uid="Main_CopyQuestLink" x:Name="CopyQuestStreamLinkButton" Grid.Column="1" Content="Copy Quest link" Click="CopyQuestUrl_Click" IsEnabled="False" AutomationProperties.Name="Copy Quest Video Player link" />
                       </Grid>
                       <TextBlock x:Name="QuestStreamStatus" TextWrapping="Wrap" Style="{StaticResource QuietText}" AutomationProperties.LiveSetting="Polite" />
                     </StackPanel>
                     <Grid x:Name="PlayActions" ColumnDefinitions="*,*" ColumnSpacing="12" Visibility="Collapsed">
-                      <Button x:Name="PlayButton" Content="Play" Click="Play_Click" HorizontalAlignment="Stretch" MinHeight="48" FontSize="16" FontWeight="SemiBold" Style="{StaticResource AccentButtonStyle}" />
-                      <Button x:Name="WatchButton" Grid.Column="1" Content="Keep watching" Click="Watch_Click" HorizontalAlignment="Stretch" Visibility="Collapsed" />
+                      <Button x:Uid="Main_Play" x:Name="PlayButton" Content="Play" Click="Play_Click" HorizontalAlignment="Stretch" MinHeight="48" FontSize="16" FontWeight="SemiBold" Style="{StaticResource AccentButtonStyle}" />
+                      <Button x:Uid="Main_Watch" x:Name="WatchButton" Grid.Column="1" Content="Keep watching" Click="Watch_Click" HorizontalAlignment="Stretch" Visibility="Collapsed" />
                     </Grid>
-                    <Button x:Name="RequestControllerButton" Content="Request control" Visibility="Collapsed" Click="RequestController_Click" HorizontalAlignment="Stretch" />
-                    <Button x:Name="UseWindowButton" Content="Use a window here" Click="UseWindow_Click" HorizontalAlignment="Stretch" Visibility="Collapsed" ToolTipService.ToolTip="Run your own copy of the game and keep your controller on this PC." />
-                    <InfoBar x:Name="ControllerSetupNotice" Title="Controllers are optional" IsOpen="False" IsClosable="False" Severity="Informational" Visibility="Collapsed" AutomationProperties.LiveSetting="Polite">
-                      <InfoBar.ActionButton><Button Content="Set up controllers" Click="ControllerSetup_Click" /></InfoBar.ActionButton>
+                    <Button x:Uid="Main_RequestController" x:Name="RequestControllerButton" Content="Request control" Visibility="Collapsed" Click="RequestController_Click" HorizontalAlignment="Stretch" />
+                    <Button x:Uid="Main_UseWindow" x:Name="UseWindowButton" Content="Use a window here" Click="UseWindow_Click" HorizontalAlignment="Stretch" Visibility="Collapsed" ToolTipService.ToolTip="Run your own copy of the game and keep your controller on this PC." />
+                    <InfoBar x:Uid="Main_ControllerSetupNotice" x:Name="ControllerSetupNotice" Title="Controllers are optional" IsOpen="False" IsClosable="False" Severity="Informational" Visibility="Collapsed" AutomationProperties.LiveSetting="Polite">
+                      <InfoBar.ActionButton><Button x:Uid="Main_SetupControllers" Content="Set up controllers" Click="ControllerSetup_Click" /></InfoBar.ActionButton>
                     </InfoBar>
-                    <Button x:Name="StartButton" Content="Start sharing" HorizontalAlignment="Stretch" MinHeight="48" FontSize="16" FontWeight="SemiBold" CornerRadius="12" Style="{StaticResource AccentButtonStyle}" Click="Start_Click" />
-                    <Button x:Name="CreateGameRoomButton" Content="Create game room" Click="CreateGameRoom_Click" HorizontalAlignment="Stretch" Visibility="Collapsed" />
+                    <Button x:Uid="Main_Start" x:Name="StartButton" Content="Start sharing" HorizontalAlignment="Stretch" MinHeight="48" FontSize="16" FontWeight="SemiBold" CornerRadius="12" Style="{StaticResource AccentButtonStyle}" Click="Start_Click" />
+                    <Button x:Uid="Main_CreateGameRoom" x:Name="CreateGameRoomButton" Content="Create game room" Click="CreateGameRoom_Click" HorizontalAlignment="Stretch" Visibility="Collapsed" />
                     <InfoBar x:Name="StatusBar" IsOpen="False" Visibility="{x:Bind StatusBar.IsOpen, Mode=OneWay}" IsClosable="True" AutomationProperties.LiveSetting="Polite" />
                   </StackPanel>
                 </Border>
@@ -240,115 +235,123 @@
           </Grid>
           <StackPanel x:Name="SettingsPanel" Spacing="16">
               <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
-                <TextBlock Text="Settings" Style="{StaticResource PageTitle}" VerticalAlignment="Center" />
-                <Button x:Name="SettingsActionsButton" Grid.Column="1" VerticalAlignment="Center" AutomationProperties.Name="Settings actions" ToolTipService.ToolTip="Settings actions">
+                <TextBlock x:Uid="Settings_Title" Text="Settings" Style="{StaticResource PageTitle}" VerticalAlignment="Center" />
+                <Button x:Uid="Settings_Actions" x:Name="SettingsActionsButton" Grid.Column="1" VerticalAlignment="Center" AutomationProperties.Name="Settings actions" ToolTipService.ToolTip="Settings actions">
                   <SymbolIcon Symbol="More" />
                   <Button.Flyout><MenuFlyout>
-                    <MenuFlyoutItem Text="Back to stream" Icon="Up" Click="BackToStream_Click" />
-                    <MenuFlyoutItem Text="Sharing and privacy" Icon="Help" Click="SharingIntroduction_Click" />
-                    <MenuFlyoutItem Text="Updates" Click="Updates_Click">
+                    <MenuFlyoutItem x:Uid="Settings_BackToStream" Text="Back to stream" Icon="Up" Click="BackToStream_Click" />
+                    <MenuFlyoutItem x:Uid="Settings_SharingPrivacy" Text="Sharing and privacy" Icon="Help" Click="SharingIntroduction_Click" />
+                    <MenuFlyoutItem x:Uid="Settings_Updates" Text="Updates" Click="Updates_Click">
                       <MenuFlyoutItem.Icon><FontIcon Glyph="" /></MenuFlyoutItem.Icon>
                     </MenuFlyoutItem>
-                    <MenuFlyoutItem Text="Controller setup" Click="ControllerSetup_Click">
+                    <MenuFlyoutItem x:Uid="Settings_ControllerSetupItem" Text="Controller setup" Click="ControllerSetup_Click">
                       <MenuFlyoutItem.Icon><FontIcon Glyph="" /></MenuFlyoutItem.Icon>
                     </MenuFlyoutItem>
                     <MenuFlyoutSeparator />
-                    <MenuFlyoutItem Text="Reset to automatic" Click="Reset_Click" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}" />
+                    <MenuFlyoutItem x:Uid="Settings_Reset" Text="Reset to automatic" Click="Reset_Click" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}" />
                   </MenuFlyout></Button.Flyout>
                 </Button>
               </Grid>
-            <toolkit:SettingsCard x:Name="ControllerSetupCard" Header="Controller setup" Description="Checking this PC…" FontWeight="Medium" Visibility="Collapsed">
+            <toolkit:SettingsCard x:Uid="Settings_Language" Header="Display language" Description="Choose the language VRCoplay uses. The app restarts after you change it." FontWeight="Medium">
+              <ComboBox x:Name="LanguagePicker" SelectedIndex="{x:Bind _settings.DisplayLanguage, Mode=TwoWay}" SelectionChanged="LanguagePicker_SelectionChanged" AutomationProperties.Name="Display language">
+                <ComboBoxItem x:Uid="Settings_LanguageSystem" Content="Use Windows language" />
+                <ComboBoxItem x:Uid="Settings_LanguageEnglish" Content="English" />
+                <ComboBoxItem x:Uid="Settings_LanguageSpanish" Content="Español" />
+                <ComboBoxItem x:Uid="Settings_LanguageFrench" Content="Français" />
+              </ComboBox>
+            </toolkit:SettingsCard>
+            <toolkit:SettingsCard x:Uid="Settings_ControllerSetupCard" x:Name="ControllerSetupCard" Header="Controller setup" Description="Checking this PC…" FontWeight="Medium" Visibility="Collapsed">
               <toolkit:SettingsCard.HeaderIcon><FontIcon Glyph="" /></toolkit:SettingsCard.HeaderIcon>
-              <Button Content="Set up controllers" Click="ControllerSetup_Click" />
+              <Button x:Uid="Settings_SetupControllers" Content="Set up controllers" Click="ControllerSetup_Click" />
             </toolkit:SettingsCard>
             <Border Style="{StaticResource Surface}">
               <Grid RowDefinitions="Auto,Auto">
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition x:Name="SetupColumn" Width="0" /></Grid.ColumnDefinitions>
                 <StackPanel Spacing="12">
-                    <toolkit:SettingsExpander x:Name="StreamSettingsExpander" Description="Audio, playback and links">
-                      <toolkit:SettingsExpander.Header><TextBlock Text="Stream" Style="{StaticResource SettingsGroupTitle}" /></toolkit:SettingsExpander.Header>
+                    <toolkit:SettingsExpander x:Uid="Settings_StreamExpander" x:Name="StreamSettingsExpander" Description="Audio, playback and links">
+                      <toolkit:SettingsExpander.Header><TextBlock x:Uid="Settings_StreamTitle" Text="Stream" Style="{StaticResource SettingsGroupTitle}" /></toolkit:SettingsExpander.Header>
                       <toolkit:SettingsExpander.Items>
-                        <toolkit:SettingsCard Header="Share audio" Description="Window Capture shares the selected app’s audio. Fullscreen Capture shares this PC’s playback audio." FontWeight="Medium" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}"><ToggleSwitch x:Name="AudioToggle" IsOn="{x:Bind _settings.Audio, Mode=TwoWay}" AutomationProperties.Name="Share audio" /></toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="Quiet local audio" Description="For Window Capture, make the selected app nearly silent on this PC while keeping its stream volume. Its original volume returns when sharing stops." FontWeight="Medium" IsEnabled="{x:Bind CanEditSetting(SettingsSheet.IsEnabled, AudioToggle.IsOn), Mode=OneWay}"><ToggleSwitch IsOn="{x:Bind _settings.QuietLocalAudio, Mode=TwoWay}" AutomationProperties.Name="Quiet local audio" /></toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="World playback" Description="Automatic checks for low latency in VRChat®. Start sharing, then reload the Video Player to detect its mode." FontWeight="Medium" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}">
+                        <toolkit:SettingsCard x:Uid="Settings_ShareAudio" Header="Share audio" Description="Window Capture shares the selected app’s audio. Fullscreen Capture shares this PC’s playback audio." FontWeight="Medium" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}"><ToggleSwitch x:Uid="Settings_ShareAudioToggle" x:Name="AudioToggle" IsOn="{x:Bind _settings.Audio, Mode=TwoWay}" AutomationProperties.Name="Share audio" /></toolkit:SettingsCard>
+                        <toolkit:SettingsCard x:Uid="Settings_QuietAudio" Header="Quiet local audio" Description="For Window Capture, make the selected app nearly silent on this PC while keeping its stream volume. Its original volume returns when sharing stops." FontWeight="Medium" IsEnabled="{x:Bind CanEditSetting(SettingsSheet.IsEnabled, AudioToggle.IsOn), Mode=OneWay}"><ToggleSwitch x:Uid="Settings_QuietAudioToggle" IsOn="{x:Bind _settings.QuietLocalAudio, Mode=TwoWay}" AutomationProperties.Name="Quiet local audio" /></toolkit:SettingsCard>
+                        <toolkit:SettingsCard x:Uid="Settings_WorldPlayback" Header="World playback" Description="Automatic checks for low latency in VRChat®. Start sharing, then reload the Video Player to detect its mode." FontWeight="Medium" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}">
                           <ComboBox x:Name="WorldMode" SelectedIndex="{x:Bind _settings.World, Mode=TwoWay}" AutomationProperties.Name="World playback"><x:String>Automatic</x:String><x:String>Low latency</x:String><x:String>Buffered</x:String></ComboBox>
                         </toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="Also stream to Quest" Description="Adds a viewing link for standalone Quest when sharing with Friends. Uses the existing direct connection for video and audio, without game controls or a relay." FontWeight="Medium" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}">
+                        <toolkit:SettingsCard x:Uid="Settings_QuestStreaming" Header="Also stream to Quest" Description="Adds a viewing link for standalone Quest when sharing with Friends. Uses the existing direct connection for video and audio, without game controls or a relay." FontWeight="Medium" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}">
                           <ToggleSwitch x:Name="QuestStreamingToggle" IsOn="{x:Bind _settings.QuestStreaming, Mode=TwoWay}" AutomationProperties.Name="Also stream to Quest" />
                         </toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="Use direct IP link" Description="Connect viewers directly to your PC without contacting the server for streaming. Game rooms connect separately. Turning this on disconnects existing stream links." FontWeight="Medium">
+                        <toolkit:SettingsCard x:Uid="Settings_DirectIp" Header="Use direct IP link" Description="Connect viewers directly to your PC without contacting the server for streaming. Game rooms connect separately. Turning this on disconnects existing stream links." FontWeight="Medium">
                           <ToggleSwitch x:Name="DirectIpLinkToggle" IsOn="{x:Bind _settings.UseDirectIp, Mode=TwoWay}" Toggled="DirectIpLink_Toggled" AutomationProperties.Name="Use direct IP link" />
                         </toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="Streamer mode" Description="Hide room codes, links, QR codes and controller PINs in the app. Copy buttons still work." FontWeight="Medium">
+                        <toolkit:SettingsCard x:Uid="Settings_StreamerMode" Header="Streamer mode" Description="Hide room codes, links, QR codes and controller PINs in the app. Copy buttons still work." FontWeight="Medium">
                           <ToggleSwitch x:Name="StreamerModeToggle" IsOn="{x:Bind _settings.StreamerMode, Mode=TwoWay}" Toggled="StreamerMode_Toggled" AutomationProperties.Name="Streamer mode" />
                         </toolkit:SettingsCard>
                       </toolkit:SettingsExpander.Items>
                     </toolkit:SettingsExpander>
-                    <toolkit:SettingsExpander Description="Controller outputs, motion and profiles">
-                      <toolkit:SettingsExpander.Header><TextBlock Text="Controls" Style="{StaticResource SettingsGroupTitle}" /></toolkit:SettingsExpander.Header>
+                    <toolkit:SettingsExpander x:Uid="Settings_ControlsExpander" Description="Controller outputs, motion and profiles">
+                      <toolkit:SettingsExpander.Header><TextBlock x:Uid="Settings_ControlsTitle" Text="Controls" Style="{StaticResource SettingsGroupTitle}" /></toolkit:SettingsExpander.Header>
                       <toolkit:SettingsExpander.Items>
-                        <toolkit:SettingsCard x:Name="ControllerCard" Header="Connect VR controllers automatically" Description="Use your SteamVR controllers when playing games." FontWeight="Medium"><ToggleSwitch x:Name="ControllerToggle" IsOn="{x:Bind _settings.Controller, Mode=TwoWay}" Toggled="ControllerPreference_Changed" AutomationProperties.Name="SteamVR controllers" /></toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="Preferred hand" Description="Use this hand for pointing and the primary Cemuhook source." FontWeight="Medium" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}">
+                        <toolkit:SettingsCard x:Uid="Settings_AutoControllers" x:Name="ControllerCard" Header="Connect VR controllers automatically" Description="Use your SteamVR controllers when playing games." FontWeight="Medium"><ToggleSwitch x:Uid="Settings_SteamVrControllers" x:Name="ControllerToggle" IsOn="{x:Bind _settings.Controller, Mode=TwoWay}" Toggled="ControllerPreference_Changed" AutomationProperties.Name="SteamVR controllers" /></toolkit:SettingsCard>
+                        <toolkit:SettingsCard x:Uid="Settings_PreferredHand" Header="Preferred hand" Description="Use this hand for pointing and the primary Cemuhook source." FontWeight="Medium" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}">
                           <ComboBox x:Name="ControllerHandPicker" SelectedIndex="{x:Bind _settings.ControllerHand, Mode=TwoWay}" AutomationProperties.Name="Preferred hand"><x:String>Right</x:String><x:String>Left</x:String></ComboBox>
                         </toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="Cemuhook motion" Description="Two complete controller sources, with independent motion from each hand. Connect using a compatible app’s DSU settings." FontWeight="Medium" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}">
+                        <toolkit:SettingsCard x:Uid="Settings_CemuhookMotion" Header="Cemuhook motion" Description="Two complete controller sources, with independent motion from each hand. Connect using a compatible app’s DSU settings." FontWeight="Medium" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}">
                           <ToggleSwitch x:Name="CemuhookToggle" IsOn="{x:Bind _settings.Cemuhook, Mode=TwoWay}" Toggled="ControllerOutput_Changed" AutomationProperties.Name="Cemuhook motion" />
                         </toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="Cemuhook port" Description="Address: 127.0.0.1. This port carries the preferred hand; the next port carries the other hand. Each has players 1–4." FontWeight="Medium" IsEnabled="{x:Bind CanEditSetting(SettingsSheet.IsEnabled, CemuhookToggle.IsOn), Mode=OneWay}">
+                        <toolkit:SettingsCard x:Uid="Settings_CemuhookPort" Header="Cemuhook port" Description="Address: 127.0.0.1. This port carries the preferred hand; the next port carries the other hand. Each has players 1–4." FontWeight="Medium" IsEnabled="{x:Bind CanEditSetting(SettingsSheet.IsEnabled, CemuhookToggle.IsOn), Mode=OneWay}">
                           <NumberBox Value="{x:Bind _settings.CemuhookPort, Mode=TwoWay}" Minimum="1024" Maximum="65534" SpinButtonPlacementMode="Compact" AutomationProperties.Name="Cemuhook port" />
                         </toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="DualShock controller" Description="One virtual gamepad per player, with buttons, both sticks, triggers and pointing. Requires the controller driver." FontWeight="Medium" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}">
+                        <toolkit:SettingsCard x:Uid="Settings_DualShockController" Header="DualShock controller" Description="One virtual gamepad per player, with buttons, both sticks, triggers and pointing. Requires the controller driver." FontWeight="Medium" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}">
                           <ToggleSwitch x:Name="DualShockToggle" IsOn="{x:Bind _settings.DualShock, Mode=TwoWay}" Toggled="ControllerOutput_Changed" AutomationProperties.Name="DualShock controller" />
                         </toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="DualShock motion" Description="Choose the physical hand that supplies this gamepad’s gyro and accelerometer. Cemuhook always carries both hands independently." FontWeight="Medium" IsEnabled="{x:Bind CanEditSetting(SettingsSheet.IsEnabled, DualShockToggle.IsOn), Mode=OneWay}">
+                        <toolkit:SettingsCard x:Uid="Settings_DualShockMotion" Header="DualShock motion" Description="Choose the physical hand that supplies this gamepad’s gyro and accelerometer. Cemuhook always carries both hands independently." FontWeight="Medium" IsEnabled="{x:Bind CanEditSetting(SettingsSheet.IsEnabled, DualShockToggle.IsOn), Mode=OneWay}">
                           <ComboBox SelectedIndex="{x:Bind _settings.DualShockMotionHand, Mode=TwoWay}" AutomationProperties.Name="DualShock motion"><x:String>Off</x:String><x:String>Left hand</x:String><x:String>Right hand</x:String></ComboBox>
                         </toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="Controller profiles" Description="Browse controller setups for emulators and other software." FontWeight="Medium" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}"><Button Content="Browse profiles" Click="BrowseProfiles_Click" /></toolkit:SettingsCard>
+                        <toolkit:SettingsCard x:Uid="Settings_ControllerProfiles" Header="Controller profiles" Description="Browse controller setups for emulators and other software." FontWeight="Medium" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}"><Button x:Uid="Settings_BrowseProfiles" Content="Browse profiles" Click="BrowseProfiles_Click" /></toolkit:SettingsCard>
                       </toolkit:SettingsExpander.Items>
                     </toolkit:SettingsExpander>
                   <ContentControl x:Name="SettingsSheet" HorizontalContentAlignment="Stretch">
                     <StackPanel Spacing="12">
-                    <toolkit:SettingsExpander Description="Sharing audience and direct connection options">
-                      <toolkit:SettingsExpander.Header><TextBlock Text="Advanced" Style="{StaticResource SettingsGroupTitle}" /></toolkit:SettingsExpander.Header>
+                    <toolkit:SettingsExpander x:Uid="Settings_AdvancedExpander" Description="Sharing audience and direct connection options">
+                      <toolkit:SettingsExpander.Header><TextBlock x:Uid="Settings_AdvancedTitle" Text="Advanced" Style="{StaticResource SettingsGroupTitle}" /></toolkit:SettingsExpander.Header>
                       <toolkit:SettingsExpander.Items>
-                        <toolkit:SettingsCard x:Name="AudienceSettings" Header="Share with" Description="Friends can watch using your Video Player link. Choose This computer for local viewing only." FontWeight="Medium">
+                        <toolkit:SettingsCard x:Uid="Settings_ShareWith" x:Name="AudienceSettings" Header="Share with" Description="Friends can watch using your Video Player link. Choose This computer for local viewing only." FontWeight="Medium">
                           <ComboBox x:Name="AudiencePicker" SelectedIndex="{x:Bind _settings.Audience, Mode=TwoWay}" AutomationProperties.Name="Share with" SelectionChanged="Flow_Changed">
                             <x:String>This computer</x:String><x:String>Friends</x:String>
                           </ComboBox>
                         </toolkit:SettingsCard>
-                        <toolkit:SettingsCard x:Name="DirectNetworkSettings" Header="Direct video connection" Description="Automatic router setup is tried first. If you already have a port mapping, enter it here." FontWeight="Medium" ContentAlignment="Vertical" HorizontalContentAlignment="Stretch" Visibility="Collapsed">
+                        <toolkit:SettingsCard x:Uid="Settings_DirectNetwork" x:Name="DirectNetworkSettings" Header="Direct video connection" Description="Automatic router setup is tried first. If you already have a port mapping, enter it here." FontWeight="Medium" ContentAlignment="Vertical" HorizontalContentAlignment="Stretch" Visibility="Collapsed">
                           <StackPanel Spacing="12"><TextBox x:Name="DirectAddressBox" Text="{x:Bind _settings.DirectAddress, Mode=TwoWay}" Header="Public address" PlaceholderText="Automatic" /><NumberBox x:Name="DirectPortBox" Value="{Binding DirectPort, Mode=TwoWay, Converter={StaticResource OptionalNumber}, ConverterParameter=8554}" Header="Public port" Minimum="1" Maximum="65535" /></StackPanel>
                         </toolkit:SettingsCard>
                       </toolkit:SettingsExpander.Items>
                     </toolkit:SettingsExpander>
-                    <toolkit:SettingsExpander x:Name="GameSessionSettings" Description="Controller access and your local view">
-                      <toolkit:SettingsExpander.Header><TextBlock Text="Game session" Style="{StaticResource SettingsGroupTitle}" /></toolkit:SettingsExpander.Header>
+                    <toolkit:SettingsExpander x:Uid="Settings_GameSessionExpander" x:Name="GameSessionSettings" Description="Controller access and your local view">
+                      <toolkit:SettingsExpander.Header><TextBlock x:Uid="Settings_GameSessionTitle" Text="Game session" Style="{StaticResource SettingsGroupTitle}" /></toolkit:SettingsExpander.Header>
                       <toolkit:SettingsExpander.Items>
-                        <toolkit:SettingsCard x:Name="RequirePinCard" Header="Require controller PIN" Description="The game room is for playing together. Only controller requests need a PIN." FontWeight="Medium"><ToggleSwitch x:Name="RequirePinToggle" IsOn="{x:Bind _settings.RequirePin, Mode=TwoWay}" AutomationProperties.Name="Require controller PIN" /></toolkit:SettingsCard>
-                        <toolkit:SettingsCard x:Name="AllowRequestsCard" Header="Allow control requests" Description="You still approve each player." FontWeight="Medium"><ToggleSwitch x:Name="AllowRequestsToggle" IsOn="{x:Bind _settings.AllowRequests, Mode=TwoWay}" Toggled="ControllerPreference_Changed" AutomationProperties.Name="Allow control requests" /></toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="Moonlight connection" Description="Host address is automatic unless supplied. Use a reachable address and an application published by Sunshine." FontWeight="Medium" ContentAlignment="Vertical" HorizontalContentAlignment="Stretch">
+                        <toolkit:SettingsCard x:Uid="Settings_RequirePin" x:Name="RequirePinCard" Header="Require controller PIN" Description="The game room is for playing together. Only controller requests need a PIN." FontWeight="Medium"><ToggleSwitch x:Uid="Settings_RequirePinToggle" x:Name="RequirePinToggle" IsOn="{x:Bind _settings.RequirePin, Mode=TwoWay}" AutomationProperties.Name="Require controller PIN" /></toolkit:SettingsCard>
+                        <toolkit:SettingsCard x:Uid="Settings_AllowRequests" x:Name="AllowRequestsCard" Header="Allow control requests" Description="You still approve each player." FontWeight="Medium"><ToggleSwitch x:Uid="Settings_AllowRequestsToggle" x:Name="AllowRequestsToggle" IsOn="{x:Bind _settings.AllowRequests, Mode=TwoWay}" Toggled="ControllerPreference_Changed" AutomationProperties.Name="Allow control requests" /></toolkit:SettingsCard>
+                        <toolkit:SettingsCard x:Uid="Settings_MoonlightConnection" Header="Moonlight connection" Description="Host address is automatic unless supplied. Use a reachable address and an application published by Sunshine." FontWeight="Medium" ContentAlignment="Vertical" HorizontalContentAlignment="Stretch">
                           <StackPanel Spacing="12"><TextBox x:Name="MoonlightHostBox" Text="{x:Bind _settings.MoonlightHost, Mode=TwoWay}" Header="Host address" PlaceholderText="Automatic" /><TextBox x:Name="MoonlightAppBox" Text="{x:Bind _settings.MoonlightApp, Mode=TwoWay}" Header="Sunshine application" PlaceholderText="Automatic" /></StackPanel>
                         </toolkit:SettingsCard>
                       </toolkit:SettingsExpander.Items>
                     </toolkit:SettingsExpander>
                     </StackPanel>
                   </ContentControl>
-                <toolkit:SettingsExpander Description="Point at the Video Player with your controller" VerticalAlignment="Top">
-                  <toolkit:SettingsExpander.Header><TextBlock Text="VR pointing" Style="{StaticResource SettingsGroupTitle}" /></toolkit:SettingsExpander.Header>
+                <toolkit:SettingsExpander x:Uid="Settings_VrPointingExpander" Description="Point at the Video Player with your controller" VerticalAlignment="Top">
+                  <toolkit:SettingsExpander.Header><TextBlock x:Uid="Settings_VrPointingTitle" Text="VR pointing" Style="{StaticResource SettingsGroupTitle}" /></toolkit:SettingsExpander.Header>
                   <toolkit:SettingsExpander.Items>
-                    <TextBlock x:Name="PointerAvailabilityText" Style="{StaticResource QuietText}" Text="Checking controller support…" AutomationProperties.LiveSetting="Polite" />
-                    <toolkit:SettingsCard x:Name="PointerCard" Header="Point at your Video Player" Description="Play your stream in VRChat, then select each blue point with the trigger in your preferred hand. The avatar pointer must be on that hand. Recalibrate after changing hands." FontWeight="Medium" ContentAlignment="Vertical" HorizontalContentAlignment="Stretch">
+                    <TextBlock x:Uid="Settings_PointerAvailability" x:Name="PointerAvailabilityText" Style="{StaticResource QuietText}" Text="Checking controller support…" AutomationProperties.LiveSetting="Polite" />
+                    <toolkit:SettingsCard x:Uid="Settings_PointerCard" x:Name="PointerCard" Header="Point at your Video Player" Description="Play your stream in VRChat, then select each blue point with the trigger in your preferred hand. The avatar pointer must be on that hand. Recalibrate after changing hands." FontWeight="Medium" ContentAlignment="Vertical" HorizontalContentAlignment="Stretch">
                       <StackPanel Spacing="12">
-                        <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12"><ToggleSwitch x:Name="PointerToggle" IsOn="{x:Bind _settings.Pointer, Mode=TwoWay}" Toggled="PointerToggle_Toggled" AutomationProperties.Name="VR pointer" /><Button x:Name="RecalibratePointerButton" Grid.Column="1" Content="Recalibrate" IsEnabled="False" Click="RecalibratePointer_Click" /><Button x:Name="RetryPointerButton" Grid.Column="2" Content="Retry OSC" IsEnabled="False" Click="RetryPointer_Click" AutomationProperties.Name="Retry VRChat OSC connection" ToolTipService.ToolTip="Restart OSC discovery and the pointer connection" /></Grid>
+                        <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12"><ToggleSwitch x:Uid="Settings_PointerToggle" x:Name="PointerToggle" IsOn="{x:Bind _settings.Pointer, Mode=TwoWay}" Toggled="PointerToggle_Toggled" AutomationProperties.Name="VR pointer" /><Button x:Uid="Settings_Recalibrate" x:Name="RecalibratePointerButton" Grid.Column="1" Content="Recalibrate" IsEnabled="False" Click="RecalibratePointer_Click" /><Button x:Uid="Settings_RetryPointer" x:Name="RetryPointerButton" Grid.Column="2" Content="Retry OSC" IsEnabled="False" Click="RetryPointer_Click" AutomationProperties.Name="Retry VRChat OSC connection" ToolTipService.ToolTip="Restart OSC discovery and the pointer connection" /></Grid>
                         <TextBlock x:Name="PointerStatusText" Text="Off" Style="{StaticResource QuietText}" AutomationProperties.LiveSetting="Polite" />
-                        <Button x:Name="StartPointerCalibrationButton" Content="Start calibration" HorizontalAlignment="Left" Visibility="Collapsed" Click="StartPointerCalibration_Click" ToolTipService.ToolTip="Start pointing setup after confirming your stream is visible in VRChat" />
+                        <Button x:Uid="Settings_StartCalibration" x:Name="StartPointerCalibrationButton" Content="Start calibration" HorizontalAlignment="Left" Visibility="Collapsed" Click="StartPointerCalibration_Click" ToolTipService.ToolTip="Start pointing setup after confirming your stream is visible in VRChat" />
                         <StackPanel x:Name="PointerAlignmentPanel" Spacing="12" Visibility="Collapsed">
-                          <TextBlock Text="Controller alignment" FontWeight="SemiBold" />
+                          <TextBlock x:Uid="Settings_ControllerAlignment" Text="Controller alignment" FontWeight="SemiBold" />
                           <TextBlock x:Name="PointerAlignmentText" Style="{StaticResource QuietText}" TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite" />
                           <StackPanel Orientation="Horizontal" Spacing="8">
-                            <Button x:Name="AutoAlignPointerButton" Content="Align controller" Click="AutoAlignPointer_Click" />
-                            <Button x:Name="SkipPointerAlignmentButton" Content="Skip" Click="SkipPointerAlignment_Click" />
-                            <Button Content="Reset" Click="ResetPointerAlignment_Click" AutomationProperties.Name="Reset controller alignment" />
+                            <Button x:Uid="Settings_AlignController" x:Name="AutoAlignPointerButton" Content="Align controller" Click="AutoAlignPointer_Click" />
+                            <Button x:Uid="Settings_Skip" x:Name="SkipPointerAlignmentButton" Content="Skip" Click="SkipPointerAlignment_Click" />
+                            <Button x:Uid="Settings_ResetAlignment" Content="Reset" Click="ResetPointerAlignment_Click" AutomationProperties.Name="Reset controller alignment" />
                           </StackPanel>
                           <Slider x:Name="PointerAimXSlider" Header="Horizontal aim (X)" Minimum="-45" Maximum="45" StepFrequency="0.1" SmallChange="0.1" LargeChange="1" ValueChanged="PointerAim_ValueChanged" AutomationProperties.Name="Horizontal pointer aim in degrees" />
                           <Slider x:Name="PointerAimYSlider" Header="Vertical aim (Y)" Minimum="-45" Maximum="45" StepFrequency="0.1" SmallChange="0.1" LargeChange="1" ValueChanged="PointerAim_ValueChanged" AutomationProperties.Name="Vertical pointer aim in degrees" />
@@ -356,22 +359,22 @@
                         </StackPanel>
                       </StackPanel>
                     </toolkit:SettingsCard>
-                    <toolkit:SettingsCard x:Name="PointerTouchCard" Header="Touch controls" Description="Use the trigger in your preferred hand: tap to click, hold still to right-click, or hold and move to drag or scroll. Turn on Capture cursor to see the pointer in your stream. Press Escape to turn off touch controls." FontWeight="Medium">
+                    <toolkit:SettingsCard x:Uid="Settings_TouchControls" x:Name="PointerTouchCard" Header="Touch controls" Description="Use the trigger in your preferred hand: tap to click, hold still to right-click, or hold and move to drag or scroll. Turn on Capture cursor to see the pointer in your stream. Press Escape to turn off touch controls." FontWeight="Medium">
                       <ToggleSwitch x:Name="PointerTouchToggle" Toggled="PointerTouch_Toggled" AutomationProperties.Name="Touch controls" />
                     </toolkit:SettingsCard>
                   </toolkit:SettingsExpander.Items>
                 </toolkit:SettingsExpander>
                 </StackPanel>
                 <StackPanel x:Name="CaptureSettings" Grid.Row="1" Margin="0,12,0,0" Spacing="12">
-                    <toolkit:SettingsExpander Description="Cursor, frame rate and picture size" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}">
-                      <toolkit:SettingsExpander.Header><TextBlock Text="Capture" Style="{StaticResource SettingsGroupTitle}" /></toolkit:SettingsExpander.Header>
+                    <toolkit:SettingsExpander x:Uid="Settings_CaptureExpander" Description="Cursor, frame rate and picture size" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}">
+                      <toolkit:SettingsExpander.Header><TextBlock x:Uid="Settings_CaptureTitle" Text="Capture" Style="{StaticResource SettingsGroupTitle}" /></toolkit:SettingsExpander.Header>
                       <toolkit:SettingsExpander.Items>
-                        <toolkit:SettingsCard Header="Capture cursor" Description="Include the mouse cursor in the picture." FontWeight="Medium"><ToggleSwitch x:Name="CursorToggle" IsOn="{x:Bind _settings.Cursor, Mode=TwoWay}" AutomationProperties.Name="Capture cursor" /></toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="Frame rate" Description="Blank uses 60 FPS. Choose 1 to 240." FontWeight="Medium"><NumberBox x:Name="FpsBox" Value="{Binding Fps, Mode=TwoWay, Converter={StaticResource OptionalNumber}}" Width="112" Minimum="1" Maximum="240" SpinButtonPlacementMode="Compact" AutomationProperties.Name="Frame rate" /></toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="Output size" Description="Leave both blank for native size. Custom sizes need positive, even values." FontWeight="Medium" ContentAlignment="Vertical" HorizontalContentAlignment="Stretch">
+                        <toolkit:SettingsCard x:Uid="Settings_CaptureCursor" Header="Capture cursor" Description="Include the mouse cursor in the picture." FontWeight="Medium"><ToggleSwitch x:Uid="Settings_CaptureCursorToggle" x:Name="CursorToggle" IsOn="{x:Bind _settings.Cursor, Mode=TwoWay}" AutomationProperties.Name="Capture cursor" /></toolkit:SettingsCard>
+                        <toolkit:SettingsCard x:Uid="Settings_FrameRate" Header="Frame rate" Description="Blank uses 60 FPS. Choose 1 to 240." FontWeight="Medium"><NumberBox x:Uid="Settings_Fps" x:Name="FpsBox" Value="{Binding Fps, Mode=TwoWay, Converter={StaticResource OptionalNumber}}" Width="112" Minimum="1" Maximum="240" SpinButtonPlacementMode="Compact" AutomationProperties.Name="Frame rate" /></toolkit:SettingsCard>
+                        <toolkit:SettingsCard x:Uid="Settings_OutputSize" Header="Output size" Description="Leave both blank for native size. Custom sizes need positive, even values." FontWeight="Medium" ContentAlignment="Vertical" HorizontalContentAlignment="Stretch">
                           <Grid ColumnDefinitions="*,*" ColumnSpacing="12"><NumberBox x:Name="WidthBox" Value="{Binding Width, Mode=TwoWay, Converter={StaticResource OptionalNumber}}" Header="Width" Minimum="2" SpinButtonPlacementMode="Compact" /><NumberBox x:Name="HeightBox" Value="{Binding Height, Mode=TwoWay, Converter={StaticResource OptionalNumber}}" Grid.Column="1" Header="Height" Minimum="2" SpinButtonPlacementMode="Compact" /></Grid>
                         </toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="Crop" Description="Pixels removed from each edge. Some picture must remain." FontWeight="Medium" ContentAlignment="Vertical" HorizontalContentAlignment="Stretch">
+                        <toolkit:SettingsCard x:Uid="Settings_Crop" Header="Crop" Description="Pixels removed from each edge. Some picture must remain." FontWeight="Medium" ContentAlignment="Vertical" HorizontalContentAlignment="Stretch">
                           <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*" RowSpacing="12" ColumnSpacing="12">
                             <NumberBox x:Name="CropLeftBox" Value="{Binding CropLeft, Mode=TwoWay, Converter={StaticResource OptionalNumber}}" Header="Left" Minimum="0" /><NumberBox x:Name="CropTopBox" Value="{Binding CropTop, Mode=TwoWay, Converter={StaticResource OptionalNumber}}" Grid.Column="1" Header="Top" Minimum="0" />
                             <NumberBox x:Name="CropRightBox" Value="{Binding CropRight, Mode=TwoWay, Converter={StaticResource OptionalNumber}}" Grid.Row="1" Header="Right" Minimum="0" /><NumberBox x:Name="CropBottomBox" Value="{Binding CropBottom, Mode=TwoWay, Converter={StaticResource OptionalNumber}}" Grid.Row="1" Grid.Column="1" Header="Bottom" Minimum="0" />
@@ -379,25 +382,25 @@
                         </toolkit:SettingsCard>
                       </toolkit:SettingsExpander.Items>
                     </toolkit:SettingsExpander>
-                    <toolkit:SettingsExpander Description="Picture quality and expert options" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}">
-                      <toolkit:SettingsExpander.Header><TextBlock Text="Encoding" Style="{StaticResource SettingsGroupTitle}" /></toolkit:SettingsExpander.Header>
+                    <toolkit:SettingsExpander x:Uid="Settings_EncodingExpander" Description="Picture quality and expert options" IsEnabled="{x:Bind SettingsSheet.IsEnabled, Mode=OneWay}">
+                      <toolkit:SettingsExpander.Header><TextBlock x:Uid="Settings_EncodingTitle" Text="Encoding" Style="{StaticResource SettingsGroupTitle}" /></toolkit:SettingsExpander.Header>
                       <toolkit:SettingsExpander.Items>
-                        <toolkit:SettingsCard Header="Encoder" Description="Automatic tries NVIDIA, AMD, Intel, then software." FontWeight="Medium">
+                        <toolkit:SettingsCard x:Uid="Settings_Encoder" Header="Encoder" Description="Automatic tries NVIDIA, AMD, Intel, then software." FontWeight="Medium">
                           <ComboBox x:Name="EncoderPicker" SelectedIndex="{x:Bind _settings.Encoder, Mode=TwoWay}" SelectionChanged="EncoderPicker_SelectionChanged" AutomationProperties.Name="Encoder"><x:String>Automatic</x:String><x:String>NVIDIA NVENC</x:String><x:String>AMD AMF</x:String><x:String>Intel Quick Sync</x:String><x:String>x264 software</x:String></ComboBox>
                         </toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="Quality / QP" Description="Blank uses the default. Lower values give higher quality." FontWeight="Medium"><NumberBox x:Name="QualityBox" Value="{Binding Quality, Mode=TwoWay, Converter={StaticResource OptionalNumber}}" Width="112" Minimum="0" Maximum="51" SpinButtonPlacementMode="Compact" AutomationProperties.Name="Quality / QP" /></toolkit:SettingsCard>
-                        <toolkit:SettingsCard Header="Encoder properties" Description="Advanced GStreamer encoder properties (name=value). Overrides can prevent playback." FontWeight="Medium" ContentAlignment="Vertical" HorizontalContentAlignment="Stretch"><TextBox x:Name="ExtraArgs" Text="{x:Bind _settings.EncoderProperties, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="88" PlaceholderText="Leave empty for automatic" AutomationProperties.Name="Encoder properties" /></toolkit:SettingsCard>
+                        <toolkit:SettingsCard x:Uid="Settings_Quality" Header="Quality / QP" Description="Blank uses the default. Lower values give higher quality." FontWeight="Medium"><NumberBox x:Uid="Settings_QualityNumber" x:Name="QualityBox" Value="{Binding Quality, Mode=TwoWay, Converter={StaticResource OptionalNumber}}" Width="112" Minimum="0" Maximum="51" SpinButtonPlacementMode="Compact" AutomationProperties.Name="Quality / QP" /></toolkit:SettingsCard>
+                        <toolkit:SettingsCard x:Uid="Settings_EncoderProperties" Header="Encoder properties" Description="Advanced GStreamer encoder properties (name=value). Overrides can prevent playback." FontWeight="Medium" ContentAlignment="Vertical" HorizontalContentAlignment="Stretch"><TextBox x:Uid="Settings_ExtraArgs" x:Name="ExtraArgs" Text="{x:Bind _settings.EncoderProperties, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="88" PlaceholderText="Leave empty for automatic" AutomationProperties.Name="Encoder properties" /></toolkit:SettingsCard>
                       </toolkit:SettingsExpander.Items>
                     </toolkit:SettingsExpander>
-                <toolkit:SettingsExpander x:Name="OverlaySettings" Description="Invites and playback advice" VerticalAlignment="Top">
-                  <toolkit:SettingsExpander.Header><TextBlock Text="Stream overlays" Style="{StaticResource SettingsGroupTitle}" /></toolkit:SettingsExpander.Header>
+                <toolkit:SettingsExpander x:Uid="Settings_OverlaysExpander" x:Name="OverlaySettings" Description="Invites and playback advice" VerticalAlignment="Top">
+                  <toolkit:SettingsExpander.Header><TextBlock x:Uid="Settings_OverlaysTitle" Text="Stream overlays" Style="{StaticResource SettingsGroupTitle}" /></toolkit:SettingsExpander.Header>
                   <toolkit:SettingsExpander.Items>
-                    <toolkit:SettingsCard Header="Invite viewers to play" Description="Shows your game room’s join link and code. Requires an active game session; the host controls the invite." FontWeight="Medium"><ToggleSwitch x:Name="InviteToggle" IsOn="{x:Bind _settings.InviteOverlay, Mode=TwoWay}" Toggled="Overlay_Changed" AutomationProperties.Name="Invite remote viewers" /></toolkit:SettingsCard>
-                    <toolkit:SettingsCard Header="Repeat the invite" Description="Waits 90 seconds between invites while video is available. Turn off to show it manually." FontWeight="Medium"><ToggleSwitch x:Name="InvitePeriodicToggle" IsOn="{x:Bind _settings.InvitePeriodic, Mode=TwoWay}" Toggled="Overlay_Changed" AutomationProperties.Name="Repeat invite" /></toolkit:SettingsCard>
-                    <toolkit:SettingsCard Header="Invite reading time" Description="Seconds with the full join link and code visible." FontWeight="Medium"><NumberBox x:Name="InviteDurationBox" Minimum="5" Maximum="120" SpinButtonPlacementMode="Compact" Width="140" Value="{Binding InviteSeconds, Mode=TwoWay, Converter={StaticResource OptionalNumber}, ConverterParameter=15}" ValueChanged="InviteDuration_Changed" AutomationProperties.Name="Invite reading time in seconds" /></toolkit:SettingsCard>
-                    <toolkit:SettingsCard Header="Keep the invite visible" Description="Leaves the join link and code on screen until you turn the invite off." FontWeight="Medium"><ToggleSwitch x:Name="InviteKeepVisibleToggle" IsOn="{x:Bind _settings.InviteKeepVisible, Mode=TwoWay}" Toggled="Overlay_Changed" AutomationProperties.Name="Keep invite visible" /></toolkit:SettingsCard>
-                    <toolkit:SettingsCard Header="Want to join?" Description="Shows the invite link and room code. Hides the PIN. Uses your motion setting." FontWeight="Medium"><Button x:Name="ShowInviteButton" Content="Show invite now" IsEnabled="False" Click="ShowInvite_Click" /></toolkit:SettingsCard>
-                    <toolkit:SettingsCard Header="Low latency advice" Description="Settles into a small bottom-left reminder until low latency is detected. Respects reduced motion." FontWeight="Medium"><ToggleSwitch x:Name="WarningToggle" IsOn="{x:Bind _settings.WarningOverlay, Mode=TwoWay}" Toggled="Overlay_Changed" AutomationProperties.Name="Low latency advice" /></toolkit:SettingsCard>
+                    <toolkit:SettingsCard x:Uid="Settings_InviteViewers" Header="Invite viewers to play" Description="Shows your game room’s join link and code. Requires an active game session; the host controls the invite." FontWeight="Medium"><ToggleSwitch x:Name="InviteToggle" IsOn="{x:Bind _settings.InviteOverlay, Mode=TwoWay}" Toggled="Overlay_Changed" AutomationProperties.Name="Invite remote viewers" /></toolkit:SettingsCard>
+                    <toolkit:SettingsCard x:Uid="Settings_RepeatInvite" Header="Repeat the invite" Description="Waits 90 seconds between invites while video is available. Turn off to show it manually." FontWeight="Medium"><ToggleSwitch x:Name="InvitePeriodicToggle" IsOn="{x:Bind _settings.InvitePeriodic, Mode=TwoWay}" Toggled="Overlay_Changed" AutomationProperties.Name="Repeat invite" /></toolkit:SettingsCard>
+                    <toolkit:SettingsCard x:Uid="Settings_InviteTime" Header="Invite reading time" Description="Seconds with the full join link and code visible." FontWeight="Medium"><NumberBox x:Name="InviteDurationBox" Minimum="5" Maximum="120" SpinButtonPlacementMode="Compact" Width="140" Value="{Binding InviteSeconds, Mode=TwoWay, Converter={StaticResource OptionalNumber}, ConverterParameter=15}" ValueChanged="InviteDuration_Changed" AutomationProperties.Name="Invite reading time in seconds" /></toolkit:SettingsCard>
+                    <toolkit:SettingsCard x:Uid="Settings_KeepInvite" Header="Keep the invite visible" Description="Leaves the join link and code on screen until you turn the invite off." FontWeight="Medium"><ToggleSwitch x:Name="InviteKeepVisibleToggle" IsOn="{x:Bind _settings.InviteKeepVisible, Mode=TwoWay}" Toggled="Overlay_Changed" AutomationProperties.Name="Keep invite visible" /></toolkit:SettingsCard>
+                    <toolkit:SettingsCard x:Uid="Settings_WantToJoin" Header="Want to join?" Description="Shows the invite link and room code. Hides the PIN. Uses your motion setting." FontWeight="Medium"><Button x:Uid="Settings_ShowInvite" x:Name="ShowInviteButton" Content="Show invite now" IsEnabled="False" Click="ShowInvite_Click" /></toolkit:SettingsCard>
+                    <toolkit:SettingsCard x:Uid="Settings_LowLatency" Header="Low latency advice" Description="Settles into a small bottom-left reminder until low latency is detected. Respects reduced motion." FontWeight="Medium"><ToggleSwitch x:Name="WarningToggle" IsOn="{x:Bind _settings.WarningOverlay, Mode=TwoWay}" Toggled="Overlay_Changed" AutomationProperties.Name="Low latency advice" /></toolkit:SettingsCard>
                   </toolkit:SettingsExpander.Items>
                 </toolkit:SettingsExpander>
                 </StackPanel>
@@ -407,8 +410,8 @@
           <StackPanel x:Name="AppFooter" Spacing="4">
             <TextBlock x:Name="AppInfoFooter" Text="{x:Bind AppDetails}" FontSize="12" FontWeight="Normal" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextAlignment="Center" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="12">
-              <HyperlinkButton Content="Copyright and licenses" Click="Legal_Click" FontSize="12" FontWeight="Normal" />
-              <HyperlinkButton Content="Source code" Click="Source_Click" FontSize="12" FontWeight="Normal" />
+              <HyperlinkButton x:Uid="Footer_Licenses" Content="Copyright and licenses" Click="Legal_Click" FontSize="12" FontWeight="Normal" />
+              <HyperlinkButton x:Uid="Footer_Source" Content="Source code" Click="Source_Click" FontSize="12" FontWeight="Normal" />
             </StackPanel>
           </StackPanel>
         </StackPanel>

@@ -64,9 +64,10 @@ internal sealed partial class DesktopSession
         var capture = CaptureWindowsAsync(stream, settings, lifetime.Token);
         SharingDiagnosticLog.Default.Write(_diagnosticSession, "publisher-started");
         MediaStarted?.Invoke();
+        Task? ended = null;
         try
         {
-            var ended = await Task.WhenAny(publisher, capture, _server!.Task);
+            ended = await Task.WhenAny(publisher, capture, _server!.Task);
             stop.ThrowIfCancellationRequested();
             await ended;
             throw new InvalidOperationException(ended == _server.Task
@@ -75,7 +76,8 @@ internal sealed partial class DesktopSession
         catch (Exception error)
         {
             SharingDiagnosticLog.Default.Write(_diagnosticSession, "media-ended",
-                canceled: stop.IsCancellationRequested, error: error, stderr: [_lastCaptureLine]);
+                task: ended == publisher ? "publisher" : ended == capture ? "source-capture" : ended == _server!.Task ? "server" : null,
+                canceled: stop.IsCancellationRequested, error: error, stderr: [_lastCaptureLine, _lastServerLine]);
             throw;
         }
         finally

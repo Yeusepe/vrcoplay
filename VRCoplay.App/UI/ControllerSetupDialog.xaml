@@ -1,5 +1,5 @@
 <!-- Copyright (c) 2026 YUCP Studio. SPDX-License-Identifier: GPL-3.0-or-later. -->
-<ContentDialog x:Class="VRCoplay.ControllerSetupDialog" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Style="{StaticResource DefaultContentDialogStyle}" DefaultButton="Primary" PrimaryButtonText="Download driver" CloseButtonText="Skip for now" PrimaryButtonClick="Primary_Click" FontFamily="{StaticResource ContentControlThemeFontFamily}" Background="{ThemeResource SolidBackgroundFillColorBaseBrush}">
+<ContentDialog x:Class="VRCoplay.ControllerSetupDialog" x:Uid="Dialog_ControllerSetup" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Style="{StaticResource DefaultContentDialogStyle}" DefaultButton="Primary" PrimaryButtonText="Download driver" CloseButtonText="Skip for now" PrimaryButtonClick="Primary_Click" FontFamily="{StaticResource ContentControlThemeFontFamily}" Background="{ThemeResource SolidBackgroundFillColorBaseBrush}">
   <ContentDialog.Resources>
     <x:Double x:Key="ContentDialogMaxWidth">440</x:Double>
     <Thickness x:Key="ContentDialogTitleMargin">0,8,0,16</Thickness>
@@ -23,7 +23,7 @@
         <FontIcon x:Name="WarningIcon" Glyph="" FontSize="48" Visibility="Collapsed" Foreground="{ThemeResource SystemFillColorCautionBrush}" AutomationProperties.AccessibilityView="Raw" />
         <FontIcon x:Name="ReadyIcon" Glyph="" FontSize="48" Visibility="Collapsed" Foreground="{ThemeResource SystemFillColorSuccessBrush}" AutomationProperties.AccessibilityView="Raw" />
       </Grid>
-      <TextBlock x:Name="SetupHeading" Text="Play with controllers" Style="{StaticResource PageTitle}" FontSize="28" TextAlignment="Center" AutomationProperties.HeadingLevel="Level1" AutomationProperties.LiveSetting="Polite" />
+      <TextBlock x:Uid="Dialog_ControllerSetupHeading" x:Name="SetupHeading" Text="Play with controllers" Style="{StaticResource PageTitle}" FontSize="28" TextAlignment="Center" AutomationProperties.HeadingLevel="Level1" AutomationProperties.LiveSetting="Polite" />
     </StackPanel>
   </ContentDialog.Title>
   <ScrollViewer x:Name="SetupScroll" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
@@ -35,16 +35,16 @@
         <TextBlock x:Name="SetupStatus" Style="{StaticResource QuietText}" VerticalAlignment="Center" AutomationProperties.LiveSetting="Polite" />
       </StackPanel>
       <TextBlock x:Name="SetupError" Visibility="Collapsed" Style="{StaticResource QuietText}" TextAlignment="Center" Foreground="{ThemeResource SystemFillColorCriticalBrush}" AutomationProperties.LiveSetting="Polite" />
-      <HyperlinkButton x:Name="SetupDetailsButton" Click="SetupDetails_Click" HorizontalAlignment="Center" MinHeight="44" Padding="8" Foreground="{ThemeResource TextFillColorSecondaryBrush}" AutomationProperties.Name="About controller setup">
+      <HyperlinkButton x:Uid="Dialog_ControllerSetupDetails" x:Name="SetupDetailsButton" Click="SetupDetails_Click" HorizontalAlignment="Center" MinHeight="44" Padding="8" Foreground="{ThemeResource TextFillColorSecondaryBrush}" AutomationProperties.Name="About controller setup">
         <StackPanel Orientation="Horizontal" Spacing="6">
-          <TextBlock Text="About controller setup" />
+          <TextBlock x:Uid="Dialog_ControllerSetupDetailsLabel" Text="About controller setup" />
           <FontIcon Glyph="" FontSize="10" AutomationProperties.AccessibilityView="Raw" />
         </StackPanel>
         <FlyoutBase.AttachedFlyout>
           <Flyout Placement="Top">
             <StackPanel MaxWidth="304" Spacing="12">
               <TextBlock x:Name="SetupDetails" TextWrapping="Wrap" />
-              <HyperlinkButton x:Name="DownloadAgainButton" Content="Open download page" Click="DownloadAgain_Click" HorizontalAlignment="Left" Padding="0,8" Visibility="Collapsed" />
+              <HyperlinkButton x:Uid="Dialog_DownloadAgain" x:Name="DownloadAgainButton" Content="Open download page" Click="DownloadAgain_Click" HorizontalAlignment="Left" Padding="0,8" Visibility="Collapsed" />
             </StackPanel>
           </Flyout>
         </FlyoutBase.AttachedFlyout>

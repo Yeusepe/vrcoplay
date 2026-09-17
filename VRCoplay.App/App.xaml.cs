@@ -25,6 +25,7 @@ public partial class App : Application
         if (AudioRecoveryWatchdog.RunIfRequested(args))
             return;
         WinRT.ComWrappersSupport.InitializeComWrappers();
+        AppStrings.ApplyDisplayLanguage(SettingsStore.LoadDisplayLanguage());
         var current = AppInstance.GetCurrent();
         var activation = current.GetActivatedEventArgs();
         Pending.Enqueue(ActivationUri(activation));

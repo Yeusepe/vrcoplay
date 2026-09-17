@@ -224,6 +224,7 @@ public sealed partial class MainWindow : Window
         var busy = _captureState is CaptureState.Starting or CaptureState.Stopping;
         var connecting = _session.GameSession is { Session: null };
         SettingsSheet.IsEnabled = idle && !connecting;
+        LanguagePicker.IsEnabled = idle && !game && !connecting;
         ActivityPicker.IsEnabled = idle && !game && !connecting;
         StartButton.IsEnabled = (!connecting || !idle) && _captureState != CaptureState.Stopping;
         CreateGameRoomButton.IsEnabled = !connecting && !busy;
@@ -361,7 +362,7 @@ public sealed partial class MainWindow : Window
     }
     private void Reset_Click(object sender, RoutedEventArgs e)
     {
-        var s = new StreamSettings();
+        var s = new StreamSettings { DisplayLanguage = _settings.DisplayLanguage };
         _loadingSettings = true;
         _settings = s;
         RootPage.DataContext = _settings;

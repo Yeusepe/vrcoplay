@@ -7,6 +7,9 @@ namespace VRCoplay;
 public sealed partial record StreamSettings
 {
     public string PlayerName { get; set; } = "";
+    [JsonIgnore]
+    [Range(0, 3)]
+    public int DisplayLanguage { get; set; }
     public bool Audio { get; set; } = true;
     public bool QuietLocalAudio { get; set; } = true;
     public bool Controller { get; set; } = true;

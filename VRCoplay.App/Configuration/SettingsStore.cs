@@ -10,6 +10,7 @@ internal static class SettingsStore
     private const string SharingExplainedKey = "sharingExplainedV2";
     private const string AutomaticUpdatePromptsKey = "automaticUpdatePromptsV1";
     private const string SkippedUpdateVersionKey = "skippedUpdateVersionV1";
+    private const string DisplayLanguageKey = "displayLanguageV1";
     internal static bool AutomaticUpdatePrompts
     {
         get => !Open().LocalSettings.Values.TryGetValue(AutomaticUpdatePromptsKey, out var value) || value is not false;
@@ -40,15 +41,34 @@ internal static class SettingsStore
     {
         try
         {
-            return Open().LocalSettings.Values.TryGetValue("streamSettings", out var value) && value is string json
+            var settings = Open().LocalSettings.Values.TryGetValue("streamSettings", out var value) && value is string json
                 ? JsonSerializer.Deserialize<StreamSettings>(json) ?? new()
                 : new();
+            settings.DisplayLanguage = LoadDisplayLanguage();
+            return settings;
         }
         catch
         {
             return new();
         }
     }
-    internal static void Save(StreamSettings settings) =>
-        Open().LocalSettings.Values["streamSettings"] = JsonSerializer.Serialize(settings);
+    internal static void Save(StreamSettings settings)
+    {
+        var values = Open().LocalSettings.Values;
+        values["streamSettings"] = JsonSerializer.Serialize(settings);
+        values[DisplayLanguageKey] = Math.Clamp(settings.DisplayLanguage, 0, 3);
+    }
+    internal static int LoadDisplayLanguage()
+    {
+        try
+        {
+            return Open().LocalSettings.Values.TryGetValue(DisplayLanguageKey, out var value) && value is int language
+                ? Math.Clamp(language, 0, 3)
+                : 0;
+        }
+        catch
+        {
+            return 0;
+        }
+    }
 }
