@@ -47,14 +47,22 @@ if ($ReuseRepositoryBuild) {
             throw 'Unexpected repository build output path.'
         }
         $path = Join-Path $repo $relative
-        if (!(Test-Path -LiteralPath $path -PathType Leaf) -or
-            (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash -ine $receipt.build_outputs[$relative]) {
+        $stream = [IO.FileStream]::new($path, [IO.FileMode]::Open, [IO.FileAccess]::Read,
+            [IO.FileShare]::Read, 1MB, [IO.FileOptions]::SequentialScan)
+        try { $hash = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($stream)) }
+        finally { $stream.Dispose() }
+        if ($hash -ine $receipt.build_outputs[$relative]) {
             throw "Repository build output changed after validation: $relative"
         }
     }
-    $files = @(Get-ChildItem -LiteralPath (Join-Path $repo 'VRCoplay.App') -Directory |
-        Where-Object Name -In @('bin', 'obj') | Get-ChildItem -Recurse -File |
-        ForEach-Object { [IO.Path]::GetRelativePath($repo, $_.FullName).Replace('\', '/') })
+    $files = @(foreach ($folder in @('bin', 'obj')) {
+        $directory = Join-Path $repo "VRCoplay.App/$folder"
+        if ([IO.Directory]::Exists($directory)) {
+            foreach ($file in [IO.Directory]::EnumerateFiles($directory, '*', [IO.SearchOption]::AllDirectories)) {
+                [IO.Path]::GetRelativePath($repo, $file).Replace('\', '/')
+            }
+        }
+    })
     if (Compare-Object @($receipt.build_outputs.Keys) $files) {
         throw 'Repository build output inventory changed after validation.'
     }
@@ -110,7 +118,7 @@ $signTool = Get-ChildItem -LiteralPath $sdkRoot -Directory | Where-Object { $_.N
 if (!$signTool) { throw 'Install the Windows SDK signing tools.' }
 
 $packageFolder = Join-Path $work 'packages'
-$buildArgs = @('build', $project, '-c', 'Release', '--nologo', '-v:minimal', '-clp:PerformanceSummary',
+$buildArgs = @('build', $project, '-c', 'Release', '--nologo', '-v:minimal',
     "-p:Version=$Version", "-p:AssemblyVersion=$Version", "-p:FileVersion=$Version", "-p:InformationalVersion=$Version",
     '-p:Platform=x64', '-p:RuntimeIdentifier=win-x64', '-p:SelfContained=true', '-p:WindowsAppSDKSelfContained=true',
     '-p:WindowsPackageType=MSIX', '-p:EnableMsixTooling=true', '-p:GenerateAppxPackageOnBuild=true',
