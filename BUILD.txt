@@ -2,7 +2,7 @@ VRCoplay build
 
 Requirements
 - Windows 11 x64.
-- .NET SDK 10 and Windows SDK 10.0.22621.0 or later.
+- .NET SDK 10.0.401 (selected by global.json) and Windows SDK 10.0.22621.0 or later.
 - PowerShell 7 for native restore/build and release packaging.
 
 Font
@@ -17,7 +17,7 @@ For a source export without native binaries, first restore/build them:
   pwsh -File tools/Restore-Native.ps1
 This needs Git, CMake 3.28+, and the Visual Studio C++ tools in addition to the requirements above.
 Win2D is built locally from pinned public source. Its recipe requires Visual
-Studio 2022 C++ x64 tools (v143) and Windows SDK 10.0.26100.0.
+Studio 2022 or 2026 with C++ x64 tools (v143 14.44) and Windows SDK 10.0.26100.0.
 See VRCoplay.App/ThirdParty/Win2D/README.md. The local package must exist before
 desktop restore; VRCoplay.App/NuGet.Config restricts it to the local feed.
 Run these commands from the repository root:

@@ -1,6 +1,6 @@
 # Win2D public-source build
 
-VRCoplay uses `VRCoplay.Win2D` `1.4.0-public.25680382.3`, a local Windows x64
+VRCoplay uses `VRCoplay.Win2D` `1.4.0-public.25680382.4`, a local Windows x64
 package built from Microsoft Win2D commit
 [`25680382dd2136779e10ea6084f0c5ba437ae288`](https://github.com/microsoft/Win2D/tree/25680382dd2136779e10ea6084f0c5ba437ae288).
 It is not an official Microsoft binary. The upstream MIT license is retained in
@@ -8,7 +8,7 @@ the source archive, local package, and `../../Tools/Win2D-LICENSE.txt`.
 
 ## Build
 
-Requires PowerShell 7, Git, .NET SDK 10, Visual Studio 2022 C++ x64 tools (v143),
+Requires PowerShell 7, Git, .NET SDK 10.0.401, Visual Studio 2022 or 2026 with C++ x64 tools (v143 14.44),
 and Windows SDK 10.0.26100.0. From the repository root:
 
 ```powershell
@@ -30,7 +30,7 @@ The managed projection targets Windows 22621/.NET 8, consumes the freshly built
 metadata, restores the required Windows App SDK components, and uses SDK 10.
 Win2D's C++/IDL implementation and public telemetry header are unchanged.
 
-Output: `artifacts/VRCoplay.Win2D.1.4.0-public.25680382.3.nupkg` and a `build.json`
+Output: `artifacts/VRCoplay.Win2D.1.4.0-public.25680382.4.nupkg` and a `build.json`
 receipt with input recipe, tool versions and output hashes. Source and
 build output stay in `%LOCALAPPDATA%/VRCoplay/source-build/`. Source mapping in
 `../../NuGet.Config` restricts this package ID to the local feed. App restore has

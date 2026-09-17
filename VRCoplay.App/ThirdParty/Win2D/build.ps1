@@ -33,10 +33,15 @@ function Download([string]$Uri, [string]$Path, [string]$Hash) {
 }
 if (!$MSBuildPath) {
     $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio/Installer/vswhere.exe'
-    $vs = & $vswhere -version '[17.0,18.0)' -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -latest -property installationPath
-    if (!$vs) { throw 'Install Visual Studio 2022 C++ x64 tools (v143), or supply -MSBuildPath.' }
+    $vs = (& $vswhere -version '[17.0,19.0)' -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath) |
+        Where-Object { Get-ChildItem (Join-Path $_ 'VC/Tools/MSVC') -Directory -Filter '14.44.*' -ErrorAction SilentlyContinue } | Select-Object -First 1
+    if (!$vs) { throw 'Install Visual Studio 2022 or 2026 with C++ x64 tools (v143), or supply -MSBuildPath.' }
     $MSBuildPath = Join-Path $vs 'MSBuild/Current/Bin/amd64/MSBuild.exe'
 }
+$vsRoot = [IO.Path]::GetFullPath((Join-Path (Split-Path $MSBuildPath) '../../../..'))
+$msvc = Get-ChildItem (Join-Path $vsRoot 'VC/Tools/MSVC') -Directory |
+    Where-Object { $_.Name -like '14.44.*' } | Sort-Object { [version]$_.Name } -Descending | Select-Object -First 1
+if (!$msvc) { throw 'Install the v143 14.44 C++ x64 toolset.' }
 $sdk = '10.0.26100.0'
 $sdkBin = Join-Path ${env:ProgramFiles(x86)} "Windows Kits/10/bin/$sdk/x64"
 if (!(Test-Path "$sdkBin/midlrt.exe")) { throw "Install Windows SDK $sdk." }
@@ -62,7 +67,7 @@ try {
     $env:PATH = $sdkBin + ';' + $oldPath
     Run $nuget @('restore', 'winrt/lib/packages.config', '-PackagesDirectory', 'packages', '-Source', 'https://api.nuget.org/v3/index.json', '-NonInteractive', '-Verbosity', 'quiet')
     Run $MSBuildPath @('Win2D.proj', '/t:PrepareVersionInfo', '/p:BuildTests=false', '/p:BuildTools=false', '/p:RunTests=false', '/nr:false', '/v:m')
-    Run $MSBuildPath @('winrt/dll/winrt.dll.uap.vcxproj', '/p:Configuration=Release', '/p:Platform=x64', "/p:WindowsTargetPlatformVersion=$sdk", '/p:PreferredToolArchitecture=x64', '/p:IncludeVersionInfo=true', '/p:ApplicationType=', '/p:AppContainerApplication=false', '/p:UseCrtSDKReference=false', '/p:WinUISDKReferences=false', '/p:CharacterSet=Unicode', '/m:4', '/nr:false', '/v:m')
+    Run $MSBuildPath @('winrt/dll/winrt.dll.uap.vcxproj', '/p:Configuration=Release', '/p:Platform=x64', '/p:PlatformToolset=v143', "/p:VCToolsVersion=$($msvc.Name)", "/p:WindowsTargetPlatformVersion=$sdk", '/p:PreferredToolArchitecture=x64', '/p:IncludeVersionInfo=true', '/p:ApplicationType=', '/p:AppContainerApplication=false', '/p:UseCrtSDKReference=false', '/p:WinUISDKReferences=false', '/p:CharacterSet=Unicode', '/m:4', '/nr:false', '/v:m')
     $managed = @('winrt/projection/winrt.projection.csproj', '-p:TargetPlatformVersion=10.0.22621.0', '-p:Configuration=Release', '-p:Platform=AnyCPU', '-p:DebugType=None', '-p:DebugSymbols=false', "-p:PathMap=$work=/_")
     Run 'dotnet' (@('restore') + $managed + @('--source', 'https://api.nuget.org/v3/index.json'))
     Run 'dotnet' (@('build') + $managed + @('--no-restore', '--verbosity', 'minimal'))
@@ -83,7 +88,7 @@ try {
         nativeSha256 = (Get-FileHash 'bin/uapx64/release/winrt.dll.uap/Microsoft.Graphics.Canvas.dll').Hash
         projectionSha256 = (Get-FileHash 'bin/anycpu/release/winrt.projection/Microsoft.Graphics.Canvas.Interop.dll').Hash
         telemetryHeaderSha256 = (Get-FileHash 'winrt/inc/MicrosoftTelemetry.h').Hash
-        msbuildVersion = (Get-Item $MSBuildPath).VersionInfo.FileVersion; windowsSdk = $sdk; dotnetSdk = (& dotnet --version)
+        msbuildVersion = (Get-Item $MSBuildPath).VersionInfo.FileVersion; msvcVersion = $msvc.Name; windowsSdk = $sdk; dotnetSdk = (& dotnet --version)
     } | ConvertTo-Json | Set-Content -LiteralPath $receipt -Encoding utf8NoBOM
 } finally {
     $env:PATH = $oldPath

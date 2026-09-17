@@ -14,7 +14,7 @@ Paths below are relative to `VRCoplay.App`.
 | OpenVR | [2.15.6; 0924064316de3effbcd1acf1e309182a2deb1c05](https://github.com/ValveSoftware/openvr/tree/v2.15.6) | BSD-3-Clause; `ThirdParty/OpenVR/LICENSE`, `PIN.json` |
 | libVIIPER | [0.7.0; 6b71b148a2243fab77ee1a46f4e22e00bd7d5a04](https://github.com/Alia5/VIIPER/tree/v0.7.0) | GPL-3.0-or-later; `ThirdParty/VIIPER/LICENSE.txt`, `licenses.txt` |
 | Microsoft.WindowsAppSDK | [2.4.0](https://github.com/microsoft/WindowsAppSDK) | Microsoft Software License Terms for the distributed packages; public repository source uses MIT. See `Tools/WindowsAppSDK-LICENSE.txt`. |
-| Win2D (`VRCoplay.Win2D`) | [1.4.0-public.25680382.3; 25680382dd2136779e10ea6084f0c5ba437ae288](https://github.com/microsoft/Win2D/tree/25680382dd2136779e10ea6084f0c5ba437ae288) | MIT; `Tools/Win2D-LICENSE.txt`; local build in `ThirdParty/Win2D/` |
+| Win2D (`VRCoplay.Win2D`) | [1.4.0-public.25680382.4; 25680382dd2136779e10ea6084f0c5ba437ae288](https://github.com/microsoft/Win2D/tree/25680382dd2136779e10ea6084f0c5ba437ae288) | MIT; `Tools/Win2D-LICENSE.txt`; local build in `ThirdParty/Win2D/` |
 | Vortice.Direct2D1, Vortice.Direct3D11, Vortice.D3DCompiler, Vortice.DXGI, Vortice.DirectX | [3.8.3](https://github.com/amerkoleci/Vortice.Windows/tree/9e609cb9439c9872aa1b339f177e40ec96f77239) | MIT; `Tools/Vortice-LICENSE.txt` |
 | Microsoft.AspNetCore.SignalR.Client | [10.0.10](https://github.com/dotnet/aspnetcore/tree/v10.0.10) | MIT |
 | CommunityToolkit.WinUI.Controls.SettingsControls | [8.2.251219](https://github.com/CommunityToolkit/Windows/tree/a6b4dc451c0e54dd29f58743894a956100e7f713) | MIT; `Tools/CommunityToolkit-LICENSE.txt` |
