@@ -95,6 +95,13 @@ internal sealed class SharingDiagnosticLog(string directory, int maxFileBytes = 
     }
     private static readonly string[] DiagnosticPhrases =
     [
+        "Unable to load DLL",
+        "gstreamer-1.0-0.dll",
+        "glib-2.0-0.dll",
+        "gobject-2.0-0.dll",
+        "The GStreamer runtime is missing",
+        "The GStreamer DLL search path could not be configured",
+        "The specified module could not be found",
         "The application's Windows volume changed",
         "The application changed its audio level",
         "Quiet local audio stopped",

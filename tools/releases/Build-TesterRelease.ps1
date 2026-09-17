@@ -5,6 +5,7 @@ param(
     [Parameter(Mandatory)][uri] $BaseUri,
     [string] $NotesPath,
     [string] $CertificateThumbprint,
+    [uri] $TimestampUri = 'http://timestamp.digicert.com',
     [Parameter(Mandatory)][uri] $SourceUri,
     [Parameter(Mandatory)][ValidatePattern('^[a-fA-F0-9]{64}$')][string] $SourceSha256,
     [Parameter(Mandatory)][string] $OutputDirectory,
@@ -20,6 +21,9 @@ if ($releaseVersion.Revision -lt 0 -or @($releaseVersion.Major, $releaseVersion.
 }
 if ($BaseUri.Scheme -ne 'https' -or $BaseUri.Query -or $BaseUri.Fragment -or $BaseUri.UserInfo -or !$BaseUri.AbsolutePath.EndsWith('/')) {
     throw 'BaseUri must be a stable HTTPS directory ending in /, without credentials, query or fragment.'
+}
+if (!$TimestampUri.IsAbsoluteUri -or $TimestampUri.Scheme -notin @('http','https') -or $TimestampUri.UserInfo -or $TimestampUri.Query -or $TimestampUri.Fragment) {
+    throw 'TimestampUri must be an HTTP(S) RFC 3161 timestamp service without credentials, query or fragment.'
 }
 $repo = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
 $project = Join-Path $repo 'VRCoplay.App/VRCoplay.csproj'
@@ -89,8 +93,10 @@ if ($packages.Count -ne 1) { throw "Expected one self-contained MSIX; found $($p
 $packageName = "VRCoplay_$($Version)_x64.msix"
 $packagePath = Join-Path $output $packageName
 Copy-Item -LiteralPath $packages[0].FullName -Destination $packagePath
-& $signTool sign /fd SHA256 /s My /sha1 $certificate.Thumbprint $packagePath
+& $signTool sign /fd SHA256 /tr $TimestampUri.AbsoluteUri /td SHA256 /s My /sha1 $certificate.Thumbprint $packagePath
 if ($LASTEXITCODE -ne 0) { throw 'MSIX signing failed.' }
+$signature = Get-AuthenticodeSignature -LiteralPath $packagePath
+if (!$signature.TimeStamperCertificate) { throw 'The MSIX signature has no timestamp.' }
 
 
 Export-Certificate -Cert $certificate -FilePath (Join-Path $output 'VRCoplay.Testers.cer') -Type CERT | Out-Null

@@ -219,7 +219,7 @@
           "sha256": "aa317cb49585ea6d6d60cce937df095de21e7d77736d829c3bddd1afc9fe6d59"
         },
         {
-          "path": "libexec/gstreamer-1.0/gst-plugin-scanner.exe",
+          "path": "bin/gst-plugin-scanner.exe",
           "member": "gstreamer_libs-1.28.7.data/purelib/gstreamer_libs/libexec/gstreamer-1.0/gst-plugin-scanner.exe",
           "sha256": "521870ddddd2d1e26c5eefdd2d348d651ef295b063d84dcfc56315ab98b09076"
         }

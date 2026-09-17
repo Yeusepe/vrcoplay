@@ -56,6 +56,7 @@ internal sealed partial class DesktopSession
         var diagnosticSession = _diagnosticSession;
         var terminalReason = "completed";
         var notifyFailure = false;
+        Exception? captureError = null;
         try
         {
             var input = request();
@@ -192,6 +193,7 @@ internal sealed partial class DesktopSession
         }
         catch (Exception error)
         {
+            captureError = error;
             notifyFailure = !stop.IsCancellationRequested;
             terminalReason = "failed";
             SharingDiagnosticLog.Default.Write(diagnosticSession, "capture-failed", error: error);
@@ -243,7 +245,7 @@ internal sealed partial class DesktopSession
                 Notifications.CaptureStopped();
                 Show(message, severity);
                 if (notifyFailure)
-                    Notifications.CaptureFailed(guest);
+                    Notifications.CaptureFailed(guest, captureError);
                 SharingDiagnosticLog.Default.Write(diagnosticSession, "capture-ended", reason: terminalReason);
             }
             catch (Exception error)

@@ -36,6 +36,8 @@ Use a four-part version number.
 Use HTTPS URLs. End BaseUri with a slash.
 Use -NotesPath for a release note file.
 Use -CertificateThumbprint for an existing certificate.
+Signing requires an RFC 3161 timestamp. The default service is DigiCert;
+use -TimestampUri to choose another service. A missing timestamp fails packaging.
 Without that option, the script creates or reuses a local test certificate.
 Use your own certificate for modified copies.
 Use -WorkDirectory to select a build directory. The default is a new temporary directory.

@@ -124,8 +124,10 @@ internal sealed class SessionNotifications(TimeProvider? timeProvider = null)
         Clear("standby");
         Clear("remote-link");
     }
-    internal void CaptureFailed(bool guest) => Raise(new("capture-stopped", guest ? "Playing stopped" : "Sharing stopped",
-        guest ? "Playing stopped unexpectedly. Open VRCoplay to try again."
+    internal void CaptureFailed(bool guest, Exception? error = null) => Raise(new("capture-stopped", guest ? "Playing stopped" : "Sharing stopped",
+        error?.GetBaseException() is DllNotFoundException or BadImageFormatException or FileNotFoundException
+            ? "A required streaming component could not load. Update or reinstall VRCoplay."
+        : guest ? "Playing stopped unexpectedly. Open VRCoplay to try again."
               : "Sharing stopped unexpectedly. Open VRCoplay to restart.",
         NotificationTarget.Stream, DesktopNotice.Error));
     internal void ControllersFailed() => Raise(new("controllers-stopped", "Controllers unavailable",

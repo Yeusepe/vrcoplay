@@ -17,6 +17,13 @@ native dependencies. The Media Foundation plugin uses Windows' AAC encoder for
 Quest playback; the RTSP plugin receives the public stream without another video
 encode. It does not load plugins from a machine-wide installation.
 
+Windows DLL lookup is configured with SetDefaultDllDirectories and AddDllDirectory
+before any GStreamer call. MSIX does not use PATH for ordinary native DLL lookup.
+The unchanged, pinned plugin scanner is placed in bin beside its DLL dependencies
+so that it can start as a packaged child process. Its upstream archive member and
+SHA-256 remain unchanged. The registry filename includes an installation hash to
+keep absolute plugin paths separate across package updates and development builds.
+
 Upstream: https://gstreamer.freedesktop.org/
 
 Source and build recipes: https://gitlab.freedesktop.org/gstreamer/cerbero/-/tree/1.28.7
